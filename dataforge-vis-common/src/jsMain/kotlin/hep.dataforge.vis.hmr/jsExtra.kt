@@ -1,7 +1,5 @@
 package hep.dataforge.vis.hmr
 
-import kotlinext.js.objectAssign
-
 inline fun <T : Any> jsObject(builder: T.() -> Unit): T {
     val obj: T = js("({})") as T
     return obj.apply {
@@ -20,4 +18,9 @@ fun toPlainObjectStripNull(obj: Any) = js {
         val value = obj.asDynamic()[key]
         if (value != null) this[key] = value
     }
+}
+
+//This method added to load bugged library
+fun callCore(){
+    kotlinext.js.jsObject<dynamic> {  }
 }
