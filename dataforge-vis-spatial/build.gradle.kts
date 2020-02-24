@@ -33,6 +33,7 @@ kotlin {
             dependencies {
 //                api(project(":wrappers"))
                 implementation(npm("three", "0.106.2"))
+                implementation(npm("three.meshline", "1.2.0"))
                 implementation(npm("@hi-level/three-csg", "1.0.6"))
             }
         }

@@ -74,7 +74,7 @@ class Model {
         }
         event.track?.let {
             tracks.polyline(*it.toTypedArray(), name = "track[${event.id}]"){
-                thickness = 4
+                thickness = 24
             }
         }
     }
