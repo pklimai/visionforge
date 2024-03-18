@@ -13,10 +13,7 @@ import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.meta.toJson
 import space.kscience.dataforge.meta.toMeta
 import space.kscience.dataforge.names.Name
-import space.kscience.visionforge.html.VisionOfCheckbox
-import space.kscience.visionforge.html.VisionOfHtmlForm
-import space.kscience.visionforge.html.VisionOfNumberField
-import space.kscience.visionforge.html.VisionOfTextField
+import space.kscience.visionforge.html.*
 
 public class VisionManager(meta: Meta) : AbstractPlugin(meta), MutableVisionContainer<Vision> {
     override val tag: PluginTag get() = Companion.tag
@@ -33,10 +30,11 @@ public class VisionManager(meta: Meta) : AbstractPlugin(meta), MutableVisionCont
         }
     }
 
-    public val jsonFormat: Json
-        get() = Json(defaultJson) {
+    public val jsonFormat: Json by lazy {
+        Json(defaultJson) {
             serializersModule = this@VisionManager.serializersModule
         }
+    }
 
     public fun decodeFromString(string: String): Vision = jsonFormat.decodeFromString(visionSerializer, string)
 
@@ -72,10 +70,22 @@ public class VisionManager(meta: Meta) : AbstractPlugin(meta), MutableVisionCont
                 defaultDeserializer { SimpleVisionGroup.serializer() }
                 subclass(NullVision.serializer())
                 subclass(SimpleVisionGroup.serializer())
+                subclass(VisionOfPlainHtml.serializer())
+                subclass(VisionOfHtmlInput.serializer())
                 subclass(VisionOfNumberField.serializer())
                 subclass(VisionOfTextField.serializer())
                 subclass(VisionOfCheckbox.serializer())
+                subclass(VisionOfRangeField.serializer())
                 subclass(VisionOfHtmlForm.serializer())
+                subclass(VisionOfHtmlButton.serializer())
+            }
+
+            polymorphic(VisionEvent::class) {
+                subclass(VisionChange.serializer())
+                subclass(VisionMetaEvent.serializer())
+                subclass(VisionSubmitEvent.serializer())
+                subclass(VisionValueChangeEvent.serializer())
+                subclass(VisionInputEvent.serializer())
             }
         }
 
@@ -106,7 +116,7 @@ public abstract class VisionPlugin(meta: Meta = Meta.EMPTY) : AbstractPlugin(met
 /**
  * Fetch a [VisionManager] from this plugin or create a child plugin with a [VisionManager]
  */
-public val Context.visionManager: VisionManager get() = request(VisionManager )
+public val Context.visionManager: VisionManager get() = request(VisionManager)
 
 public fun Vision.encodeToString(): String =
     manager?.encodeToString(this) ?: error("Orphan vision could not be encoded")
@@ -122,6 +132,8 @@ public class RootVision(override val manager: VisionManager) : AbstractVisionGro
  * Designate this [Vision] as a root and assign a [VisionManager] as its parent
  */
 public fun Vision.setAsRoot(manager: VisionManager) {
+    //do nothing if vision is already rooted
+    if(this.manager == manager) return
     if (parent != null) error("Vision $this already has a parent. It could not be set as root")
     parent = RootVision(manager)
 }

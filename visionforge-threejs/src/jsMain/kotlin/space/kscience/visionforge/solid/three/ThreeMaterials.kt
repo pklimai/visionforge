@@ -10,10 +10,7 @@ import space.kscience.visionforge.getStyleNodes
 import space.kscience.visionforge.solid.ColorAccessor
 import space.kscience.visionforge.solid.SolidMaterial
 import space.kscience.visionforge.solid.SolidReference
-import three.materials.LineBasicMaterial
-import three.materials.Material
-import three.materials.MeshBasicMaterial
-import three.materials.MeshStandardMaterial
+import three.materials.*
 import three.math.Color
 import three.objects.Mesh
 
@@ -56,8 +53,20 @@ public object ThreeMaterials {
     }
 
     internal fun buildMaterial(meta: Meta): Material = when (meta[SolidMaterial.TYPE_KEY]?.string) {
-        "simple" -> MeshBasicMaterial().apply {
+        "basic" -> MeshBasicMaterial().apply {
             color = meta[SolidMaterial.COLOR_KEY]?.threeColor() ?: DEFAULT_COLOR
+            wireframe = meta[SolidMaterial.WIREFRAME_KEY].boolean ?: false
+        }
+
+        "lambert" -> MeshLambertMaterial().apply {
+            color = meta[SolidMaterial.COLOR_KEY]?.threeColor() ?: DEFAULT_COLOR
+            emissive = meta[SolidMaterial.EMISSIVE_COLOR_KEY]?.threeColor() ?: DEFAULT_EMISSIVE_COLOR
+            wireframe = meta[SolidMaterial.WIREFRAME_KEY].boolean ?: false
+        }
+
+        "phong" -> MeshPhongMaterial().apply {
+            color = meta[SolidMaterial.COLOR_KEY]?.threeColor() ?: DEFAULT_COLOR
+            emissive = meta[SolidMaterial.EMISSIVE_COLOR_KEY]?.threeColor() ?: DEFAULT_EMISSIVE_COLOR
             wireframe = meta[SolidMaterial.WIREFRAME_KEY].boolean ?: false
         }
 
@@ -83,7 +92,7 @@ public object ThreeMaterials {
     private val visionMaterialCache = HashMap<Vision, Material>()
 
     internal fun cacheMaterial(vision: Vision): Material = visionMaterialCache.getOrPut(vision) {
-        buildMaterial(vision.properties.getMeta(SolidMaterial.MATERIAL_KEY)).apply {
+        buildMaterial(vision.properties[SolidMaterial.MATERIAL_KEY]).apply {
             cached = true
         }
     }
@@ -124,7 +133,7 @@ internal var Material.cached: Boolean
 
 public fun Mesh.setMaterial(vision: Vision) {
     if (
-        vision.properties.own?.get(SolidMaterial.MATERIAL_KEY) == null
+        vision.properties.own[SolidMaterial.MATERIAL_KEY] == null
         && vision.getStyleNodes(SolidMaterial.MATERIAL_KEY).isEmpty()
     ) {
         //if this is a reference, use material of the prototype
@@ -133,11 +142,11 @@ public fun Mesh.setMaterial(vision: Vision) {
         } else {
             material = vision.parent?.let { parent ->
                 //TODO cache parent material
-                ThreeMaterials.buildMaterial(parent.properties.getMeta(SolidMaterial.MATERIAL_KEY))
+                ThreeMaterials.buildMaterial(parent.properties[SolidMaterial.MATERIAL_KEY])
             } ?: ThreeMaterials.cacheMaterial(vision)
         }
     } else {
-        material = ThreeMaterials.buildMaterial(vision.properties.getMeta(SolidMaterial.MATERIAL_KEY))
+        material = ThreeMaterials.buildMaterial(vision.properties[SolidMaterial.MATERIAL_KEY])
     }
 }
 
@@ -153,18 +162,18 @@ public fun Mesh.updateMaterialProperty(vision: Vision, propertyName: Name) {
         when (propertyName) {
             SolidMaterial.MATERIAL_COLOR_KEY -> {
                 material.asDynamic().color =
-                    vision.properties.getMeta(SolidMaterial.MATERIAL_COLOR_KEY).threeColor()
+                    vision.properties[SolidMaterial.MATERIAL_COLOR_KEY].threeColor()
                         ?: ThreeMaterials.DEFAULT_COLOR
             }
 
             SolidMaterial.SPECULAR_COLOR_KEY -> {
                 material.asDynamic().specular =
-                    vision.properties.getMeta(SolidMaterial.SPECULAR_COLOR_KEY).threeColor()
+                    vision.properties[SolidMaterial.SPECULAR_COLOR_KEY].threeColor()
                         ?: ThreeMaterials.DEFAULT_COLOR
             }
 
             SolidMaterial.MATERIAL_EMISSIVE_COLOR_KEY -> {
-                material.asDynamic().emissive = vision.properties.getMeta(SolidMaterial.MATERIAL_EMISSIVE_COLOR_KEY)
+                material.asDynamic().emissive = vision.properties[SolidMaterial.MATERIAL_EMISSIVE_COLOR_KEY]
                     .threeColor()
                     ?: ThreeMaterials.BLACK_COLOR
             }

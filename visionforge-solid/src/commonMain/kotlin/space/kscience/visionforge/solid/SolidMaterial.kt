@@ -2,6 +2,7 @@ package space.kscience.visionforge.solid
 
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
+import space.kscience.dataforge.meta.descriptors.ValueRestriction
 import space.kscience.dataforge.meta.descriptors.value
 import space.kscience.dataforge.meta.set
 import space.kscience.dataforge.names.Name
@@ -17,6 +18,8 @@ import space.kscience.visionforge.solid.SolidMaterial.Companion.MATERIAL_OPACITY
  */
 @VisionBuilder
 public class SolidMaterial : Scheme() {
+
+    public var type: String by string("default", key = TYPE_KEY)
 
     /**
      * Primary web-color for the material
@@ -64,10 +67,11 @@ public class SolidMaterial : Scheme() {
             //must be lazy to avoid initialization bug
             MetaDescriptor {
                 inherited = true
+                valueRestriction = ValueRestriction.ABSENT
 
-                value(TYPE_KEY, ValueType.STRING){
+                value(TYPE_KEY, ValueType.STRING) {
                     inherited = true
-                    allowedValues = listOf("default".asValue(), "simple".asValue())
+                    allowedValues = listOf("default", "basic", "lambert", "phong").map { it.asValue() }
                     default("default")
                 }
 
@@ -110,12 +114,12 @@ public val Solid.color: ColorAccessor
     get() = ColorAccessor(properties.root(true), MATERIAL_COLOR_KEY)
 
 public var Solid.material: SolidMaterial?
-    get() = SolidMaterial.read(properties.getMeta(MATERIAL_KEY))
-    set(value) = properties.setMeta(MATERIAL_KEY, value?.meta)
+    get() = SolidMaterial.read(properties[MATERIAL_KEY])
+    set(value) = properties.set(MATERIAL_KEY, value?.meta)
 
 @VisionBuilder
 public fun Solid.material(builder: SolidMaterial.() -> Unit) {
-    properties.getMeta(MATERIAL_KEY).updateWith(SolidMaterial, builder)
+    properties[MATERIAL_KEY].updateWith(SolidMaterial, builder)
 }
 
 public var Solid.opacity: Number?
@@ -128,5 +132,5 @@ public var Solid.opacity: Number?
 @VisionBuilder
 public fun Solid.edges(enabled: Boolean = true, block: SolidMaterial.() -> Unit = {}) {
     properties[SolidMaterial.EDGES_ENABLED_KEY] = enabled
-    SolidMaterial.write(properties.getMeta(SolidMaterial.EDGES_MATERIAL_KEY)).apply(block)
+    SolidMaterial.write(properties[SolidMaterial.EDGES_MATERIAL_KEY]).apply(block)
 }

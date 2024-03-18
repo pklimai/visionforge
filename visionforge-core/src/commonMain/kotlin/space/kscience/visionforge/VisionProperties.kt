@@ -1,10 +1,7 @@
 package space.kscience.visionforge
 
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Transient
 import space.kscience.dataforge.meta.*
@@ -17,7 +14,7 @@ public interface VisionProperties : MetaProvider {
     /**
      * Raw Visions own properties without styles, defaults, etc.
      */
-    public val own: Meta?
+    public val own: Meta
 
     public val descriptor: MetaDescriptor?
 
@@ -34,16 +31,20 @@ public interface VisionProperties : MetaProvider {
      * @param inherit toggles parent node property lookup. Null means inference from descriptor.
      * @param includeStyles toggles inclusion of properties from styles.
      */
-    public fun getMeta(
+    public fun get(
         name: Name,
         inherit: Boolean?,
         includeStyles: Boolean? = null,
     ): Meta
 
-    override fun getMeta(name: Name): Meta? = getMeta(name, null, null)
+    override fun get(name: Name): Meta? = get(name, null, null)
 
 
     public val changes: Flow<Name>
+
+    @Deprecated("Replace with property", ReplaceWith("changes"))
+    public fun flowChanges(): Flow<Name> = changes
+
 
     /**
      * Notify all listeners that a property has been changed and should be invalidated.
@@ -54,7 +55,7 @@ public interface VisionProperties : MetaProvider {
 
 public interface MutableVisionProperties : VisionProperties, MutableMetaProvider {
 
-    override fun getMeta(
+    override fun get(
         name: Name,
         inherit: Boolean?,
         includeStyles: Boolean?,
@@ -65,9 +66,9 @@ public interface MutableVisionProperties : VisionProperties, MutableMetaProvider
         includeStyles,
     )
 
-    public fun setMeta(
+    public fun set(
         name: Name,
-        node: Meta?,
+        item: Meta?,
         notify: Boolean,
     )
 
@@ -77,10 +78,10 @@ public interface MutableVisionProperties : VisionProperties, MutableMetaProvider
         notify: Boolean,
     )
 
-    override fun getMeta(name: Name): MutableMeta = getMeta(name, null, null)
+    override fun get(name: Name): MutableMeta = get(name, null, null)
 
-    override fun setMeta(name: Name, node: Meta?) {
-        setMeta(name, node, true)
+    override fun set(name: Name, node: Meta?) {
+        set(name, node, true)
     }
 
     override fun setValue(name: Name, value: Value?) {
@@ -89,7 +90,7 @@ public interface MutableVisionProperties : VisionProperties, MutableMetaProvider
 }
 
 public fun MutableVisionProperties.remove(name: Name) {
-    setMeta(name, null)
+    set(name, null)
 }
 
 public fun MutableVisionProperties.remove(name: String) {
@@ -114,8 +115,8 @@ private class VisionPropertiesItem(
 
     override val items: Map<NameToken, MutableMeta>
         get() {
-            val metaKeys = properties.own?.getMeta(nodeName)?.items?.keys ?: emptySet()
-            val descriptorKeys = descriptor?.children?.map { NameToken(it.key) } ?: emptySet()
+            val metaKeys = properties.own[nodeName]?.items?.keys ?: emptySet()
+            val descriptorKeys = descriptor?.nodes?.map { NameToken(it.key) } ?: emptySet()
             val defaultKeys = default?.get(nodeName)?.items?.keys ?: emptySet()
             val inheritFlag = descriptor?.inherited ?: inherit
             val stylesFlag = descriptor?.usesStyles ?: useStyles
@@ -148,8 +149,8 @@ private class VisionPropertiesItem(
         default
     )
 
-    override fun setMeta(name: Name, node: Meta?) {
-        properties.setMeta(nodeName + name, node)
+    override fun set(name: Name, node: Meta?) {
+        properties[nodeName + name] = node
     }
 
     override fun toString(): String = Meta.toString(this)
@@ -160,24 +161,11 @@ private class VisionPropertiesItem(
 /**
  * A base implementation of [MutableVisionProperties]
  */
-public abstract class AbstractVisionProperties(
+public open class AbstractVisionProperties(
     public val vision: Vision,
+    final override val own: MutableMeta,
 ) : MutableVisionProperties {
     override val descriptor: MetaDescriptor? get() = vision.descriptor
-
-    protected abstract var properties: MutableMeta?
-
-    override val own: Meta? get() = properties
-
-    @JvmSynchronized
-    protected fun getOrCreateProperties(): MutableMeta {
-        if (properties == null) {
-            //TODO check performance issues
-            val newProperties = MutableMeta()
-            properties = newProperties
-        }
-        return properties!!
-    }
 
     private val descriptorCache = HashMap<Name, MetaDescriptor?>()
 
@@ -186,7 +174,7 @@ public abstract class AbstractVisionProperties(
         inherit: Boolean?,
         includeStyles: Boolean?,
     ): Value? {
-        own?.get(name)?.value?.let { return it }
+        own[name]?.value?.let { return it }
 
         val descriptor = descriptor?.let { descriptor -> descriptorCache.getOrPut(name) { descriptor[name] } }
         val stylesFlag = includeStyles ?: descriptor?.usesStyles ?: true
@@ -202,16 +190,28 @@ public abstract class AbstractVisionProperties(
         return descriptor?.defaultValue
     }
 
-    override fun setMeta(name: Name, node: Meta?, notify: Boolean) {
+    override fun set(name: Name, item: Meta?, notify: Boolean) {
         //ignore if the value is the same as existing
-        if (own?.getMeta(name) == node) return
+        if (own[name] == item) return
 
         if (name.isEmpty()) {
-            properties = node?.asMutableMeta()
-        } else if (node == null) {
-            properties?.setMeta(name, node)
+            if (item == null) {
+                own.items.keys.forEach {
+                    remove(it.asName())
+                }
+            } else {
+                (own.items.keys - item.items.keys).forEach {
+                    remove(it.asName())
+                }
+                item.items.forEach { (token, item) ->
+                    set(token, item)
+                }
+            }
+
+        } else if (item == null) {
+            own[name] = item
         } else {
-            getOrCreateProperties().setMeta(name, node)
+            own[name] = item
         }
         if (notify) {
             invalidate(name)
@@ -220,12 +220,12 @@ public abstract class AbstractVisionProperties(
 
     override fun setValue(name: Name, value: Value?, notify: Boolean) {
         //ignore if the value is the same as existing
-        if (own?.getValue(name) == value) return
+        if (own.getValue(name) == value) return
 
         if (value == null) {
-            properties?.getMeta(name)?.value = null
+            own[name]?.value = null
         } else {
-            getOrCreateProperties().setValue(name, value)
+            own.setValue(name, value)
         }
         if (notify) {
             invalidate(name)
@@ -233,14 +233,20 @@ public abstract class AbstractVisionProperties(
     }
 
     @Transient
-    protected val changesInternal: MutableSharedFlow<Name> = MutableSharedFlow<Name>()
-    override val changes: SharedFlow<Name> get() = changesInternal
+    protected val changesInternal: MutableSharedFlow<Name> = MutableSharedFlow()
+
+    override val changes: Flow<Name>
+        get() = changesInternal
 
     override fun invalidate(propertyName: Name) {
         //send update signal
-        @OptIn(DelicateCoroutinesApi::class)
-        (vision.manager?.context ?: GlobalScope).launch {
-            changesInternal.emit(propertyName)
+        val manager = vision.manager
+        if (manager != null) {
+            manager.context.launch {
+                changesInternal.emit(propertyName)
+            }
+        } else {
+            changesInternal.tryEmit(propertyName)
         }
 
         //notify children if there are any
@@ -265,54 +271,35 @@ public abstract class AbstractVisionProperties(
 
 public fun VisionProperties.getValue(
     name: String,
-    inherit: Boolean? = null,
+    inherit: Boolean,
     includeStyles: Boolean? = null,
 ): Value? = getValue(name.parseAsName(), inherit, includeStyles)
 
 /**
  * Get [Vision] property using key as a String
  */
-public fun VisionProperties.getMeta(
+public operator fun VisionProperties.get(
     name: String,
     inherit: Boolean? = null,
     includeStyles: Boolean? = null,
-): Meta = getMeta(name.parseAsName(), inherit, includeStyles)
+): Meta = get(name.parseAsName(), inherit, includeStyles)
 
 /**
  * The root property node with given inheritance and style flags
- * @param inherit - inherit properties from the [Vision] parent. If null, infer from descriptor
- * @param includeStyles - include style information. If null, infer from descriptor
+ * @param inherit inherit properties from the [Vision] parent. If null, infer from descriptor
+ * @param includeStyles include style information. If null, infer from descriptor
  */
 public fun MutableVisionProperties.root(
     inherit: Boolean? = null,
     includeStyles: Boolean? = null,
-): MutableMeta = getMeta(Name.EMPTY, inherit, includeStyles)
+): MutableMeta = get(Name.EMPTY, inherit, includeStyles)
 
 
 /**
  * Get [Vision] property using key as a String
  */
-public fun MutableVisionProperties.getMeta(
+public operator fun MutableVisionProperties.get(
     name: String,
     inherit: Boolean? = null,
     includeStyles: Boolean? = null,
-): MutableMeta = getMeta(name.parseAsName(), inherit, includeStyles)
-
-//
-//public operator fun MutableVisionProperties.set(name: Name, value: Number): Unit =
-//    setValue(name, value.asValue())
-//
-//public operator fun MutableVisionProperties.set(name: String, value: Number): Unit =
-//    set(name.parseAsName(), value)
-//
-//public operator fun MutableVisionProperties.set(name: Name, value: Boolean): Unit =
-//    setValue(name, value.asValue())
-//
-//public operator fun MutableVisionProperties.set(name: String, value: Boolean): Unit =
-//    set(name.parseAsName(), value)
-//
-//public operator fun MutableVisionProperties.set(name: Name, value: String): Unit =
-//    setValue(name, value.asValue())
-//
-//public operator fun MutableVisionProperties.set(name: String, value: String): Unit =
-//    set(name.parseAsName(), value)
+): MutableMeta = get(name.parseAsName(), inherit, includeStyles)

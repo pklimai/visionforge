@@ -1,9 +1,9 @@
 package space.kscience.visionforge
 
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import space.kscience.dataforge.context.Plugin
 import space.kscience.dataforge.meta.Meta
-import space.kscience.dataforge.meta.MetaRepr
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.parseAsName
 
@@ -18,6 +18,9 @@ public interface VisionClient: Plugin {
     public fun notifyPropertyChanged(visionName: Name, propertyName: Name, item: Meta?)
 }
 
+public fun VisionClient.sendEventAsync(targetName: Name, event: VisionEvent): Job = context.launch {
+    sendEvent(targetName, event)
+}
 
 public fun VisionClient.notifyPropertyChanged(visionName: Name, propertyName: String, item: Meta?) {
     notifyPropertyChanged(visionName, propertyName.parseAsName(true), item)
@@ -33,10 +36,4 @@ public fun VisionClient.notifyPropertyChanged(visionName: Name, propertyName: St
 
 public fun VisionClient.notifyPropertyChanged(visionName: Name, propertyName: String, item: Boolean) {
     notifyPropertyChanged(visionName, propertyName.parseAsName(true), Meta(item))
-}
-
-public fun VisionClient.sendEvent(targetName: Name, payload: MetaRepr): Unit {
-    context.launch {
-        sendEvent(targetName, VisionMetaEvent(payload.toMeta()))
-    }
 }
