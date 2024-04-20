@@ -10,7 +10,7 @@ val dataforgeVersion by extra("0.8.0")
 
 allprojects {
     group = "space.kscience"
-    version = "0.4.1"
+    version = "0.4.2-dev-2"
 }
 
 subprojects {
@@ -25,8 +25,8 @@ subprojects {
     }
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + "-Xcontext-receivers"
+        compilerOptions {
+            freeCompilerArgs.add("-Xcontext-receivers")
         }
     }
 

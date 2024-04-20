@@ -12,7 +12,7 @@ repositories {
 }
 
 kotlin {
-
+    jvmToolchain(11)
     js(IR) {
         browser {
             webpackTask {
@@ -30,12 +30,9 @@ kotlin {
 
     jvm {
 //        withJava()
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "11"
-                freeCompilerArgs =
-                    freeCompilerArgs + "-Xjvm-default=all" + "-Xopt-in=kotlin.RequiresOptIn" + "-Xlambdas=indy" + "-Xcontext-receivers"
-            }
+        compilerOptions {
+            freeCompilerArgs.addAll("-Xjvm-default=all", "-Xopt-in=kotlin.RequiresOptIn", "-Xlambdas=indy", "-Xcontext-receivers")
+
         }
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()

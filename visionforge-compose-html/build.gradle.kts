@@ -19,12 +19,11 @@ kotlin {
             }
         }
 
-        jsMain{
+        jsMain {
             dependencies {
-                api("app.softwork:bootstrap-compose:0.1.15")
-                api("app.softwork:bootstrap-compose-icons:0.1.15")
-                implementation(compose.html.svg)
-
+                implementation(npm("bootstrap", "5.3.3"))
+                implementation(npm(" bootstrap-icons", "1.11.3"))
+                api("com.benasher44:uuid:0.8.4")
                 api(compose.html.core)
             }
         }

@@ -1,32 +1,32 @@
 plugins {
     id("space.kscience.gradle.mpp")
     alias(spclibs.plugins.compose)
+//    alias(spclibs.plugins.ktor)
     application
 }
 
 group = "ru.mipt.npm"
 
-val ktorVersion: String = spclibs.versions.ktor.get()
 
 kscience {
-    useCoroutines()
-    useSerialization()
-    useKtor()
     fullStack(
         "muon-monitor.js",
-        jvmConfig = { withJava() },
-//        jsConfig = { useCommonJs() },
+        jvmConfig = {withJava()},
         browserConfig = {
-            webpackTask{
-                cssSupport{
+            commonWebpackConfig {
+                cssSupport {
                     enabled = true
                 }
-                scssSupport{
+                scssSupport {
                     enabled = true
                 }
             }
         }
     )
+
+    useCoroutines()
+    useSerialization()
+    useKtor()
 
     commonMain {
         implementation(projects.visionforgeSolid)
@@ -34,32 +34,21 @@ kscience {
     }
     jvmMain {
         implementation("org.apache.commons:commons-math3:3.6.1")
-        implementation("io.ktor:ktor-server-cio:${ktorVersion}")
-        implementation("io.ktor:ktor-server-content-negotiation:${ktorVersion}")
-        implementation("io.ktor:ktor-serialization-kotlinx-json:${ktorVersion}")
-        implementation("ch.qos.logback:logback-classic:1.2.11")
+        implementation("io.ktor:ktor-server-cio")
+        implementation("io.ktor:ktor-server-content-negotiation")
+        implementation("io.ktor:ktor-serialization-kotlinx-json")
+        implementation(spclibs.logback.classic)
     }
     jsMain {
         implementation(projects.visionforgeThreejs)
         //implementation(devNpm("webpack-bundle-analyzer", "4.4.0"))
     }
 }
-kotlin{
+kotlin {
     explicitApi = null
 }
 
 
 application {
-    mainClass.set("ru.mipt.npm.muon.monitor.server.MMServerKt")
+    mainClass.set("ru.mipt.npm.muon.monitor.MMServerKt")
 }
-
-//distributions {
-//    main {
-//        contents {
-//            from("$buildDir/libs") {
-//                rename("${rootProject.name}-jvm", rootProject.name)
-//                into("lib")
-//            }
-//        }
-//    }
-//}

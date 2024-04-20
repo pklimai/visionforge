@@ -19,7 +19,7 @@ public interface VisionGroup : Vision {
 
     override fun update(change: VisionChange) {
         change.children?.forEach { (name, change) ->
-            if (change.vision != null || change.vision == NullVision) {
+            if (change.vision != null) {
                 error("VisionGroup is read-only")
             } else {
                 children.getChild(name)?.update(change)

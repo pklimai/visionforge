@@ -3,8 +3,7 @@
 package space.kscience.visionforge.html
 
 import androidx.compose.runtime.*
-import kotlinx.uuid.UUID
-import kotlinx.uuid.generateUUID
+import com.benasher44.uuid.uuid4
 import org.jetbrains.compose.web.attributes.*
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.HTMLOptionElement
@@ -45,7 +44,7 @@ public fun BooleanValueChooser(
     value: Value?,
     onValueChange: (Value?) -> Unit,
 ) {
-    val uid = remember { "checkbox[${UUID.generateUUID().toString(false)}]" }
+    val uid = remember { "checkbox[${uuid4()}]" }
     var innerValue by remember(value, descriptor) {
         mutableStateOf(
             value?.boolean ?: descriptor?.defaultValue?.boolean

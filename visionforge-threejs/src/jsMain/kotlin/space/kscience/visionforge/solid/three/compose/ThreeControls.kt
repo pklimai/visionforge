@@ -1,11 +1,9 @@
 package space.kscience.visionforge.solid.three.compose
 
 import androidx.compose.runtime.Composable
-import app.softwork.bootstrapcompose.Button
-import app.softwork.bootstrapcompose.Color.Info
-import app.softwork.bootstrapcompose.Column
-import app.softwork.bootstrapcompose.Layout.Height
-import app.softwork.bootstrapcompose.Layout.Width
+import bootstrap.Button
+import bootstrap.Color
+import bootstrap.Column
 import org.jetbrains.compose.web.dom.Hr
 import org.w3c.files.Blob
 import org.w3c.files.BlobPropertyBag
@@ -22,7 +20,7 @@ internal fun CanvasControls(
 ) {
     Column {
         vision?.let { vision ->
-            Button("Export", color = Info, styling = { Layout.width = Width.Full }) {
+            Button("Export", color = Color.Info, styling = { Layout.width = bootstrap.Layout.Width.Full }) {
                 val json = vision.encodeToString()
 
                 val fileSaver = kotlinext.js.require<dynamic>("file-saver")
@@ -51,7 +49,7 @@ public fun ThreeControls(
 ) {
     Tabs(
         styling = {
-            Layout.height = Height.Full
+            Layout.height = bootstrap.Layout.Height.Full
         }
     ) {
         vision?.let { vision ->

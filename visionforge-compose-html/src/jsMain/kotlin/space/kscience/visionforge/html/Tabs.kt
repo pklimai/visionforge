@@ -1,9 +1,9 @@
 package space.kscience.visionforge.html
 
 import androidx.compose.runtime.*
-import app.softwork.bootstrapcompose.Card
-import app.softwork.bootstrapcompose.NavbarLink
-import app.softwork.bootstrapcompose.Styling
+import bootstrap.Card
+import bootstrap.NavbarLink
+import bootstrap.Styling
 import org.jetbrains.compose.web.css.overflowY
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.HTMLAnchorElement

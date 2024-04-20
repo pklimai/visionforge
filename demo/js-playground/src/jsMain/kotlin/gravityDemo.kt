@@ -1,8 +1,8 @@
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import app.softwork.bootstrapcompose.Column
-import app.softwork.bootstrapcompose.Row
+import bootstrap.Column
+import bootstrap.Row
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import org.jetbrains.compose.web.css.*
