@@ -18,7 +18,6 @@ pluginManagement {
         id("space.kscience.gradle.project") version toolsVersion
         id("space.kscience.gradle.mpp") version toolsVersion
         id("space.kscience.gradle.jvm") version toolsVersion
-        id("space.kscience.gradle.js") version toolsVersion
     }
 }
 

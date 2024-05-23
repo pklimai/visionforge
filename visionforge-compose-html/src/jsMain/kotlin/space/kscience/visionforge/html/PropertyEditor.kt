@@ -1,15 +1,18 @@
 package space.kscience.visionforge.html
 
 import androidx.compose.runtime.*
-import app.softwork.bootstrapcompose.CloseButton
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.web.attributes.ButtonType
+import org.jetbrains.compose.web.attributes.disabled
+import org.jetbrains.compose.web.attributes.type
 import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.alignItems
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.width
+import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
@@ -120,10 +123,16 @@ public fun PropertyEditor(
 
         }
         if (!name.isEmpty()) {
-            CloseButton(editorPropertyState != EditorPropertyState.Defined) {
-                rootMeta.remove(name)
-                update()
-            }
+            Button(attrs = {
+                type(ButtonType.Button)
+                if(editorPropertyState != EditorPropertyState.Defined) disabled()
+                classes("btn-close")
+                onClick {
+                    rootMeta.remove(name)
+                    update()
+
+                }
+            })
         }
     }
     if (expanded) {

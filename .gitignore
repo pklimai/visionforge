@@ -6,6 +6,7 @@ out/
 .kotlin
 build/
 data/
+.kotlin/
 
 !gradle-wrapper.jar
 

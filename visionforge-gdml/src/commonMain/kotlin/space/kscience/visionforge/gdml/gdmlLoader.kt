@@ -373,7 +373,7 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
         rootSolid.prototypes {
             templates.items.forEach { (token, item) ->
                 item.parent = null
-                setChild(token.asName(), item as? Solid)
+                setChild(token.asName(), item)
             }
         }
         settings.styleCache.forEach {

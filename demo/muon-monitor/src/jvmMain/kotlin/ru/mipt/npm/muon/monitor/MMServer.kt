@@ -1,4 +1,4 @@
-package ru.mipt.npm.muon.monitor.server
+package ru.mipt.npm.muon.monitor
 
 
 import io.ktor.http.ContentType
@@ -17,7 +17,6 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import org.apache.commons.math3.random.JDKRandomGenerator
-import ru.mipt.npm.muon.monitor.Model
 import ru.mipt.npm.muon.monitor.sim.Cos2TrackGenerator
 import ru.mipt.npm.muon.monitor.sim.simulateOne
 import space.kscience.dataforge.context.Context

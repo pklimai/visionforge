@@ -9,14 +9,14 @@ import space.kscience.dataforge.meta.Meta
 import space.kscience.visionforge.VisionPlugin
 
 public actual class MarkupPlugin : VisionPlugin() {
-    override val visionSerializersModule: SerializersModule get() = markupSerializersModule
+    actual override val visionSerializersModule: SerializersModule get() = markupSerializersModule
 
-    override val tag: PluginTag get() = Companion.tag
+    actual override val tag: PluginTag get() = Companion.tag
 
     public actual companion object : PluginFactory<MarkupPlugin> {
-        override val tag: PluginTag = PluginTag("vision.markup.jvm", PluginTag.DATAFORGE_GROUP)
+        actual override val tag: PluginTag = PluginTag("vision.markup.jvm", PluginTag.DATAFORGE_GROUP)
 
-        override fun build(context: Context, meta: Meta): MarkupPlugin = MarkupPlugin()
+        actual override fun build(context: Context, meta: Meta): MarkupPlugin = MarkupPlugin()
 
     }
 }

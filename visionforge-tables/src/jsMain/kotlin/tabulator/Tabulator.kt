@@ -1,10 +1,5 @@
-@file:Suppress("INTERFACE_WITH_SUPERCLASS",
-    "OVERRIDING_FINAL_MEMBER",
-    "RETURN_TYPE_MISMATCH_ON_OVERRIDE",
-    "CONFLICTING_OVERLOADS",
-    "NO_EXPLICIT_VISIBILITY_IN_API_MODE_WARNING")
-
 @file:JsModule("tabulator-tables")
+@file:Suppress("NO_EXPLICIT_VISIBILITY_IN_API_MODE_WARNING")
 @file:JsNonModule
 
 package tabulator
