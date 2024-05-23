@@ -9,7 +9,6 @@ import space.kscience.dataforge.meta.Meta
 import space.kscience.dataforge.misc.DfType
 import space.kscience.dataforge.names.Name
 import space.kscience.visionforge.Vision
-import kotlin.reflect.KClass
 import kotlin.reflect.cast
 
 /**
@@ -46,16 +45,15 @@ public interface ElementVisionRenderer {
 }
 
 /**
- * A browser renderer for element of given type
+ * A browser renderer for a vision of given type
  */
-public class SingleTypeVisionRenderer<T : Vision>(
-    public val kClass: KClass<T>,
-    private val acceptRating: Int = ElementVisionRenderer.DEFAULT_RATING,
-    private val renderFunction: TagConsumer<HTMLElement>.(name: Name, vision: T, meta: Meta) -> Unit,
-) : ElementVisionRenderer {
+public inline fun <reified T : Vision> ElementVisionRenderer(
+    acceptRating: Int = ElementVisionRenderer.DEFAULT_RATING,
+    noinline renderFunction: TagConsumer<HTMLElement>.(name: Name, vision: T, meta: Meta) -> Unit,
+): ElementVisionRenderer = object : ElementVisionRenderer {
 
     override fun rateVision(vision: Vision): Int =
-        if (vision::class == kClass) acceptRating else ElementVisionRenderer.ZERO_RATING
+        if (vision::class == T::class) acceptRating else ElementVisionRenderer.ZERO_RATING
 
     override fun render(
         element: Element,
@@ -65,14 +63,9 @@ public class SingleTypeVisionRenderer<T : Vision>(
     ) {
         element.clear()
         element.append {
-            renderFunction(name, kClass.cast(vision), meta)
+            renderFunction(name, T::class.cast(vision), meta)
         }
     }
 
-    override fun toString(): String = "ElementVisionRender(${kClass.simpleName})"
+    override fun toString(): String = "ElementVisionRender(${T::class.simpleName})"
 }
-
-public inline fun <reified T : Vision> ElementVisionRenderer(
-    acceptRating: Int = ElementVisionRenderer.DEFAULT_RATING,
-    noinline renderFunction: TagConsumer<HTMLElement>.(name: Name, vision: T, meta: Meta) -> Unit,
-): ElementVisionRenderer = SingleTypeVisionRenderer(T::class, acceptRating, renderFunction)
