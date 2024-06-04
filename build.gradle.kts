@@ -3,14 +3,15 @@ import space.kscience.gradle.useSPCTeam
 
 plugins {
     id("space.kscience.gradle.project")
-    id("org.jetbrains.kotlinx.kover") version "0.5.0"
+    alias(spclibs.plugins.kotlinx.kover)
 }
 
-val dataforgeVersion by extra("0.8.0")
+val dataforgeVersion by extra("0.9.0")
+val plotlyVersion by extra("2.29.0")
 
 allprojects {
     group = "space.kscience"
-    version = "0.4.2-dev-2"
+    version = "0.5.0-dev-1"
 }
 
 subprojects {

@@ -9,18 +9,8 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLTableCaptionElement
 import org.w3c.dom.HTMLTableCellElement
 import org.w3c.dom.HTMLTableElement
-import kotlin.collections.List
-import kotlin.collections.all
-import kotlin.collections.chunked
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.forEach
-import kotlin.collections.forEachIndexed
-import kotlin.collections.lastIndex
-import kotlin.collections.map
-import kotlin.collections.mapIndexed
-import kotlin.collections.mutableListOf
-import kotlin.collections.mutableMapOf
 import kotlin.collections.set
 import kotlin.math.max
 import kotlin.math.min
@@ -110,9 +100,9 @@ public object Table {
     }
 
     public class FixedHeaderProperty(public val style: StyleScope.() -> Unit) {
-        public constructor(topSize: CSSLengthOrPercentageValue, zIndex: ZIndex) : this({
+        public constructor(topSize: CSSLengthOrPercentageValue, zIndex: String) : this({
             top(topSize)
-            property("z-index", zIndex.unsafeCast<String>())
+            property("z-index", zIndex)
         })
     }
 

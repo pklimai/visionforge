@@ -8,6 +8,8 @@ build/
 data/
 .kotlin/
 
+jcef-bundle/
+
 !gradle-wrapper.jar
 
 /kotlin-js-store/yarn.lock

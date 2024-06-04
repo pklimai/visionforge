@@ -1,6 +1,7 @@
 plugins {
     id("space.kscience.gradle.mpp")
-    alias(spclibs.plugins.compose)
+    alias(spclibs.plugins.compose.compiler)
+    alias(spclibs.plugins.compose.jb)
 //    alias(spclibs.plugins.ktor)
     application
 }

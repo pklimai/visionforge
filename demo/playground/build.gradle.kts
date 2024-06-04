@@ -43,9 +43,9 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(projects.visionforgeSolid)
-                implementation(projects.visionforgePlotly)
+//                implementation(projects.visionforgePlotly)
                 implementation(projects.visionforgeMarkdown)
-                implementation(projects.visionforgeTables)
+//                implementation(projects.visionforgeTables)
                 implementation(projects.cernRootLoader)
                 api(projects.visionforgeJupyter.visionforgeJupyterCommon)
             }

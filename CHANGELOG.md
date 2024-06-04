@@ -3,8 +3,11 @@
 ## Unreleased
 
 ### Added
+- Moved plotly-kt repo inside this one
 
 ### Changed
+- Kotlin 2.0
+- DataForge 0.9
 
 ### Deprecated
 

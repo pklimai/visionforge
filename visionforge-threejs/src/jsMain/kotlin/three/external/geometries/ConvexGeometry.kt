@@ -8,4 +8,4 @@ import three.math.Vector3
 
 external class ConvexGeometry(points: Array<Vector3>) : BufferGeometry
 
-external class ConvexBufferGeometry(points: Array<Vector3>) : BufferGeometry
+//external class ConvexBufferGeometry(points: Array<Vector3>) : BufferGeometry

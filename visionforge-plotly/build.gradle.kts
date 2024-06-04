@@ -2,8 +2,6 @@ plugins {
     id("space.kscience.gradle.mpp")
 }
 
-val plotlyVersion = "0.7.0"
-
 kscience {
     jvm()
     js {
@@ -11,7 +9,7 @@ kscience {
     }
     dependencies {
         api(projects.visionforgeCore)
-        api("space.kscience:plotlykt-core:${plotlyVersion}")
+        api(projects.plotly.plotlyktCore)
     }
     useSerialization()
 }

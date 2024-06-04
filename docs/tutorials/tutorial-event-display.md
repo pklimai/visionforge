@@ -18,7 +18,6 @@ Before we start, we have to load necessary dependencies:
 ```kotlin
 repositories {
     mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")
 
     // Add either the line below:
     maven("https://repo.kotlin.link")

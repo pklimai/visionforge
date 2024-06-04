@@ -1,7 +1,8 @@
 
 plugins {
     id("space.kscience.gradle.mpp")
-    alias(spclibs.plugins.compose)
+    alias(spclibs.plugins.compose.compiler)
+    alias(spclibs.plugins.compose.jb)
 }
 
 val ktorVersion: String by rootProject.extra
