@@ -5,7 +5,7 @@ import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.models.Trace
 import space.kscience.plotly.models.invoke
-import space.kscience.plotly.plot
+import space.kscience.plotly.plotly
 import space.kscience.plotly.server.close
 import space.kscience.plotly.server.pushUpdates
 import space.kscience.plotly.server.serve
@@ -35,7 +35,7 @@ fun main() {
         page { plotly ->
             h1 { +"This is the plot page" }
             a("/other") { +"The other page" }
-            plot(renderer = plotly) {
+            plotly(renderer = plotly) {
                 traces(sinTrace, cosTrace)
                 layout {
                     title = "Other dynamic plot"
@@ -48,7 +48,7 @@ fun main() {
         page("other") { plotly ->
             h1 { +"This is the other plot page" }
             a("/") { +"Back to the main page" }
-            plot(renderer = plotly) {
+            plotly(renderer = plotly) {
                 traces(sinTrace)
                 layout {
                     title = "Dynamic plot"

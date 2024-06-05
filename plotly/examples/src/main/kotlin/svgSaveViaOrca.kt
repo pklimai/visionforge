@@ -84,5 +84,5 @@ fun main() {
         }
     }
 
-    plot.export(selectFile(FileNameExtensionFilter("SVG","svg")) ?: error("File not selected"))
+    plot.export(Plotly.selectFile(FileNameExtensionFilter("SVG","svg")) ?: error("File not selected"))
 }

@@ -32,7 +32,7 @@ public interface MutableVisionContainer<in V : Vision> {
 public interface VisionChildren : VisionContainer<Vision> {
     public val parent: Vision?
 
-    public val keys: Set<NameToken>
+    public val keys: Collection<NameToken>
 
     public val values: Iterable<Vision> get() = keys.map { get(it)!! }
 

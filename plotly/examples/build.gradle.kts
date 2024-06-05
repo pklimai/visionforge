@@ -8,8 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation(projects.plotly.plotlyktServer)
-    implementation(projects.plotly.plotlyktJupyter)
+    implementation(projects.plotly.plotlyktCore)
     implementation(projects.plotly.plotlyktScript)
     implementation(kotlin("script-runtime"))
     implementation("org.jetbrains.kotlinx:dataframe:0.13.1")

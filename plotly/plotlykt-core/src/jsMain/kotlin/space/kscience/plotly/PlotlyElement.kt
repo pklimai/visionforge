@@ -12,12 +12,11 @@ import org.w3c.dom.events.MouseEvent
 import space.kscience.dataforge.meta.MetaSerializer
 import space.kscience.dataforge.meta.Scheme
 import space.kscience.dataforge.meta.Value
-import space.kscience.dataforge.names.asName
-import space.kscience.dataforge.names.firstOrNull
-import space.kscience.dataforge.names.startsWith
+import space.kscience.dataforge.names.Name
 import space.kscience.plotly.events.PlotlyEvent
 import space.kscience.plotly.events.PlotlyEventListenerType
 import space.kscience.plotly.events.PlotlyEventPoint
+import space.kscience.plotly.models.Trace
 
 @OptIn(ExperimentalSerializationApi::class)
 private fun Scheme.toDynamic(): dynamic = Json.encodeToDynamic(MetaSerializer, meta)
@@ -41,24 +40,23 @@ public fun Element.plot(plotlyConfig: PlotlyConfig = PlotlyConfig(), plot: Plot)
 
     PlotlyJs.react(this, tracesData, layout, plotlyConfig.toDynamic())
 
-    plot.meta.onChange(this) { name ->
-        if (name.startsWith(plot::layout.name.asName())) {
-            PlotlyJs.relayout(this@plot, plot.layout.toDynamic())
-        } else if (name.firstOrNull()?.body == "data") {
-            val traceName = name.firstOrNull()!!
-            val traceIndex = traceName.index?.toInt() ?: 0
-            val traceData = plot.data[traceIndex].toDynamic()
-
-            Plotly.coordinateNames.forEach { coordinate ->
-                val data = traceData[coordinate]
-                if (traceData[coordinate] != null) {
-                    traceData[coordinate] = arrayOf(data)
-                }
-            }
-
-            PlotlyJs.restyle(this@plot, traceData, arrayOf(traceIndex))
-        }
+    plot.layout.meta.onChange(this){
+        PlotlyJs.relayout(this@plot, plot.layout.toDynamic())
     }
+
+    plot.onDataChange(this){ index: Int, trace: Trace, _: Name ->
+        val traceData = trace.toDynamic()
+
+        Plotly.coordinateNames.forEach { coordinate ->
+            val data = traceData[coordinate]
+            if (traceData[coordinate] != null) {
+                traceData[coordinate] = arrayOf(data)
+            }
+        }
+
+        PlotlyJs.restyle(this@plot, traceData, arrayOf(index))
+    }
+    //TODO remove listeners on element removal
 }
 
 @Deprecated("Change arguments positions", ReplaceWith("plot(plotlyConfig, plot)"))

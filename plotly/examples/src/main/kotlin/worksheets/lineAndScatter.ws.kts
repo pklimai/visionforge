@@ -2,7 +2,7 @@ import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.models.ScatterMode
 import space.kscience.plotly.scatter
-import space.kscience.plotly.toHTML
+import space.kscience.plotly.toHTMLPage
 
 Plotly.plot {
     scatter {
@@ -26,4 +26,4 @@ Plotly.plot {
     layout {
         title = "Line and Scatter Plot"
     }
-}.toHTML()
+}.toHTMLPage()

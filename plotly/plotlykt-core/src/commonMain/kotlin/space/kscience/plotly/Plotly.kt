@@ -4,6 +4,8 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.buildJsonArray
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.names.Name
+import space.kscience.visionforge.VisionBuilder
+import space.kscience.visionforge.html.VisionOutput
 import kotlin.js.JsName
 
 /**
@@ -64,3 +66,15 @@ public class PlotlyConfig : Scheme() {
     public companion object : SchemeSpec<PlotlyConfig>(::PlotlyConfig)
 }
 
+/**
+ * Embed a dynamic plotly plot in a vision
+ */
+@VisionBuilder
+public inline fun VisionOutput.plotly(
+    config: PlotlyConfig = PlotlyConfig(),
+    block: Plot.() -> Unit,
+): Plot {
+    requirePlugin(PlotlyPlugin)
+    meta = config.meta
+    return Plotly.plot(block)
+}

@@ -7,7 +7,7 @@ import space.kscience.plotly.Plotly
 import space.kscience.plotly.layout
 import space.kscience.plotly.models.AxisType
 import space.kscience.plotly.models.DragMode
-import space.kscience.plotly.plot
+import space.kscience.plotly.plotly
 import space.kscience.plotly.server.close
 import space.kscience.plotly.server.pushUpdates
 import space.kscience.plotly.server.serve
@@ -18,7 +18,7 @@ fun main() {
     val server = Plotly.serve {
         pushUpdates(50)
         page { plotly ->
-            plot(renderer = plotly) {
+            plotly(renderer = plotly) {
                 traces(candleStickTrace)
                 layout {
                     dragmode = DragMode.zoom

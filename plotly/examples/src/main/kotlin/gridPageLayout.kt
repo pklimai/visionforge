@@ -68,7 +68,7 @@ private fun Plotly.grid(block: PlotGrid.() -> Unit): PlotlyPage {
                 div("row") {
                     row.forEach { cell ->
                         div("col-${cell.width}") {
-                            plot(cell.plot, cell.id, renderer = container)
+                            plotly(cell.plot, cell.id, renderer = container)
                         }
                     }
                 }

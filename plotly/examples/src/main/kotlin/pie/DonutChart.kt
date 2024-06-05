@@ -5,7 +5,6 @@ import space.kscience.plotly.Plotly
 import space.kscience.plotly.fragment
 import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.Pie
-import space.kscience.plotly.plot
 
 
 fun main() {

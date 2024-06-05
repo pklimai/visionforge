@@ -7,6 +7,7 @@ import kotlinx.serialization.Transient
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.meta.descriptors.get
+import space.kscience.dataforge.misc.DFExperimental
 import space.kscience.dataforge.names.*
 
 public interface VisionProperties : MetaProvider {
@@ -108,12 +109,15 @@ private class VisionPropertiesItem(
     val inherit: Boolean? = null,
     val useStyles: Boolean? = null,
     val default: Meta? = null,
-) : MutableMeta {
+) : MutableTypedMeta<VisionPropertiesItem> {
+
+    override val self: VisionPropertiesItem get() =  this
+
 
     val descriptor: MetaDescriptor? by lazy { properties.descriptor?.get(nodeName) }
 
 
-    override val items: Map<NameToken, MutableMeta>
+    override val items: Map<NameToken, VisionPropertiesItem>
         get() {
             val metaKeys = properties.own[nodeName]?.items?.keys ?: emptySet()
             val descriptorKeys = descriptor?.nodes?.map { NameToken(it.key) } ?: emptySet()
@@ -141,7 +145,24 @@ private class VisionPropertiesItem(
             properties.setValue(nodeName, value)
         }
 
-    override fun getOrCreate(name: Name): MutableMeta = VisionPropertiesItem(
+    //TODO remove with DataForge 0.9.1
+    override fun get(name: Name): VisionPropertiesItem? {
+        tailrec fun VisionPropertiesItem.find(name: Name): VisionPropertiesItem? = if (name.isEmpty()) {
+            this
+        } else {
+            items[name.firstOrNull()!!]?.find(name.cutFirst())
+        }
+
+        return self.find(name)
+    }
+
+
+    @DFExperimental
+    override fun attach(name: Name, node: VisionPropertiesItem) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getOrCreate(name: Name): VisionPropertiesItem = VisionPropertiesItem(
         properties,
         nodeName + name,
         inherit,

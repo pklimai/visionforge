@@ -46,7 +46,7 @@ fun CoroutineScope.servePlots(scale: StateFlow<Number>): ApplicationEngine = Plo
         val trace2 = Scatter(x, y2) {
             name = "cos"
         }
-        plot(renderer = container) {//static plot
+        plotly(renderer = container) {//static plot
             traces(trace1, trace2)
             layout {
                 title = "First graph, row: 1, size: 8/12"
@@ -62,7 +62,7 @@ fun CoroutineScope.servePlots(scale: StateFlow<Number>): ApplicationEngine = Plo
 
         val trace = Scatter(x, y) { name = "sin" }
 
-        val plot = plot("dynamic", config = PlotlyConfig { responsive = true }, renderer = container) {
+        val plot = plotly("dynamic", config = PlotlyConfig { responsive = true }, renderer = container) {
             traces(trace)
             layout {
                 title = "Dynamic plot"

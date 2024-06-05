@@ -6,7 +6,7 @@ import space.kscience.plotly.Plotly
 import space.kscience.plotly.layout
 import space.kscience.plotly.models.Trace
 import space.kscience.plotly.models.invoke
-import space.kscience.plotly.plot
+import space.kscience.plotly.plotly
 import space.kscience.plotly.server.pushUpdates
 import space.kscience.plotly.server.serve
 import kotlin.math.PI
@@ -27,7 +27,7 @@ fun serve(scale: ObservableIntegerValue) = Plotly.serve(port = 7778) {
         val trace2 = Trace(x, y2) {
             name = "cos"
         }
-        plot {//static plot
+        plotly {//static plot
             traces(trace1, trace2)
             layout {
                 title = "First graph, row: 1, size: 8/12"
@@ -43,7 +43,7 @@ fun serve(scale: ObservableIntegerValue) = Plotly.serve(port = 7778) {
 
         val trace = Trace(x, y) { name = "sin" }
 
-        val plot = plot("dynamic", renderer = container) {
+        val plot = plotly("dynamic", renderer = container) {
             traces(trace)
             layout {
                 title = "Dynamic plot"

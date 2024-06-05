@@ -6,7 +6,7 @@ val trace1 = Trace(x1, y1) { name = "sin" }
 val trace2 = Trace(x1, y2) { name = "cos" }
 
 
-plot {
+plotly {
     traces(trace1, trace2)
     layout {
         title = "The plot above"
@@ -18,7 +18,7 @@ hr()
 h1 { +"A custom separator" }
 hr()
 div {
-    plot {
+    plotly {
         traces(trace1, trace2)
         layout {
             title = "The plot below"

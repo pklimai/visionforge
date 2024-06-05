@@ -1,5 +1,6 @@
 plugins {
     id("space.kscience.gradle.mpp")
+    kotlin("jupyter.api")
     `maven-publish`
 }
 
@@ -15,6 +16,7 @@ kscience {
     fullStack(bundleName = "js/plotly-kt.js")
     native()
     wasm()
+    useSerialization()
 
     commonMain {
         api(projects.visionforgeCore)
@@ -32,6 +34,9 @@ kscience {
     }
 }
 
+tasks.processJupyterApiResources{
+    libraryProducers = listOf("space.kscience.plotly.PlotlyIntegration")
+}
 
 readme {
     maturity = space.kscience.gradle.Maturity.DEVELOPMENT

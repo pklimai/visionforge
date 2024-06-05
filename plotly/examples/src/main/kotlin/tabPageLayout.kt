@@ -3,9 +3,30 @@ import space.kscience.plotly.*
 import space.kscience.plotly.models.Trace
 import space.kscience.plotly.models.invoke
 import space.kscience.plotly.palettes.T10
+import space.kscience.visionforge.html.HtmlFragment
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
+
+public val cdnBootstrap: HtmlFragment = HtmlFragment {
+    script {
+        src = "https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity = "sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        attributes["crossorigin"] =  "anonymous"
+    }
+    script {
+        src = "https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
+        integrity = "sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd"
+        attributes["crossorigin"] = "anonymous"
+    }
+    link {
+        rel = "stylesheet"
+        href = "https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        attributes["integrity"] = "sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+        attributes["crossorigin"] = "anonymous"
+    }
+}
+
 
 
 public class PlotTabs {
@@ -88,7 +109,7 @@ fun main() {
     val plot = Plotly.tabs {
 
         tab("First") {
-            plot(config = responsive) {
+            plotly(config = responsive) {
                 traces(trace1)
                 layout {
                     title = "First graph"
@@ -98,7 +119,7 @@ fun main() {
             }
         }
         tab("Second") {
-            plot(config = responsive) {
+            plotly(config = responsive) {
                 traces(trace2)
                 layout {
                     title = "Second graph"

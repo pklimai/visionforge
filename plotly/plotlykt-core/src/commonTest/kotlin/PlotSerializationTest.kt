@@ -2,11 +2,11 @@ package space.kscience.plotly
 
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.jsonObject
-import org.junit.jupiter.api.Test
 import space.kscience.dataforge.meta.ListValue
 import space.kscience.dataforge.meta.ObservableMutableMeta
 import space.kscience.plotly.models.ShapeType
 import space.kscience.plotly.models.TraceType
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -29,7 +29,7 @@ class PlotSerializationTest {
     }
 
     @Test
-    fun shapeSerialization(){
+    fun shapeSerialization() {
         val plot = Plotly.plot {
             shape {
                 type = ShapeType.rect

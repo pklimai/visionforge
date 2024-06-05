@@ -16,7 +16,7 @@ public fun Plot.makeFile(
     config: PlotlyConfig = PlotlyConfig(),
 ) {
     FileSystem.SYSTEM.write(path, true) {
-        writeUtf8(toHTML(cdnPlotlyHeader, config = config))
+        writeUtf8(toHTMLPage(cdnPlotlyHeader, config = config))
     }
 }
 

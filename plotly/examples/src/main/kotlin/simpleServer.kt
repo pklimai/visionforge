@@ -8,7 +8,7 @@ import space.kscience.plotly.Plot
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.models.Trace
 import space.kscience.plotly.models.invoke
-import space.kscience.plotly.plot
+import space.kscience.plotly.plotly
 import space.kscience.plotly.server.close
 import space.kscience.plotly.server.serve
 import space.kscience.plotly.server.show
@@ -43,11 +43,11 @@ fun main() {
                 style = "display: flex;   align-items: stretch; "
                 div {
                     style = "width: 64%;"
-                    plot(plot1)
+                    plotly(plot1)
                 }
                 div {
                     style = "width: 32%;"
-                    plot {
+                    plotly {
                         traces(trace1, trace2)
                         layout {
                             title = "Second graph, row: 1, size: 4/12"
@@ -61,7 +61,7 @@ fun main() {
 
 
             div {
-                plot {
+                plotly {
                     traces(trace1, trace2)
                     layout {
                         title = "Third graph, row: 2, size: 12/12"
@@ -75,7 +75,7 @@ fun main() {
         page("other") {
             h1 { +"This is the other plot page" }
             a("/") { +"Back to the main page" }
-            plot(plot1)
+            plotly(plot1)
         }
 
     }

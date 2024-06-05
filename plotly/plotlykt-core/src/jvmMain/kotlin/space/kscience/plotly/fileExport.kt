@@ -1,7 +1,5 @@
 package space.kscience.plotly
 
-import kotlinx.html.FlowContent
-import space.kscience.visionforge.html.HtmlFragment
 import java.awt.Desktop
 import java.nio.file.Files
 import java.nio.file.Path
@@ -51,49 +49,49 @@ public fun Plot.makeFile(
 ) {
     val actualFile = path ?: Files.createTempFile("tempPlot", ".html")
     Files.createDirectories(actualFile.parent)
-    Files.writeString(actualFile, toHTML(inferPlotlyHeader(path, resourceLocation), config = config))
+    Files.writeString(actualFile, toHTMLPage(inferPlotlyHeader(path, resourceLocation), config = config))
     if (show) {
         Desktop.getDesktop().browse(actualFile.toFile().toURI())
     }
 }
 
-/**
- * The same as [Plot.makeFile].
- */
-public fun PlotlyFragment.makeFile(
-    path: Path? = null,
-    show: Boolean = true,
-    title: String = "Plotly.kt",
-    resourceLocation: ResourceLocation = ResourceLocation.LOCAL,
-    additionalHeaders: List<HtmlFragment> = emptyList(),
-) {
-    toPage(
-        title = title,
-        headers = (additionalHeaders + inferPlotlyHeader(path, resourceLocation)).toTypedArray()
-    ).makeFile(path, show)
-}
-
-
-/**
- * Export a page html to a file.
- */
-public fun PlotlyPage.makeFile(path: Path? = null, show: Boolean = true) {
-    val actualFile = path ?: Files.createTempFile("tempPlot", ".html")
-    Files.createDirectories(actualFile.parent)
-    Files.writeString(actualFile, render())
-    if (show) {
-        Desktop.getDesktop().browse(actualFile.toFile().toURI())
-    }
-}
-
-public fun Plotly.display(pageBuilder: FlowContent.(renderer: PlotlyRenderer) -> Unit): Unit =
-    fragment(pageBuilder).makeFile(null, true)
+///**
+// * The same as [Plot.makeFile].
+// */
+//public fun PlotlyFragment.makeFile(
+//    path: Path? = null,
+//    show: Boolean = true,
+//    title: String = "Plotly.kt",
+//    resourceLocation: ResourceLocation = ResourceLocation.LOCAL,
+//    additionalHeaders: List<HtmlFragment> = emptyList(),
+//) {
+//    toPage(
+//        title = title,
+//        headers = (additionalHeaders + inferPlotlyHeader(path, resourceLocation)).toTypedArray()
+//    ).makeFile(path, show)
+//}
+//
+//
+///**
+// * Export a page html to a file.
+// */
+//public fun PlotlyPage.makeFile(path: Path? = null, show: Boolean = true) {
+//    val actualFile = path ?: Files.createTempFile("tempPlot", ".html")
+//    Files.createDirectories(actualFile.parent)
+//    Files.writeString(actualFile, render())
+//    if (show) {
+//        Desktop.getDesktop().browse(actualFile.toFile().toURI())
+//    }
+//}
+//
+//public fun Plotly.display(pageBuilder: FlowContent.(renderer: PlotlyRenderer) -> Unit): Unit =
+//    fragment(pageBuilder).makeFile(null, true)
 
 /**
  * Select a file to save plot to using Swing form.
  */
 @UnstablePlotlyAPI
-public fun selectFile(filter: FileNameExtensionFilter? = null): Path? {
+public fun Plotly.selectFile(filter: FileNameExtensionFilter? = null): Path? {
     val fileChooser = JFileChooser()
     fileChooser.dialogTitle = "Specify a file to save"
     if (filter != null) {

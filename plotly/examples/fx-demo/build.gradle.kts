@@ -10,7 +10,6 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":plotly:plotlykt-server"))
     implementation("no.tornado:tornadofx:1.7.20")
     implementation(spclibs.logback.classic)
 }

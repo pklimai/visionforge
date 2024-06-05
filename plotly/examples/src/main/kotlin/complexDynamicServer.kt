@@ -8,7 +8,7 @@ import kotlinx.html.link
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.layout
 import space.kscience.plotly.models.Trace
-import space.kscience.plotly.plot
+import space.kscience.plotly.plotly
 import space.kscience.plotly.server.pushUpdates
 import space.kscience.plotly.server.serve
 import space.kscience.plotly.server.show
@@ -76,7 +76,7 @@ fun main() {
             }
             div("row") {
                 div("col-6") {
-                    plot(renderer = renderer) {
+                    plotly(renderer = renderer) {
                         layout {
                             title = "sin property"
                             xaxis.title = "point index"
@@ -91,7 +91,7 @@ fun main() {
                     }
                 }
                 div("col-6") {
-                    plot(renderer = renderer) {
+                    plotly(renderer = renderer) {
                         layout {
                             title = "cos property"
                             xaxis.title = "point index"
@@ -108,7 +108,7 @@ fun main() {
             }
             div("row") {
                 div("col-12") {
-                    plot(renderer = renderer) {
+                    plotly(renderer = renderer) {
                         layout {
                             title = "cos vs sin"
                             xaxis.title = "sin"

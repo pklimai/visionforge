@@ -6,15 +6,16 @@ import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 
 
 @Serializable
-public abstract class AbstractVision : Vision {
+public abstract class AbstractVision(
+    @SerialName("properties")
+    @OptIn(ExperimentalSerializationApi::class)
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    private val propertiesInternal: MutableMeta = MutableMeta()
+): Vision {
 
     @Transient
     override var parent: Vision? = null
 
-    @SerialName("properties")
-    @OptIn(ExperimentalSerializationApi::class)
-    @EncodeDefault(EncodeDefault.Mode.NEVER)
-    protected var propertiesInternal: MutableMeta = MutableMeta()
 
     final override val properties: MutableVisionProperties by lazy {
         AbstractVisionProperties(this, propertiesInternal)

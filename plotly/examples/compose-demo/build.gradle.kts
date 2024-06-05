@@ -21,7 +21,6 @@ kotlin {
                 implementation(compose.material)
                 implementation(compose.desktop.currentOs)
                 implementation("io.github.kevinnzou:compose-webview-multiplatform:1.9.8")
-                implementation(projects.plotly.plotlyktServer)
                 implementation(spclibs.logback.classic)
             }
         }
