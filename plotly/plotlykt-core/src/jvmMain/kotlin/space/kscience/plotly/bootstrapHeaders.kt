@@ -2,6 +2,7 @@ package space.kscience.plotly
 
 import kotlinx.html.link
 import kotlinx.html.script
+import space.kscience.visionforge.html.HtmlFragment
 
 
 //public fun localBootstrap(basePath: Path) = HtmlFragment {
@@ -31,7 +32,7 @@ import kotlinx.html.script
 //    }
 //}
 
-public val cdnBootstrap: PlotlyHtmlFragment = PlotlyHtmlFragment {
+public val cdnBootstrap: HtmlFragment = HtmlFragment {
     script {
         src = "https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity = "sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

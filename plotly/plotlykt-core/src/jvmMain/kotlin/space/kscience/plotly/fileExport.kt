@@ -1,6 +1,7 @@
 package space.kscience.plotly
 
 import kotlinx.html.FlowContent
+import space.kscience.visionforge.html.HtmlFragment
 import java.awt.Desktop
 import java.nio.file.Files
 import java.nio.file.Path
@@ -64,7 +65,7 @@ public fun PlotlyFragment.makeFile(
     show: Boolean = true,
     title: String = "Plotly.kt",
     resourceLocation: ResourceLocation = ResourceLocation.LOCAL,
-    additionalHeaders: List<PlotlyHtmlFragment> = emptyList(),
+    additionalHeaders: List<HtmlFragment> = emptyList(),
 ) {
     toPage(
         title = title,

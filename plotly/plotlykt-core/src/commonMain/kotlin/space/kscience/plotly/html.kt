@@ -2,20 +2,11 @@ package space.kscience.plotly
 
 import kotlinx.html.*
 import kotlinx.html.stream.createHTML
+import space.kscience.visionforge.html.HtmlFragment
+import space.kscience.visionforge.html.appendTo
 
 
-public class PlotlyHtmlFragment(public val visit: TagConsumer<*>.() -> Unit) {
-    override fun toString(): String {
-        return createHTML().also(visit).finalize()
-    }
-}
-
-public operator fun PlotlyHtmlFragment.plus(other: PlotlyHtmlFragment): PlotlyHtmlFragment = PlotlyHtmlFragment {
-    this@plus.run { visit() }
-    other.run { visit() }
-}
-
-public val cdnPlotlyHeader: PlotlyHtmlFragment = PlotlyHtmlFragment {
+public val cdnPlotlyHeader: HtmlFragment = HtmlFragment{
     script {
         type = "text/javascript"
         src = Plotly.PLOTLY_CDN
@@ -26,7 +17,7 @@ public val cdnPlotlyHeader: PlotlyHtmlFragment = PlotlyHtmlFragment {
  * Create a html (including headers) string from plot
  */
 public fun Plot.toHTML(
-    vararg headers: PlotlyHtmlFragment = arrayOf(cdnPlotlyHeader),
+    vararg headers: HtmlFragment = arrayOf(cdnPlotlyHeader),
     config: PlotlyConfig = PlotlyConfig(),
 ): String = createHTML().html {
     head {
@@ -35,7 +26,7 @@ public fun Plot.toHTML(
         }
         title(layout.title ?: "Plotly.kt")
         headers.forEach {
-            it.visit(consumer)
+            it.appendTo(consumer)
         }
     }
     body {
@@ -45,7 +36,7 @@ public fun Plot.toHTML(
     }
 }
 
-public val mathJaxHeader: PlotlyHtmlFragment = PlotlyHtmlFragment {
+public val mathJaxHeader: HtmlFragment = HtmlFragment {
     script {
         type = "text/x-mathjax-config"
         unsafe {

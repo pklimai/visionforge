@@ -3,6 +3,7 @@ package space.kscience.plotly
 import kotlinx.html.link
 import kotlinx.html.script
 import kotlinx.html.unsafe
+import space.kscience.visionforge.html.HtmlFragment
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
@@ -21,7 +22,7 @@ internal fun checkOrStoreFile(basePath: Path, filePath: Path, resource: String):
     } else {
         //TODO add logging
 
-        val bytes = PlotlyHtmlFragment::class.java.getResourceAsStream(resource)!!.readAllBytes()
+        val bytes = HtmlFragment::class.java.getResourceAsStream(resource)!!.readAllBytes()
         Files.createDirectories(fullPath.parent)
         Files.write(fullPath, bytes, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)
     }
@@ -40,7 +41,7 @@ public fun localScriptHeader(
     basePath: Path,
     scriptPath: Path,
     resource: String,
-): PlotlyHtmlFragment = PlotlyHtmlFragment {
+): HtmlFragment = HtmlFragment {
     val relativePath = checkOrStoreFile(basePath, scriptPath, resource)
     script {
         type = "text/javascript"
@@ -54,7 +55,7 @@ public fun localCssHeader(
     basePath: Path,
     cssPath: Path,
     resource: String,
-): PlotlyHtmlFragment = PlotlyHtmlFragment {
+): HtmlFragment = HtmlFragment {
     val relativePath = checkOrStoreFile(basePath, cssPath, resource)
     link {
         rel = "stylesheet"
@@ -66,7 +67,7 @@ public fun localCssHeader(
 internal fun localPlotlyHeader(
     path: Path,
     relativeScriptPath: String = "$assetsDirectory$PLOTLY_SCRIPT_PATH"
-) = PlotlyHtmlFragment {
+) = HtmlFragment {
     val relativePath = checkOrStoreFile(path, Path.of(relativeScriptPath), PLOTLY_SCRIPT_PATH)
     script {
         type = "text/javascript"
@@ -78,7 +79,7 @@ internal fun localPlotlyHeader(
 /**
  * A system-wide plotly store location
  */
-internal val systemPlotlyHeader = PlotlyHtmlFragment {
+internal val systemPlotlyHeader = HtmlFragment {
     val relativePath = checkOrStoreFile(
         Path.of("."),
         Path.of(System.getProperty("user.home")).resolve(".plotly/$assetsDirectory$PLOTLY_SCRIPT_PATH"),
@@ -94,10 +95,10 @@ internal val systemPlotlyHeader = PlotlyHtmlFragment {
 /**
  * embedded plotly script
  */
-internal val embededPlotlyHeader = PlotlyHtmlFragment {
+internal val embededPlotlyHeader = HtmlFragment {
     script {
         unsafe {
-            val bytes = PlotlyHtmlFragment::class.java.getResourceAsStream(PLOTLY_SCRIPT_PATH)!!.readAllBytes()
+            val bytes = HtmlFragment::class.java.getResourceAsStream(PLOTLY_SCRIPT_PATH)!!.readAllBytes()
             +bytes.toString(Charsets.UTF_8)
         }
     }
@@ -107,7 +108,7 @@ internal val embededPlotlyHeader = PlotlyHtmlFragment {
 internal fun inferPlotlyHeader(
     target: Path?,
     resourceLocation: ResourceLocation
-): PlotlyHtmlFragment = when (resourceLocation) {
+): HtmlFragment = when (resourceLocation) {
     ResourceLocation.REMOTE -> cdnPlotlyHeader
     ResourceLocation.LOCAL -> if (target != null) {
         localPlotlyHeader(target)

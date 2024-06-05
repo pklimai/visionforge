@@ -7,7 +7,6 @@ plugins {
 }
 
 val dataforgeVersion by extra("0.9.0")
-val plotlyVersion by extra("2.29.0")
 
 allprojects {
     group = "space.kscience"

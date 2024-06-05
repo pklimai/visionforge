@@ -62,7 +62,6 @@ include(
     ":visionforge-jupyter:visionforge-jupyter-common",
     ":plotly",
     ":plotly:plotlykt-core",
-    ":plotly:plotlykt-geo",
     ":plotly:plotlykt-jupyter",
     ":plotly:plotlykt-server",
     ":plotly:plotlykt-script",

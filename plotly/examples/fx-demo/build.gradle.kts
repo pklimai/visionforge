@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     kotlin("jvm")
     application
@@ -30,6 +28,3 @@ kotlin{
     jvmToolchain(11)
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.freeCompilerArgs = kotlinOptions.freeCompilerArgs +"-Xopt-in=kotlin.RequiresOptIn"
-}

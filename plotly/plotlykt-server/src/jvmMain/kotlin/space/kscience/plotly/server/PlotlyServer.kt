@@ -23,6 +23,8 @@ import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.names.Name
 import space.kscience.plotly.*
 import space.kscience.plotly.server.PlotlyServer.Companion.DEFAULT_PAGE
+import space.kscience.visionforge.html.HtmlFragment
+import space.kscience.visionforge.html.appendTo
 import java.awt.Desktop
 import java.net.URI
 import kotlin.collections.set
@@ -141,10 +143,10 @@ public class PlotlyServer internal constructor(
     /**
      * a list of headers that should be applied to all pages
      */
-    private val globalHeaders: ArrayList<PlotlyHtmlFragment> = ArrayList<PlotlyHtmlFragment>()
+    private val globalHeaders: ArrayList<HtmlFragment> = ArrayList<HtmlFragment>()
 
     public fun header(block: TagConsumer<*>.() -> Unit) {
-        globalHeaders.add(PlotlyHtmlFragment(block))
+        globalHeaders.add(HtmlFragment(block))
     }
 
     internal fun Route.servePlotData(plots: Map<String, Plot>) {
@@ -186,7 +188,7 @@ public class PlotlyServer internal constructor(
         plotlyFragment: PlotlyFragment,
         route: String = DEFAULT_PAGE,
         title: String = "Plotly server page '$route'",
-        headers: List<PlotlyHtmlFragment> = emptyList(),
+        headers: List<HtmlFragment> = emptyList(),
     ) {
         root.apply {
             val plots = HashMap<String, Plot>()
@@ -214,9 +216,9 @@ public class PlotlyServer internal constructor(
                             meta {
                                 charset = "utf-8"
                                 (globalHeaders + headers).forEach {
-                                    it.visit(consumer)
+                                    it.appendTo(consumer)
                                 }
-                                plotlyKtHeader.visit(consumer)
+                                plotlyKtHeader.appendTo(consumer)
                             }
                             title(title)
                         }
@@ -239,7 +241,7 @@ public class PlotlyServer internal constructor(
     public fun page(
         route: String = DEFAULT_PAGE,
         title: String = "Plotly server page '$route'",
-        headers: List<PlotlyHtmlFragment> = emptyList(),
+        headers: List<HtmlFragment> = emptyList(),
         content: FlowContent.(renderer: PlotlyRenderer) -> Unit,
     ) {
         page(PlotlyFragment(content), route, title, headers)

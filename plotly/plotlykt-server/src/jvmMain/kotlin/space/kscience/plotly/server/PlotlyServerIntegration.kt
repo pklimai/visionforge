@@ -14,6 +14,7 @@ import space.kscience.dataforge.meta.Scheme
 import space.kscience.dataforge.meta.boolean
 import space.kscience.dataforge.meta.int
 import space.kscience.plotly.*
+import space.kscience.visionforge.html.HtmlFragment
 
 public object PlotlyServerConfiguration : Scheme() {
     public var port: Int by int(System.getProperty("space.kscience.plotly.port")?.toInt() ?: 8882)
@@ -24,9 +25,9 @@ public object PlotlyServerConfiguration : Scheme() {
     /**
      * Switch plotly renderer to the legacy notebook mode (Jupyter classic)
      */
-    public fun notebook(): PlotlyHtmlFragment {
+    public fun notebook(): HtmlFragment {
         legacyMode = true
-        return PlotlyHtmlFragment {
+        return HtmlFragment {
             div {
                 style = "color: blue;"
                 +"Plotly notebook integration switch into the legacy mode."
@@ -35,7 +36,7 @@ public object PlotlyServerConfiguration : Scheme() {
     }
 }
 
-internal val plotlyKtHeader = PlotlyHtmlFragment {
+internal val plotlyKtHeader = HtmlFragment {
     script {
         src = "js/plotly-kt.js"
     }
@@ -59,15 +60,15 @@ public class PlotlyServerIntegration : JupyterIntegration() {
     public val isServerStarted: Boolean get() = server != null
 
 
-    private fun start(): PlotlyHtmlFragment = if (server != null) {
-        PlotlyHtmlFragment {
+    private fun start(): HtmlFragment = if (server != null) {
+        HtmlFragment {
             div {
                 style = "color: blue;"
                 +"The server is already running on ${Plotly.jupyter.port}. It must be shut down first to be restarted."
             }
         }
     } else {
-        fun doStart(): PlotlyHtmlFragment {
+        fun doStart(): HtmlFragment {
             server?.stop(1000, 1000)
             server = Plotly.serve(host = "0.0.0.0", port = Plotly.jupyter.port) {
                 root.servePlotData(plots)
@@ -80,7 +81,7 @@ public class PlotlyServerIntegration : JupyterIntegration() {
             ) { plotId, plot ->
                 plots[plotId] = plot
             }
-            return PlotlyHtmlFragment {
+            return HtmlFragment {
                 div {
                     style = "color: blue;"
                     +"Started plotly server on ${Plotly.jupyter.port}"
@@ -135,7 +136,7 @@ public class PlotlyServerIntegration : JupyterIntegration() {
 
         import("space.kscience.plotly.server.jupyter")
 
-        render<PlotlyHtmlFragment> {
+        render<HtmlFragment> {
             HTML(it.toString())
         }
 

@@ -5,6 +5,7 @@ import kotlinx.html.stream.createHTML
 import org.jetbrains.kotlinx.jupyter.api.HTML
 import org.jetbrains.kotlinx.jupyter.api.libraries.JupyterIntegration
 import org.jetbrains.kotlinx.jupyter.api.libraries.resources
+import space.kscience.visionforge.html.HtmlFragment
 
 public object PlotlyJupyterConfiguration {
     public var legacyMode: Boolean = false
@@ -12,9 +13,9 @@ public object PlotlyJupyterConfiguration {
     /**
      * Switch plotly renderer to the legacy notebook mode (Jupyter classic)
      */
-    public fun notebook(): PlotlyHtmlFragment {
+    public fun notebook(): HtmlFragment {
         legacyMode = true
-        return PlotlyHtmlFragment {
+        return HtmlFragment {
             div {
                 style = "color: blue;"
                 +"Plotly notebook integration switched into the notebook mode."
@@ -22,9 +23,9 @@ public object PlotlyJupyterConfiguration {
         }
     }
 
-    public fun lab(): PlotlyHtmlFragment {
+    public fun lab(): HtmlFragment {
         legacyMode = false
-        return PlotlyHtmlFragment {
+        return HtmlFragment {
             div {
                 style = "color: blue;"
                 +"Plotly notebook integration switched into the lab mode."
@@ -98,7 +99,7 @@ public class PlotlyIntegration : JupyterIntegration(), PlotlyRenderer {
 
         import("space.kscience.plotly.jupyter")
 
-        render<PlotlyHtmlFragment> {
+        render<HtmlFragment> {
             HTML(it.toString())
         }
 

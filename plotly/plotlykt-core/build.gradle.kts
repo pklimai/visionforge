@@ -4,7 +4,7 @@ plugins {
 }
 
 val dataforgeVersion: String by rootProject.extra
-val plotlyVersion: String by rootProject.extra
+val plotlyVersion by extra("2.29.0")
 
 
 kotlin{
@@ -16,10 +16,11 @@ kscience {
     native()
     wasm()
 
-    dependencies {
-        api("space.kscience:dataforge-meta:$dataforgeVersion")
-        api(spclibs.kotlinx.html)
-//        api("org.jetbrains.kotlinx:kotlinx-html:0.11.0")
+    commonMain {
+        api(projects.visionforgeCore)
+//        api("space.kscience:dataforge-meta:$dataforgeVersion")
+//        api(spclibs.kotlinx.html)
+
     }
 
     jsMain{

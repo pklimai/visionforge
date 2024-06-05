@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     kotlin("multiplatform")
 }
@@ -23,8 +21,4 @@ kotlin {
             }
         }
     }
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.freeCompilerArgs = kotlinOptions.freeCompilerArgs +"-Xopt-in=kotlin.RequiresOptIn"
 }

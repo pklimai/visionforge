@@ -12,6 +12,7 @@ import space.kscience.tables.Table
 import space.kscience.visionforge.gdml.toVision
 import space.kscience.visionforge.html.HtmlFragment
 import space.kscience.visionforge.html.VisionPage
+import space.kscience.visionforge.html.appendTo
 import space.kscience.visionforge.markup.MarkupPlugin
 import space.kscience.visionforge.plotly.PlotlyPlugin
 import space.kscience.visionforge.plotly.asVision
@@ -63,7 +64,7 @@ public class JupyterCommonIntegration : VisionForgeIntegration(CONTEXT.visionMan
         render<PlotlyPage> { plotlyPage ->
             val headers = plotlyPage.headers.associate { plotlyFragment ->
                 plotlyFragment.hashCode().toString(16) to HtmlFragment {
-                    plotlyFragment.visit(this)
+                    plotlyFragment.appendTo(this)
                 }
 
             }

@@ -2,6 +2,8 @@ package space.kscience.plotly
 
 import kotlinx.html.*
 import kotlinx.html.stream.createHTML
+import space.kscience.visionforge.html.HtmlFragment
+import space.kscience.visionforge.html.appendTo
 
 /**
  * A custom HTML fragment including plotly container reference
@@ -12,7 +14,7 @@ public class PlotlyFragment(public val render: FlowContent.(renderer: PlotlyRend
  * A complete page including headers and title
  */
 public data class PlotlyPage(
-    val headers: Collection<PlotlyHtmlFragment>,
+    val headers: Collection<HtmlFragment>,
     val fragment: PlotlyFragment,
     val title: String = "Plotly.kt",
     val renderer: PlotlyRenderer = StaticPlotlyRenderer
@@ -23,7 +25,7 @@ public data class PlotlyPage(
                 charset = "utf-8"
             }
             title(this@PlotlyPage.title)
-            headers.distinct().forEach { it.visit(consumer) }
+            headers.distinct().forEach { it.appendTo(consumer) }
         }
         body {
             fragment.render(this, renderer)
@@ -37,7 +39,7 @@ public fun Plotly.fragment(content: FlowContent.(renderer: PlotlyRenderer) -> Un
  * Create a complete page including plots
  */
 public fun Plotly.page(
-    vararg headers: PlotlyHtmlFragment = arrayOf(cdnPlotlyHeader),
+    vararg headers: HtmlFragment = arrayOf(cdnPlotlyHeader),
     title: String = "Plotly.kt",
     renderer: PlotlyRenderer = StaticPlotlyRenderer,
     content: FlowContent.(renderer: PlotlyRenderer) -> Unit
@@ -47,7 +49,7 @@ public fun Plotly.page(
  * Convert an html plot fragment to page
  */
 public fun PlotlyFragment.toPage(
-    vararg headers: PlotlyHtmlFragment = arrayOf(cdnPlotlyHeader),
+    vararg headers: HtmlFragment = arrayOf(cdnPlotlyHeader),
     title: String = "Plotly.kt",
     renderer: PlotlyRenderer = StaticPlotlyRenderer
 ): PlotlyPage = PlotlyPage(headers.toList(), this, title, renderer)
@@ -56,7 +58,7 @@ public fun PlotlyFragment.toPage(
  * Convert a plot to the sigle-plot page
  */
 public fun Plot.toPage(
-    vararg headers: PlotlyHtmlFragment = arrayOf(cdnPlotlyHeader),
+    vararg headers: HtmlFragment = arrayOf(cdnPlotlyHeader),
     config: PlotlyConfig = PlotlyConfig.empty(),
     title: String = "Plotly.kt",
     renderer: PlotlyRenderer = StaticPlotlyRenderer
