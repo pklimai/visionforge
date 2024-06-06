@@ -6,7 +6,7 @@
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:plotlykt-jupyter:0.7.1`.
+The Maven coordinates of this project are `space.kscience:plotlykt-jupyter:0.7.2`.
 
 **Gradle Kotlin DSL:**
 ```kotlin
@@ -16,6 +16,6 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:plotlykt-jupyter:0.7.1")
+    implementation("space.kscience:plotlykt-jupyter:0.7.2")
 }
 ```

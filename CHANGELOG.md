@@ -3,11 +3,8 @@
 ## Unreleased
 
 ### Added
-- Moved plotly-kt repo inside this one
 
 ### Changed
-- Kotlin 2.0
-- DataForge 0.9
 
 ### Deprecated
 
@@ -16,6 +13,17 @@
 ### Fixed
 
 ### Security
+
+## 0.4.2 - 2024-06-06
+
+### Added
+
+- Moved plotly-kt repo inside this one
+
+### Changed
+
+- Kotlin 2.0
+- DataForge 0.9
 
 ## 0.4.1 - 2024-03-15
 

@@ -9,17 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
-- Plotly moved on top of VisionForge (in the VisionForge repository)
-- Geo module merged into core
 
 ### Deprecated
 
 ### Removed
-- Own HtmlFragment replaced by VisionForge Html handling
 
 ### Fixed
 
 ### Security
+
+## 0.7.2 - 2024-06-06
+
+### Changed
+
+- Plotly moved on top of VisionForge (in the VisionForge repository)
+- Geo module merged into core
+
+### Removed
+
+- Own HtmlFragment replaced by VisionForge Html handling
 
 ## 0.7.1 - 2024-02-22
 
