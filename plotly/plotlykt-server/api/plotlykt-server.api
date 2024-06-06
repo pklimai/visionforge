@@ -42,7 +42,7 @@ public final class space/kscience/plotly/server/PlotlyServerConfiguration : spac
 	public final fun getLegacyMode ()Z
 	public final fun getPort ()I
 	public final fun getUpdateInterval ()I
-	public final fun notebook ()Lspace/kscience/plotly/PlotlyHtmlFragment;
+	public final fun notebook ()Lspace/kscience/visionforge/html/HtmlFragment;
 	public final fun setLegacyMode (Z)V
 	public final fun setPort (I)V
 	public final fun setUpdateInterval (I)V

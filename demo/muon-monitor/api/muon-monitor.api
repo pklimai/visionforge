@@ -15,20 +15,27 @@ public final class ru/mipt/npm/muon/monitor/Event {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class ru/mipt/npm/muon/monitor/Event$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class ru/mipt/npm/muon/monitor/Event$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field $stable I
 	public static final field INSTANCE Lru/mipt/npm/muon/monitor/Event$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lru/mipt/npm/muon/monitor/Event;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lru/mipt/npm/muon/monitor/Event;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/muon/monitor/Event;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/muon/monitor/Event;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/muon/monitor/Event$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class ru/mipt/npm/muon/monitor/MMServerKt {
+	public static final fun main ()V
+	public static synthetic fun main ([Ljava/lang/String;)V
+	public static final fun module (Lio/ktor/server/application/Application;Lspace/kscience/dataforge/context/Context;)V
+	public static synthetic fun module$default (Lio/ktor/server/application/Application;Lspace/kscience/dataforge/context/Context;ILjava/lang/Object;)V
 }
 
 public final class ru/mipt/npm/muon/monitor/Model {
@@ -77,13 +84,6 @@ public final class ru/mipt/npm/muon/monitor/SC16 {
 	public final fun getCenter ()Lspace/kscience/visionforge/solid/Float32Vector3D;
 	public final fun getName ()Ljava/lang/String;
 	public final fun getPixels ()Ljava/util/Collection;
-}
-
-public final class ru/mipt/npm/muon/monitor/server/MMServerKt {
-	public static final fun main ()V
-	public static synthetic fun main ([Ljava/lang/String;)V
-	public static final fun module (Lio/ktor/server/application/Application;Lspace/kscience/dataforge/context/Context;)V
-	public static synthetic fun module$default (Lio/ktor/server/application/Application;Lspace/kscience/dataforge/context/Context;ILjava/lang/Object;)V
 }
 
 public final class ru/mipt/npm/muon/monitor/sim/Cos2TrackGenerator : ru/mipt/npm/muon/monitor/sim/TrackGenerator {

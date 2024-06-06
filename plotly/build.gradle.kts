@@ -5,7 +5,7 @@ plugins{
 
 allprojects {
     group = "space.kscience"
-    version = "0.8.0-dev-1"
+    version = "0.7.2"
 }
 
 readme {
