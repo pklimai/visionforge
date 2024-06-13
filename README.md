@@ -70,6 +70,10 @@ To learn more about DataForge, please consult the following URLs:
 >
 > **Maturity**: EXPERIMENTAL
 
+### [plotly](plotly)
+>
+> **Maturity**: EXPERIMENTAL
+
 ### [visionforge-compose-html](visionforge-compose-html)
 >
 > **Maturity**: EXPERIMENTAL
@@ -143,12 +147,48 @@ To learn more about DataForge, please consult the following URLs:
 >
 > **Maturity**: EXPERIMENTAL
 
+### [plotly/examples](plotly/examples)
+>
+> **Maturity**: EXPERIMENTAL
+
+### [plotly/plotlykt-core](plotly/plotlykt-core)
+>
+> **Maturity**: DEVELOPMENT
+
+### [plotly/plotlykt-jupyter](plotly/plotlykt-jupyter)
+>
+> **Maturity**: EXPERIMENTAL
+
+### [plotly/plotlykt-script](plotly/plotlykt-script)
+>
+> **Maturity**: EXPERIMENTAL
+
+### [plotly/plotlykt-server](plotly/plotlykt-server)
+>
+> **Maturity**: EXPERIMENTAL
+
 ### [visionforge-jupyter/visionforge-jupyter-common](visionforge-jupyter/visionforge-jupyter-common)
 > Jupyter api artifact including all common modules
 >
 > **Maturity**: EXPERIMENTAL
 
 ### [visionforge-threejs/visionforge-threejs-server](visionforge-threejs/visionforge-threejs-server)
+>
+> **Maturity**: EXPERIMENTAL
+
+### [plotly/examples/compose-demo](plotly/examples/compose-demo)
+>
+> **Maturity**: EXPERIMENTAL
+
+### [plotly/examples/fx-demo](plotly/examples/fx-demo)
+>
+> **Maturity**: EXPERIMENTAL
+
+### [plotly/examples/js-demo](plotly/examples/js-demo)
+>
+> **Maturity**: EXPERIMENTAL
+
+### [plotly/examples/native-demo](plotly/examples/native-demo)
 >
 > **Maturity**: EXPERIMENTAL
 

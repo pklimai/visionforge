@@ -31,14 +31,14 @@ public final class space/kscience/visionforge/markup/VisionOfMarkup : space/ksci
 	public final fun setContent (Ljava/lang/String;)V
 }
 
-public final class space/kscience/visionforge/markup/VisionOfMarkup$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/markup/VisionOfMarkup$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/markup/VisionOfMarkup$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/markup/VisionOfMarkup;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/markup/VisionOfMarkup;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/markup/VisionOfMarkup;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/markup/VisionOfMarkup;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 

@@ -3,14 +3,14 @@ public final class space/kscience/visionforge/solid/AmbientLightSource : space/k
 	public fun <init> ()V
 }
 
-public final class space/kscience/visionforge/solid/AmbientLightSource$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/AmbientLightSource$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/AmbientLightSource$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/AmbientLightSource;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/AmbientLightSource;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/AmbientLightSource;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/AmbientLightSource;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -25,14 +25,14 @@ public final class space/kscience/visionforge/solid/AxesSolid : space/kscience/v
 	public final fun getSize ()D
 }
 
-public final class space/kscience/visionforge/solid/AxesSolid$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/AxesSolid$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/AxesSolid$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/AxesSolid;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/AxesSolid;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/AxesSolid;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/AxesSolid;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -56,14 +56,14 @@ public final class space/kscience/visionforge/solid/Box : space/kscience/visionf
 	public final fun getZSize ()F
 }
 
-public final class space/kscience/visionforge/solid/Box$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/Box$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/Box$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Box;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Box;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Box;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Box;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -98,14 +98,14 @@ public final class space/kscience/visionforge/solid/Composite : space/kscience/v
 	public final fun getSecond ()Lspace/kscience/visionforge/solid/Solid;
 }
 
-public final class space/kscience/visionforge/solid/Composite$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/Composite$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/Composite$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Composite;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Composite;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Composite;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Composite;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -148,14 +148,14 @@ public final class space/kscience/visionforge/solid/ConeSegment : space/kscience
 	public fun toGeometry (Lspace/kscience/visionforge/solid/GeometryBuilder;)V
 }
 
-public final class space/kscience/visionforge/solid/ConeSegment$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/ConeSegment$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/ConeSegment$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/ConeSegment;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/ConeSegment;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/ConeSegment;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/ConeSegment;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -184,14 +184,14 @@ public final class space/kscience/visionforge/solid/ConeSurface : space/kscience
 	public fun toGeometry (Lspace/kscience/visionforge/solid/GeometryBuilder;)V
 }
 
-public final class space/kscience/visionforge/solid/ConeSurface$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/ConeSurface$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/ConeSurface$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/ConeSurface;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/ConeSurface;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/ConeSurface;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/ConeSurface;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -212,14 +212,14 @@ public final class space/kscience/visionforge/solid/Convex : space/kscience/visi
 	public final fun getPoints ()Ljava/util/List;
 }
 
-public final class space/kscience/visionforge/solid/Convex$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/Convex$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/Convex$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Convex;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Convex;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Convex;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Convex;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -252,14 +252,14 @@ public final class space/kscience/visionforge/solid/CutTube : space/kscience/vis
 	public fun toGeometry (Lspace/kscience/visionforge/solid/GeometryBuilder;)V
 }
 
-public final class space/kscience/visionforge/solid/CutTube$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/CutTube$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/CutTube$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/CutTube;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/CutTube;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/CutTube;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/CutTube;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -281,14 +281,14 @@ public final class space/kscience/visionforge/solid/Extruded : space/kscience/vi
 	public fun toGeometry (Lspace/kscience/visionforge/solid/GeometryBuilder;)V
 }
 
-public final class space/kscience/visionforge/solid/Extruded$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/Extruded$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/Extruded$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Extruded;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Extruded;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Extruded;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Extruded;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -332,14 +332,14 @@ public final class space/kscience/visionforge/solid/Extruded$Layer {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class space/kscience/visionforge/solid/Extruded$Layer$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/Extruded$Layer$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/Extruded$Layer$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Extruded$Layer;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Extruded$Layer;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Extruded$Layer;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Extruded$Layer;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -456,14 +456,14 @@ public final class space/kscience/visionforge/solid/GenericHexagon : space/kscie
 	public fun getNode8 ()Lspace/kscience/visionforge/solid/Float32Vector3D;
 }
 
-public final class space/kscience/visionforge/solid/GenericHexagon$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/GenericHexagon$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/GenericHexagon$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/GenericHexagon;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/GenericHexagon;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/GenericHexagon;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/GenericHexagon;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -558,14 +558,14 @@ public final class space/kscience/visionforge/solid/PointLightSource : space/ksc
 	public fun <init> ()V
 }
 
-public final class space/kscience/visionforge/solid/PointLightSource$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/PointLightSource$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/PointLightSource$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/PointLightSource;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/PointLightSource;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/PointLightSource;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/PointLightSource;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -582,14 +582,14 @@ public final class space/kscience/visionforge/solid/PolyLine : space/kscience/vi
 	public final fun setThickness (Ljava/lang/Number;)V
 }
 
-public final class space/kscience/visionforge/solid/PolyLine$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/PolyLine$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/PolyLine$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/PolyLine;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/PolyLine;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/PolyLine;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/PolyLine;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -616,14 +616,14 @@ public final class space/kscience/visionforge/solid/Shape2DBuilder {
 	public final fun point (Ljava/lang/Number;Ljava/lang/Number;)V
 }
 
-public final class space/kscience/visionforge/solid/Shape2DBuilder$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/Shape2DBuilder$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/Shape2DBuilder$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Shape2DBuilder;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Shape2DBuilder;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Shape2DBuilder;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Shape2DBuilder;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -672,15 +672,15 @@ public class space/kscience/visionforge/solid/SolidBase : space/kscience/visionf
 	public static final synthetic fun write$Self (Lspace/kscience/visionforge/solid/SolidBase;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;Lkotlinx/serialization/KSerializer;)V
 }
 
-public final class space/kscience/visionforge/solid/SolidBase$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public synthetic fun <init> (Lkotlinx/serialization/KSerializer;)V
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+public synthetic class space/kscience/visionforge/solid/SolidBase$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public fun <init> (Lkotlinx/serialization/KSerializer;)V
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/SolidBase;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/SolidBase;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/SolidBase;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/SolidBase;)V
+	public final fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class space/kscience/visionforge/solid/SolidBase$Companion {
@@ -702,14 +702,14 @@ public final class space/kscience/visionforge/solid/SolidGroup : space/kscience/
 	public fun setChild (Lspace/kscience/dataforge/names/Name;Lspace/kscience/visionforge/solid/Solid;)V
 }
 
-public final class space/kscience/visionforge/solid/SolidGroup$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/SolidGroup$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/SolidGroup$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/SolidGroup;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/SolidGroup;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/SolidGroup;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/SolidGroup;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -776,14 +776,14 @@ public final class space/kscience/visionforge/solid/SolidLabel : space/kscience/
 	public final fun getText ()Ljava/lang/String;
 }
 
-public final class space/kscience/visionforge/solid/SolidLabel$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/SolidLabel$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/SolidLabel$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/SolidLabel;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/SolidLabel;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/SolidLabel;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/SolidLabel;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -854,14 +854,14 @@ public final class space/kscience/visionforge/solid/SolidReference : space/kscie
 	public fun setParent (Lspace/kscience/visionforge/Vision;)V
 }
 
-public final class space/kscience/visionforge/solid/SolidReference$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/SolidReference$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/SolidReference$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/SolidReference;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/SolidReference;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/SolidReference;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/SolidReference;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -913,14 +913,14 @@ public final class space/kscience/visionforge/solid/Sphere : space/kscience/visi
 	public fun toGeometry (Lspace/kscience/visionforge/solid/GeometryBuilder;)V
 }
 
-public final class space/kscience/visionforge/solid/Sphere$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/Sphere$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/Sphere$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Sphere;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Sphere;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Sphere;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Sphere;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -946,14 +946,14 @@ public final class space/kscience/visionforge/solid/SphereLayer : space/kscience
 	public fun toGeometry (Lspace/kscience/visionforge/solid/GeometryBuilder;)V
 }
 
-public final class space/kscience/visionforge/solid/SphereLayer$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/SphereLayer$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/SphereLayer$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/SphereLayer;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/SphereLayer;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/SphereLayer;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/SphereLayer;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -972,14 +972,14 @@ public final class space/kscience/visionforge/solid/StlBinarySolid : space/kscie
 	public final fun getData ()[B
 }
 
-public final class space/kscience/visionforge/solid/StlBinarySolid$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/StlBinarySolid$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/StlBinarySolid$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/StlBinarySolid;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/StlBinarySolid;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/StlBinarySolid;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/StlBinarySolid;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -1001,14 +1001,14 @@ public final class space/kscience/visionforge/solid/StlUrlSolid : space/kscience
 	public final fun getUrl ()Ljava/lang/String;
 }
 
-public final class space/kscience/visionforge/solid/StlUrlSolid$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/StlUrlSolid$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/StlUrlSolid$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/StlUrlSolid;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/StlUrlSolid;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/StlUrlSolid;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/StlUrlSolid;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -1024,14 +1024,14 @@ public final class space/kscience/visionforge/solid/Surface : space/kscience/vis
 	public fun toGeometry (Lspace/kscience/visionforge/solid/GeometryBuilder;)V
 }
 
-public final class space/kscience/visionforge/solid/Surface$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/Surface$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/Surface$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Surface;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Surface;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Surface;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Surface;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -1070,14 +1070,14 @@ public final class space/kscience/visionforge/solid/Surface$Layer {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class space/kscience/visionforge/solid/Surface$Layer$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/solid/Surface$Layer$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/solid/Surface$Layer$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Surface$Layer;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/solid/Surface$Layer;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Surface$Layer;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/solid/Surface$Layer;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 

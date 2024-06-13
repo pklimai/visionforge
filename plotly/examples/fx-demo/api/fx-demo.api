@@ -1,0 +1,27 @@
+public final class space/kscience/plotly/fx/PlotlyApp : tornadofx/App {
+	public fun <init> ()V
+}
+
+public final class space/kscience/plotly/fx/PlotlyFXAppKt {
+	public static final fun main ([Ljava/lang/String;)V
+}
+
+public final class space/kscience/plotly/fx/PlotlyFXController : tornadofx/Controller {
+	public fun <init> ()V
+	public final fun displayPage (Ljava/lang/String;)V
+	public final fun getAddress ()Ljavafx/beans/property/SimpleStringProperty;
+	public final fun getPages ()Ljavafx/collections/ObservableList;
+	public final fun getScale ()Ljavafx/beans/property/SimpleIntegerProperty;
+	public final fun startServer ()V
+}
+
+public final class space/kscience/plotly/fx/PlotlyView : tornadofx/View {
+	public fun <init> ()V
+	public synthetic fun getRoot ()Ljavafx/scene/Parent;
+	public fun getRoot ()Ljavafx/scene/layout/HBox;
+}
+
+public final class space/kscience/plotly/fx/ServerKt {
+	public static final fun serve (Ljavafx/beans/value/ObservableIntegerValue;)Lio/ktor/server/engine/ApplicationEngine;
+}
+

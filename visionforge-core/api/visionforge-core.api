@@ -309,14 +309,14 @@ public final class space/kscience/visionforge/SimpleVisionGroup : space/kscience
 	public fun setChild (Lspace/kscience/dataforge/names/Name;Lspace/kscience/visionforge/Vision;)V
 }
 
-public final class space/kscience/visionforge/SimpleVisionGroup$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/SimpleVisionGroup$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/SimpleVisionGroup$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/SimpleVisionGroup;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/SimpleVisionGroup;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/SimpleVisionGroup;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/SimpleVisionGroup;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -429,14 +429,14 @@ public final class space/kscience/visionforge/VisionChange : space/kscience/visi
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class space/kscience/visionforge/VisionChange$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/VisionChange$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/VisionChange$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionChange;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionChange;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionChange;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionChange;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -562,14 +562,14 @@ public final class space/kscience/visionforge/VisionInputEvent : space/kscience/
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class space/kscience/visionforge/VisionInputEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/VisionInputEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/VisionInputEvent$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionInputEvent;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionInputEvent;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionInputEvent;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionInputEvent;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -622,14 +622,14 @@ public final class space/kscience/visionforge/VisionMetaEvent : space/kscience/d
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class space/kscience/visionforge/VisionMetaEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/VisionMetaEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/VisionMetaEvent$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionMetaEvent;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionMetaEvent;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionMetaEvent;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionMetaEvent;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -683,14 +683,14 @@ public final class space/kscience/visionforge/VisionSubmitEvent : space/kscience
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class space/kscience/visionforge/VisionSubmitEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/VisionSubmitEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/VisionSubmitEvent$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionSubmitEvent;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionSubmitEvent;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionSubmitEvent;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionSubmitEvent;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -707,14 +707,14 @@ public final class space/kscience/visionforge/VisionValueChangeEvent : space/ksc
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class space/kscience/visionforge/VisionValueChangeEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/VisionValueChangeEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/VisionValueChangeEvent$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionValueChangeEvent;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionValueChangeEvent;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionValueChangeEvent;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionValueChangeEvent;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -817,14 +817,14 @@ public final class space/kscience/visionforge/html/VisionOfCheckbox : space/ksci
 	public final fun setChecked (Ljava/lang/Boolean;)V
 }
 
-public final class space/kscience/visionforge/html/VisionOfCheckbox$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/html/VisionOfCheckbox$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/html/VisionOfCheckbox$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/html/VisionOfCheckbox;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/html/VisionOfCheckbox;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfCheckbox;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfCheckbox;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -846,14 +846,14 @@ public final class space/kscience/visionforge/html/VisionOfHtmlButton : space/ks
 	public final fun setLabel (Ljava/lang/String;)V
 }
 
-public final class space/kscience/visionforge/html/VisionOfHtmlButton$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/html/VisionOfHtmlButton$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/html/VisionOfHtmlButton$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/html/VisionOfHtmlButton;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/html/VisionOfHtmlButton;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfHtmlButton;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfHtmlButton;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -869,14 +869,14 @@ public final class space/kscience/visionforge/html/VisionOfHtmlForm : space/ksci
 	public final fun setValues (Lspace/kscience/dataforge/meta/Meta;)V
 }
 
-public final class space/kscience/visionforge/html/VisionOfHtmlForm$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/html/VisionOfHtmlForm$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/html/VisionOfHtmlForm$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/html/VisionOfHtmlForm;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/html/VisionOfHtmlForm;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfHtmlForm;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfHtmlForm;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -906,14 +906,14 @@ public class space/kscience/visionforge/html/VisionOfHtmlInput : space/kscience/
 	public static final synthetic fun write$Self (Lspace/kscience/visionforge/html/VisionOfHtmlInput;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
-public final class space/kscience/visionforge/html/VisionOfHtmlInput$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/html/VisionOfHtmlInput$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/html/VisionOfHtmlInput$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/html/VisionOfHtmlInput;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/html/VisionOfHtmlInput;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfHtmlInput;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfHtmlInput;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -947,14 +947,14 @@ public final class space/kscience/visionforge/html/VisionOfNumberField : space/k
 	public final fun setNumberValue (Ljava/lang/Number;)V
 }
 
-public final class space/kscience/visionforge/html/VisionOfNumberField$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/html/VisionOfNumberField$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/html/VisionOfNumberField$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/html/VisionOfNumberField;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/html/VisionOfNumberField;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfNumberField;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfNumberField;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -969,14 +969,14 @@ public final class space/kscience/visionforge/html/VisionOfPlainHtml : space/ksc
 	public final fun setContent (Ljava/lang/String;)V
 }
 
-public final class space/kscience/visionforge/html/VisionOfPlainHtml$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/html/VisionOfPlainHtml$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/html/VisionOfPlainHtml$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/html/VisionOfPlainHtml;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/html/VisionOfPlainHtml;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfPlainHtml;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfPlainHtml;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -995,14 +995,14 @@ public final class space/kscience/visionforge/html/VisionOfRangeField : space/ks
 	public final fun setNumberValue (Ljava/lang/Number;)V
 }
 
-public final class space/kscience/visionforge/html/VisionOfRangeField$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/html/VisionOfRangeField$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/html/VisionOfRangeField$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/html/VisionOfRangeField;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/html/VisionOfRangeField;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfRangeField;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfRangeField;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
@@ -1017,14 +1017,14 @@ public final class space/kscience/visionforge/html/VisionOfTextField : space/ksc
 	public final fun setText (Ljava/lang/String;)V
 }
 
-public final class space/kscience/visionforge/html/VisionOfTextField$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public synthetic class space/kscience/visionforge/html/VisionOfTextField$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lspace/kscience/visionforge/html/VisionOfTextField$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/html/VisionOfTextField;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/html/VisionOfTextField;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfTextField;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfTextField;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
