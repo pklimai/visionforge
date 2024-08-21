@@ -185,7 +185,7 @@ public class JsVisionClient : AbstractPlugin(), VisionClient {
         startVisionUpdate(element, name, vision, outputMeta)
         //subscribe to a backwards events propagation for control visions
         if(vision is ControlVision){
-            vision.controlEventFlow.onEach {
+            vision.eventFlow.onEach {
                 sendEvent(name,it)
             }.launchIn(context)
         }

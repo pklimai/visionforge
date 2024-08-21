@@ -63,7 +63,7 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
     ): SolidReference {
         val templateName = volumesName + volume.name.asName()
         if (templates[templateName] == null) {
-            templates.setChild(templateName, volume(root, volume))
+            templates.setVision(templateName, volume(root, volume))
         }
         val ref = group.ref(templateName, physVolume.name).withPosition(root, physVolume)
         referenceStore.getOrPut(templateName) { ArrayList() }.add(ref)
@@ -313,7 +313,7 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
         when (settings.volumeAction(volume)) {
             GdmlLoaderOptions.Action.ADD -> {
                 val group: SolidGroup = volume(root, volume)
-                this.setChild(physVolume.name, group.withPosition(root, physVolume))
+                this.setVision(physVolume.name, group.withPosition(root, physVolume))
             }
 
             GdmlLoaderOptions.Action.PROTOTYPE -> {
@@ -373,7 +373,7 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
         rootSolid.prototypes {
             templates.items.forEach { (token, item) ->
                 item.parent = null
-                setChild(token.asName(), item)
+                setVision(token.asName(), item)
             }
         }
         settings.styleCache.forEach {

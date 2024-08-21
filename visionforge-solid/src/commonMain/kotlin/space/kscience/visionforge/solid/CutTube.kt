@@ -4,7 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
-import space.kscience.visionforge.setChild
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
@@ -165,4 +164,4 @@ public inline fun MutableVisionContainer<Solid>.cutTube(
     phi = angle.toFloat(),
     nTop = topNormal,
     nBottom = bottomNormal
-).apply(block).also { setChild(name, it) }
+).apply(block).also { setVision(name, it) }

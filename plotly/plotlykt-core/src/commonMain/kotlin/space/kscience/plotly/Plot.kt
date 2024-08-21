@@ -1,9 +1,8 @@
-@file:OptIn(DFExperimental::class)
-
 package space.kscience.plotly
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.JsonObject
@@ -13,7 +12,6 @@ import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.meta.descriptors.node
 import space.kscience.dataforge.misc.DFBuilder
-import space.kscience.dataforge.misc.DFExperimental
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.NameToken
 import space.kscience.plotly.models.Layout
@@ -22,7 +20,7 @@ import space.kscience.visionforge.*
 
 @Serializable
 public class VisionOfTrace(
-    traceMeta: MutableMeta,
+    private val traceMeta: MutableMeta,
 ) : AbstractVision(traceMeta)
 
 
@@ -31,13 +29,14 @@ public class VisionOfTrace(
  */
 @DFBuilder
 @Serializable
-public class Plot : AbstractVision(), VisionGroup {
-
-    private val traces = mutableListOf<VisionOfTrace>()
+public class Plot(
+    private val traces: MutableList<VisionOfTrace> = mutableListOf<VisionOfTrace>(),
+) : AbstractVision(), VisionGroup {
 
     @Transient
     private val traceFlow = MutableSharedFlow<Name>()
 
+    @Transient
     override val children: VisionChildren = object : VisionChildren {
         override val parent: Vision get() = this@Plot
 
@@ -64,7 +63,10 @@ public class Plot : AbstractVision(), VisionGroup {
     public val layout: Layout by properties.root().scheme(Layout)
 
     public fun addTrace(trace: Trace) {
-        traces.add(VisionOfTrace((trace)))
+        traces.add(VisionOfTrace(trace.meta))
+        manager?.context?.launch {
+            traceFlow.emit()
+        }
     }
 
     /**
@@ -116,6 +118,11 @@ public fun Plot.onDataChange(owner: Any?, callback: (index: Int, trace: Trace, p
     data.forEachIndexed { index, trace ->
         trace.meta.onChange(owner) { name ->
             callback(index, trace, name)
+        }
+    }
+    manager?.context?.launch{
+        children.changes.collect{
+
         }
     }
 }

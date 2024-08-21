@@ -27,7 +27,7 @@ internal object UnRef : VisualTreeTransform<SolidGroup>() {
 
     private fun SolidGroup.unref(name: Name) {
         prototypes{
-            setChild(name, null)
+            setVision(name, null)
         }
         items.filter { (it.value as? SolidReference)?.prototypeName == name }.forEach { (key, value) ->
             val reference = value as SolidReference

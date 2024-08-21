@@ -16,6 +16,8 @@ kotlin {
     sourceSets {
         jvmMain {
             dependencies {
+                implementation(projects.plotly.plotlyktCore)
+
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)

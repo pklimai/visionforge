@@ -22,8 +22,8 @@ public class Solids(meta: Meta) : VisionPlugin(meta), MutableVisionContainer<Sol
 
     override val visionSerializersModule: SerializersModule get() = serializersModuleForSolids
 
-    override fun setChild(name: Name?, child: Solid?) {
-        child?.setAsRoot(visionManager)
+    override fun setVision(name: Name?, vision: Solid?) {
+        vision?.setAsRoot(visionManager)
     }
 
     public companion object : PluginFactory<Solids> {

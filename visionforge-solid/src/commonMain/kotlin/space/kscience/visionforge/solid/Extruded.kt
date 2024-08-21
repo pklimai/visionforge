@@ -8,7 +8,6 @@ import space.kscience.kmath.geometry.component1
 import space.kscience.kmath.geometry.component2
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
-import space.kscience.visionforge.setChild
 
 
 /**
@@ -105,4 +104,4 @@ public class Extruded(
 public fun MutableVisionContainer<Solid>.extruded(
     name: String? = null,
     action: Extruded.Builder.() -> Unit = {},
-): Extruded = Extruded.Builder().apply(action).build().also { setChild(name, it) }
+): Extruded = Extruded.Builder().apply(action).build().also { setVision(name, it) }

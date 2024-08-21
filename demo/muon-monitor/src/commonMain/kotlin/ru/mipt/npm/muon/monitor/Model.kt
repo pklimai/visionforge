@@ -61,7 +61,7 @@ class Model(val manager: VisionManager) {
             }
         }
 
-        setChild("tracks".asName(), tracks)
+        setVision("tracks".asName(), tracks)
     }
 
     private fun highlight(pixel: String) {

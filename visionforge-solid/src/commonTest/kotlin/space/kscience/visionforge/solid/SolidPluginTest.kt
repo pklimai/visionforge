@@ -3,7 +3,6 @@ package space.kscience.visionforge.solid
 import space.kscience.dataforge.context.Global
 import space.kscience.dataforge.context.request
 import space.kscience.dataforge.misc.DFExperimental
-import space.kscience.visionforge.getChild
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

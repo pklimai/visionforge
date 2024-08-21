@@ -12,6 +12,7 @@ kscience {
     useCoroutines()
     commonMain {
         api("space.kscience:dataforge-context:$dataforgeVersion")
+        api("com.benasher44:uuid:0.8.4")
         api(spclibs.kotlinx.html)
     }
     jsMain {

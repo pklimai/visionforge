@@ -2,11 +2,12 @@ package space.kscience.visionforge
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.parseAsName
@@ -20,8 +21,6 @@ public abstract class VisionControlEvent : VisionEvent, MetaRepr {
 }
 
 public interface ControlVision : Vision {
-    public val controlEventFlow: SharedFlow<VisionControlEvent>
-
     /**
      * Fire a [VisionControlEvent] on this [ControlVision]
      */
@@ -45,14 +44,8 @@ public fun ControlVision.asyncControlEvent(
 @Serializable
 public abstract class AbstractControlVision : AbstractVision(), ControlVision {
 
-    @Transient
-    private val mutableControlEventFlow = MutableSharedFlow<VisionControlEvent>()
-
-    override val controlEventFlow: SharedFlow<VisionControlEvent>
-        get() = mutableControlEventFlow
-
     override suspend fun dispatchControlEvent(event: VisionControlEvent) {
-        mutableControlEventFlow.emit(event)
+        emitEvent(event)
     }
 }
 
@@ -91,7 +84,7 @@ public interface DataControl : ControlVision {
  * Register listener
  */
 public fun DataControl.onSubmit(scope: CoroutineScope, block: suspend VisionSubmitEvent.() -> Unit): Job =
-    controlEventFlow.filterIsInstance<VisionSubmitEvent>().onEach(block).launchIn(scope)
+    eventFlow.filterIsInstance<VisionSubmitEvent>().onEach(block).launchIn(scope)
 
 
 @Serializable

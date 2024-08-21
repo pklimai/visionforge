@@ -7,7 +7,6 @@ import kotlinx.serialization.Transient
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.meta.descriptors.get
-import space.kscience.dataforge.misc.DFExperimental
 import space.kscience.dataforge.names.*
 
 public interface VisionProperties : MetaProvider {
@@ -101,82 +100,6 @@ public fun MutableVisionProperties.remove(name: String) {
 @VisionBuilder
 public operator fun MutableVisionProperties.invoke(block: MutableMeta.() -> Unit) {
     root(inherit = false, includeStyles = false).apply(block)
-}
-
-private class VisionPropertiesItem(
-    val properties: MutableVisionProperties,
-    val nodeName: Name,
-    val inherit: Boolean? = null,
-    val useStyles: Boolean? = null,
-    val default: Meta? = null,
-) : MutableTypedMeta<VisionPropertiesItem> {
-
-    override val self: VisionPropertiesItem get() =  this
-
-
-    val descriptor: MetaDescriptor? by lazy { properties.descriptor?.get(nodeName) }
-
-
-    override val items: Map<NameToken, VisionPropertiesItem>
-        get() {
-            val metaKeys = properties.own[nodeName]?.items?.keys ?: emptySet()
-            val descriptorKeys = descriptor?.nodes?.map { NameToken(it.key) } ?: emptySet()
-            val defaultKeys = default?.get(nodeName)?.items?.keys ?: emptySet()
-            val inheritFlag = descriptor?.inherited ?: inherit
-            val stylesFlag = descriptor?.usesStyles ?: useStyles
-            return (metaKeys + descriptorKeys + defaultKeys).associateWith {
-                VisionPropertiesItem(
-                    properties,
-                    nodeName + it,
-                    inheritFlag,
-                    stylesFlag,
-                    default
-                )
-            }
-        }
-
-    override var value: Value?
-        get() {
-            val inheritFlag = descriptor?.inherited ?: inherit ?: false
-            val stylesFlag = descriptor?.usesStyles ?: useStyles ?: true
-            return properties.getValue(nodeName, inheritFlag, stylesFlag) ?: default?.getValue(nodeName)
-        }
-        set(value) {
-            properties.setValue(nodeName, value)
-        }
-
-    //TODO remove with DataForge 0.9.1
-    override fun get(name: Name): VisionPropertiesItem? {
-        tailrec fun VisionPropertiesItem.find(name: Name): VisionPropertiesItem? = if (name.isEmpty()) {
-            this
-        } else {
-            items[name.firstOrNull()!!]?.find(name.cutFirst())
-        }
-
-        return self.find(name)
-    }
-
-
-    @DFExperimental
-    override fun attach(name: Name, node: VisionPropertiesItem) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getOrCreate(name: Name): VisionPropertiesItem = VisionPropertiesItem(
-        properties,
-        nodeName + name,
-        inherit,
-        useStyles,
-        default
-    )
-
-    override fun set(name: Name, node: Meta?) {
-        properties[nodeName + name] = node
-    }
-
-    override fun toString(): String = Meta.toString(this)
-    override fun equals(other: Any?): Boolean = Meta.equals(this, other as? Meta)
-    override fun hashCode(): Int = Meta.hashCode(this)
 }
 
 /**

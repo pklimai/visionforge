@@ -4,7 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
-import space.kscience.visionforge.setChild
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -81,7 +80,7 @@ public inline fun MutableVisionContainer<Solid>.cylinder(
     r.toFloat(),
     height.toFloat(),
     r.toFloat()
-).apply(block).also { setChild(name, it) }
+).apply(block).also { setVision(name, it) }
 
 @VisionBuilder
 public inline fun MutableVisionContainer<Solid>.cone(
@@ -98,4 +97,4 @@ public inline fun MutableVisionContainer<Solid>.cone(
     topRadius = upperRadius.toFloat(),
     phiStart = startAngle.toFloat(),
     phi = angle.toFloat()
-).apply(block).also { setChild(name, it) }
+).apply(block).also { setVision(name, it) }

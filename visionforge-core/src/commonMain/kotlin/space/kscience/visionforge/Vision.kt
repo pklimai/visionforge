@@ -1,7 +1,10 @@
 package space.kscience.visionforge
 
+import kotlinx.coroutines.flow.Flow
 import space.kscience.dataforge.context.logger
 import space.kscience.dataforge.context.warn
+import space.kscience.dataforge.meta.Meta
+import space.kscience.dataforge.meta.MutableMeta
 import space.kscience.dataforge.meta.asValue
 import space.kscience.dataforge.meta.boolean
 import space.kscience.dataforge.meta.descriptors.Described
@@ -9,7 +12,7 @@ import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.misc.DfType
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.asName
-import space.kscience.visionforge.AbstractVisionGroup.Companion.updateProperties
+import space.kscience.visionforge.SimpleVisionGroup.Companion.updateProperties
 import space.kscience.visionforge.Vision.Companion.TYPE
 
 /**
@@ -23,35 +26,26 @@ public interface Vision : Described {
      */
     public var parent: Vision?
 
+    override val descriptor: MetaDescriptor?
+
     /**
      * Owner [VisionManager]. Used to define coroutine scope a serialization
      */
     public val manager: VisionManager? get() = parent?.manager
 
-
-    public val properties: MutableVisionProperties
+    public val properties: Meta
 
     /**
-     * Update this vision using a dif represented by [VisionChange].
+     * A flow of outgoing events from this vision
      */
-    public fun update(change: VisionChange) {
-        if (change.children?.isNotEmpty() == true) {
-            error("Vision is not a group")
-        }
-        change.properties?.let {
-            updateProperties(it, Name.EMPTY)
-        }
-    }
+    public val eventFlow: Flow<VisionEvent>
 
     /**
      * Receive and process a generic [VisionEvent].
      */
     public suspend fun receiveEvent(event: VisionEvent) {
-        if(event is VisionChange) update(event)
-        else manager?.logger?.warn { "Undispatched event: $event" }
+        manager?.logger?.warn { "Undispatched event: $event" }
     }
-
-    override val descriptor: MetaDescriptor?
 
     public companion object {
         public const val TYPE: String = "vision"
@@ -62,10 +56,28 @@ public interface Vision : Described {
     }
 }
 
+public interface MutableVision : Vision {
+    override val properties: MutableMeta
+
+    /**
+     * Receive and process a generic [VisionEvent].
+     */
+    override suspend fun receiveEvent(event: VisionEvent) {
+        if (event is VisionChange) {
+            if (event.children?.isNotEmpty() == true) {
+                error("Vision is not a group")
+            }
+            event.properties?.let {
+                updateProperties(it, Name.EMPTY)
+            }
+        } else super.receiveEvent(event)
+    }
+}
+
 /**
  * Control visibility of the element
  */
-public var Vision.visible: Boolean?
+public var MutableVision.visible: Boolean?
     get() = properties.getValue(Vision.VISIBLE_KEY)?.boolean
     set(value) {
         properties.setValue(Vision.VISIBLE_KEY, value?.asValue())

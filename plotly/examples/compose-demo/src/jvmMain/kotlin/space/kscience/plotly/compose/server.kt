@@ -11,6 +11,7 @@ import space.kscience.plotly.models.Scatter
 import space.kscience.plotly.models.invoke
 import space.kscience.plotly.server.pushUpdates
 import space.kscience.plotly.server.serve
+import space.kscience.visionforge.html.makeString
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -25,15 +26,17 @@ fun staticPlot(): String = Plotly.page {
     val trace2 = Scatter(x, y2) {
         name = "cos"
     }
-    plot(config = PlotlyConfig { responsive = true }) {//static plot
-        traces(trace1, trace2)
-        layout {
-            title = "First graph, row: 1, size: 8/12"
-            xaxis.title = "x axis name"
-            yaxis { title = "y axis name" }
+    vision {
+        plotly(config = PlotlyConfig { responsive = true }) {//static plot
+            traces(trace1, trace2)
+            layout {
+                title = "First graph, row: 1, size: 8/12"
+                xaxis.title = "x axis name"
+                yaxis { title = "y axis name" }
+            }
         }
     }
-}.render()
+}.makeString()
 
 fun CoroutineScope.servePlots(scale: StateFlow<Number>): ApplicationEngine = Plotly.serve(this, port = 7778) {
     page("Static") { container ->

@@ -1,7 +1,6 @@
 package space.kscience.visionforge.solid
 
 import space.kscience.visionforge.Colors
-import space.kscience.visionforge.getChild
 import kotlin.math.PI
 import kotlin.test.Test
 import kotlin.test.assertEquals

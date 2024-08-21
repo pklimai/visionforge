@@ -7,77 +7,106 @@ import space.kscience.dataforge.meta.ValueType
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.meta.descriptors.value
 import space.kscience.dataforge.names.Name
-import space.kscience.dataforge.names.NameToken
+import space.kscience.dataforge.names.asName
 import space.kscience.dataforge.names.parseAsName
 import space.kscience.dataforge.names.plus
-import space.kscience.visionforge.AbstractVisionGroup.Companion.updateProperties
+import space.kscience.visionforge.SimpleVisionGroup.Companion.updateProperties
 import space.kscience.visionforge.Vision.Companion.STYLE_KEY
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.set
 
 
-public interface VisionGroup : Vision {
-    public val children: VisionChildren
+public interface VisionGroup<out V : Vision> : Vision, VisionContainer<V> {
 
-    override fun update(change: VisionChange) {
-        change.children?.forEach { (name, change) ->
-            if (change.vision != null) {
-                error("VisionGroup is read-only")
-            } else {
-                children.getChild(name)?.update(change)
+    override suspend fun receiveEvent(event: VisionEvent) {
+        super.receiveEvent(event)
+        if (event is VisionChange) {
+            event.children?.forEach { (name, change) ->
+                if (event.vision != null) {
+                    error("VisionGroup is read-only")
+                } else {
+                    getVision(name)?.receiveEvent(change)
+                }
             }
-        }
-        change.properties?.let {
-            updateProperties(it, Name.EMPTY)
         }
     }
 }
-
-public interface MutableVisionGroup : VisionGroup {
-
-    override val children: MutableVisionChildren
-
-    public fun createGroup(): MutableVisionGroup
-
-    override fun update(change: VisionChange) {
-        change.children?.forEach { (name, change) ->
-            when {
-                change.vision == NullVision -> children.setChild(name, null)
-                change.vision != null -> children.setChild(name, change.vision)
-                else -> children.getChild(name)?.update(change)
-            }
-        }
-        change.properties?.let {
-            updateProperties(it, Name.EMPTY)
-        }
-    }
-}
-
-public val Vision.children: VisionChildren? get() = (this as? VisionGroup)?.children
 
 /**
- * A full base implementation for a [Vision]
+ * An event that indicates that [VisionGroup] composition is invalidated (not necessarily changed
  */
-@Serializable
-public abstract class AbstractVisionGroup : AbstractVision(), MutableVisionGroup {
+public data class VisionGroupCompositionChangedEvent(public val source: VisionGroup<*>, public val name: Name) :
+    VisionEvent
 
-    @SerialName("children")
-    protected var childrenInternal: MutableMap<NameToken, Vision>? = null
+///**
+// * An event that indicates that child property value has been invalidated
+// */
+//public data class VisionGroupPropertyChangedEvent(
+//    public val source: VisionGroup<*>,
+//    public val childName: Name,
+//    public val propertyName: Name
+//) : VisionEvent
 
+public interface MutableVisionGroup<V : Vision> : VisionGroup<V>, MutableVision, MutableVisionContainer<V> {
 
-    init {
-        childrenInternal?.forEach { it.value.parent = this }
-    }
+    /**
+     * This method tries to convert a [vision] to the typed vision handled by this [MutableVisionGroup].
+     * Return null if conversion is failed.
+     */
+    public fun convertVisionOrNull(vision: Vision): V?
 
-    override val children: MutableVisionChildren by lazy {
-        object : VisionChildrenImpl(this) {
-            override var items: MutableMap<NameToken, Vision>?
-                get() = this@AbstractVisionGroup.childrenInternal
-                set(value) {
-                    this@AbstractVisionGroup.childrenInternal = value
+    override suspend fun receiveEvent(event: VisionEvent) {
+        if (event is VisionChange) {
+            event.properties?.let {
+                updateProperties(it, Name.EMPTY)
+            }
+            event.children?.forEach { (name, change) ->
+                change.children?.forEach { (name, change) ->
+                    when {
+                        change.vision == NullVision -> setVision(name, null)
+                        change.vision != null -> setVision(
+                            name,
+                            convertVisionOrNull(change.vision) ?: error("Can't convert ${change.vision}")
+                        )
+
+                        else -> getVision(name)?.receiveEvent(change)
+                    }
                 }
+                change.properties?.let {
+                    updateProperties(it, Name.EMPTY)
+                }
+            }
         }
     }
+}
 
-    abstract override fun createGroup(): AbstractVisionGroup
+/**
+ * A simple vision group that just holds children. Nothing else.
+ */
+@Serializable
+@SerialName("vision.group")
+public class SimpleVisionGroup : AbstractVision(), MutableVisionGroup<Vision> {
+
+    @Serializable
+    @SerialName("children")
+    private val _children = mutableMapOf<Name, Vision>()
+
+    public val children: Map<Name, Vision> get() = _children
+
+    override fun convertVisionOrNull(vision: Vision): Vision = vision
+
+    override fun getVision(name: Name): Vision? = children[name]
+
+    override fun setVision(name: Name, vision: Vision?) {
+        if (vision == null) {
+            _children.remove(name)
+        } else {
+            _children[name] = vision
+            vision.parent = this
+        }
+        emitEvent(VisionGroupCompositionChangedEvent(this, name))
+    }
 
     public companion object {
         public val descriptor: MetaDescriptor = MetaDescriptor {
@@ -86,7 +115,7 @@ public abstract class AbstractVisionGroup : AbstractVision(), MutableVisionGroup
             }
         }
 
-        public fun Vision.updateProperties(item: Meta, name: Name = Name.EMPTY) {
+        public fun MutableVision.updateProperties(item: Meta, name: Name = Name.EMPTY) {
             properties.setValue(name, item.value)
             item.items.forEach { (token, item) ->
                 updateProperties(item, name + token)
@@ -96,24 +125,13 @@ public abstract class AbstractVisionGroup : AbstractVision(), MutableVisionGroup
     }
 }
 
-/**
- * A simple vision group that just holds children. Nothing else.
- */
-@Serializable
-@SerialName("vision.group")
-public class SimpleVisionGroup : AbstractVisionGroup(), MutableVisionContainer<Vision> {
-    override fun createGroup(): SimpleVisionGroup = SimpleVisionGroup()
-
-    override fun setChild(name: Name?, child: Vision?) {
-        children.setChild(name, child)
-    }
-}
-
 @VisionBuilder
 public inline fun MutableVisionContainer<Vision>.group(
     name: Name? = null,
     builder: SimpleVisionGroup.() -> Unit = {},
-): SimpleVisionGroup = SimpleVisionGroup().also { setChild(name, it) }.apply(builder)
+): SimpleVisionGroup = SimpleVisionGroup().also {
+    setVision(name ?: MutableVisionContainer.generateID().asName(), it)
+}.apply(builder)
 
 /**
  * Define a group with given [name], attach it to this parent and return it.

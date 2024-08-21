@@ -11,9 +11,9 @@ import kotlin.jvm.JvmInline
  * A container for styles
  */
 @JvmInline
-public value class StyleSheet(private val owner: Vision) {
+public value class StyleSheet(private val owner: MutableVision) {
 
-    private val styleNode: Meta get() = owner.properties[STYLESHEET_KEY]
+    private val styleNode: Meta get() = owner.properties[STYLESHEET_KEY] ?: Meta.EMPTY
 
     public val items: Map<NameToken, Meta> get() = styleNode.items
 
@@ -58,8 +58,10 @@ internal fun Vision.styleChanged(key: String, oldStyle: Meta?, newStyle: Meta?) 
                 .map { it.asName() }
         tokens.forEach { parent?.properties?.invalidate(it) }
     }
-    children?.forEach { _, vision ->
-        vision.styleChanged(key, oldStyle, newStyle)
+    if(this is VisionGroup<*>) {
+        children?.forEach { _, vision ->
+            vision.styleChanged(key, oldStyle, newStyle)
+        }
     }
 }
 
@@ -76,15 +78,15 @@ public var Vision.styles: List<String>
  * A stylesheet for this group and its descendants. Stylesheet is not applied directly,
  * but instead is just a repository for named configurations.
  */
-public val Vision.styleSheet: StyleSheet get() = StyleSheet(this)
+public val MutableVision.styleSheet: StyleSheet get() = StyleSheet(this)
 
 /**
  * Add style name to the list of styles to be resolved later.
  * The style with given name does not necessary exist at the moment.
  */
-public fun Vision.useStyle(name: String, notify: Boolean = true) {
-    val newStyle = properties.own[Vision.STYLE_KEY]?.value?.list?.plus(name.asValue()) ?: listOf(name.asValue())
-    properties.setValue(Vision.STYLE_KEY, newStyle.asValue(), notify)
+public fun MutableVision.useStyle(name: String) {
+    val newStyle = properties[Vision.STYLE_KEY]?.value?.list?.plus(name.asValue()) ?: listOf(name.asValue())
+    properties.setValue(Vision.STYLE_KEY, newStyle.asValue())
 }
 
 
@@ -92,7 +94,7 @@ public fun Vision.useStyle(name: String, notify: Boolean = true) {
  * Resolve a style with given name for given [Vision]. The style is not necessarily applied to this [Vision].
  */
 public fun Vision.getStyle(name: String): Meta? =
-    properties.own[StyleSheet.STYLESHEET_KEY + name] ?: parent?.getStyle(name)
+    properties[StyleSheet.STYLESHEET_KEY + name] ?: parent?.getStyle(name)
 
 /**
  * Resolve a property from all styles

@@ -10,7 +10,7 @@ val dataforgeVersion by extra("0.9.0")
 
 allprojects {
     group = "space.kscience"
-    version = "0.4.2"
+    version = "0.5.0-dev-1"
 }
 
 subprojects {
@@ -36,6 +36,7 @@ subprojects {
 //        }
 //    }
 }
+
 
 ksciencePublish {
     pom("https://github.com/SciProgCentre/visionforge") {

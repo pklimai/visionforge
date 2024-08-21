@@ -88,7 +88,7 @@ public fun Plot.makeFile(
 //    fragment(pageBuilder).makeFile(null, true)
 
 /**
- * Select a file to save plot to using Swing form.
+ * Select a file to save plot to using a Swing form.
  */
 @UnstablePlotlyAPI
 public fun Plotly.selectFile(filter: FileNameExtensionFilter? = null): Path? {

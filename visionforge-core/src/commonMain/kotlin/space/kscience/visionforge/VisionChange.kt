@@ -1,12 +1,7 @@
 package space.kscience.visionforge
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.SerialName
@@ -17,7 +12,6 @@ import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.isEmpty
 import space.kscience.dataforge.names.plus
 import kotlin.time.Duration
-
 
 
 /**
@@ -32,7 +26,9 @@ public object NullVision : Vision {
             error("Can't set parent for null vision")
         }
 
-    override val properties: MutableVisionProperties get() = error("Can't get properties of `NullVision`")
+    override val properties: Nothing get() = error("Can't get properties of `NullVision`")
+
+    override val eventFlow: Flow<VisionEvent> = emptyFlow()
 
     override val descriptor: MetaDescriptor? = null
 }
@@ -65,6 +61,12 @@ public data class VisionChange(
     public val children: Map<Name, VisionChange>? = null,
 ) : VisionEvent
 
+///**
+// * A listener that listens to both current vision property changes and to children changes
+// */
+//public interface VisionGroupListener : VisionListener, MutableVisionContainer<Vision>
+
+
 /**
  * An update for a [Vision]
  */
@@ -80,7 +82,11 @@ public class VisionChangeBuilder : MutableVisionContainer<Vision> {
 
     @JvmSynchronized
     private fun getOrPutChild(visionName: Name): VisionChangeBuilder =
-        children.getOrPut(visionName) { VisionChangeBuilder() }
+        if (visionName.isEmpty()) {
+            this
+        } else {
+            children.getOrPut(visionName) { VisionChangeBuilder() }
+        }
 
     @JvmSynchronized
     internal fun reset() {
@@ -102,12 +108,44 @@ public class VisionChangeBuilder : MutableVisionContainer<Vision> {
         }
     }
 
-    override fun setChild(name: Name?, child: Vision?) {
-        if (name == null) error("Static children are not allowed in VisionChange")
+    override fun setVision(name: Name, vision: Vision?) {
         getOrPutChild(name).apply {
-            vision = child ?: NullVision
+            this.vision = vision ?: NullVision
         }
     }
+
+    private fun updateFrom(baseName: Name, change: VisionChange) {
+        getOrPutChild(baseName).apply {
+            change.vision?.let { this.vision = it }
+            change.properties?.let { this.propertyChange.update(it) }
+            change.children?.let { it.forEach { (key, change) -> updateFrom(baseName + key, change) } }
+        }
+    }
+
+    public fun consumeEvent(event: VisionEvent) {
+        when (event) {
+            is VisionChange -> updateFrom(Name.EMPTY, event)
+
+            is VisionPropertyChangedEvent -> propertyChanged(
+                visionName = Name.EMPTY,
+                propertyName = event.property,
+                item = event.source.properties[event.property]
+            )
+
+            is VisionGroupPropertyChangedEvent -> propertyChanged(
+                visionName = event.childName,
+                propertyName = event.propertyName,
+                item = event.source.getVision(event.childName)?.properties?.get(event.propertyName)
+            )
+
+            is VisionGroupCompositionChangedEvent -> setVision(event.name, event.source.getVision(event.name))
+            is VisionControlEvent, is VisionMetaEvent -> {
+                //do nothing
+                //TODO add logging
+            }
+        }
+    }
+
 
     private fun build(visionManager: VisionManager): VisionChange = VisionChange(
         vision,
@@ -136,40 +174,41 @@ public inline fun VisionManager.VisionChange(block: VisionChangeBuilder.() -> Un
     VisionChangeBuilder().apply(block).deepCopy(this)
 
 
-/**
- * Collect changes that are made to [source] to [collector] using [mutex] as a synchronization lock.
- */
-private fun CoroutineScope.collectChange(
-    name: Name,
-    source: Vision,
-    mutex: Mutex,
-    collector: VisionChangeBuilder,
-) {
-
-    //Collect properties change
-    source.properties.changes.onEach { propertyName ->
-        val newItem = source.properties.own[propertyName]
-        collector.propertyChanged(name, propertyName, newItem)
-    }.launchIn(this)
-
-    val children = source.children
-    //Subscribe for children changes
-    children?.forEach { token, child ->
-        collectChange(name + token, child, mutex, collector)
-    }
-
-    //Subscribe for structure change
-    children?.changes?.onEach { changedName ->
-        val after = children[changedName]
-        val fullName = name + changedName
-        if (after != null) {
-            collectChange(fullName, after, mutex, collector)
-        }
-        mutex.withLock {
-            collector.setChild(fullName, after)
-        }
-    }?.launchIn(this)
-}
+///**
+// * Collect changes that are made to [source] to [collector] using [mutex] as a synchronization lock.
+// */
+//private fun CoroutineScope.collectChange(
+//    name: Name,
+//    source: Vision,
+//    mutex: Mutex,
+//    collector: VisionChangeBuilder,
+//) {
+//
+//    source.listen(this, collector)
+//    //Collect properties change
+//    source.properties.changes.onEach { propertyName ->
+//        val newItem = source.properties.own[propertyName]
+//        collector.propertyChanged(name, propertyName, newItem)
+//    }.launchIn(this)
+//
+//    val children = source.children
+//    //Subscribe for children changes
+//    children?.forEach { token, child ->
+//        collectChange(name + token, child, mutex, collector)
+//    }
+//
+//    //Subscribe for structure change
+//    children?.changes?.onEach { changedName ->
+//        val after = children[changedName]
+//        val fullName = name + changedName
+//        if (after != null) {
+//            collectChange(fullName, after, mutex, collector)
+//        }
+//        mutex.withLock {
+//            collector.setVision(fullName, after)
+//        }
+//    }?.launchIn(this)
+//}
 
 /**
  * Generate a flow of changes of this vision and its children
@@ -184,7 +223,9 @@ public fun Vision.flowChanges(
     coroutineScope {
         val collector = VisionChangeBuilder()
         val mutex = Mutex()
-        collectChange(Name.EMPTY, this@flowChanges, mutex, collector)
+        eventFlow.onEach {
+            collector.consumeEvent(it)
+        }.launchIn(this)
 
         if (sendInitial) {
             //Send initial vision state

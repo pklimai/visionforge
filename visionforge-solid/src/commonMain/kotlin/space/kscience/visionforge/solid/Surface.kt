@@ -9,7 +9,6 @@ import space.kscience.kmath.geometry.component2
 import space.kscience.kmath.structures.Float32
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
-import space.kscience.visionforge.setChild
 
 
 private inline fun <T> Iterable<T>.sumOf(selector: (T) -> Float32): Float32 {
@@ -170,4 +169,4 @@ public class Surface(
 public fun MutableVisionContainer<Solid>.surface(
     name: String? = null,
     action: Surface.Builder.() -> Unit = {},
-): Surface = Surface.Builder().apply(action).build().also { setChild(name, it) }
+): Surface = Surface.Builder().apply(action).build().also { setVision(name, it) }

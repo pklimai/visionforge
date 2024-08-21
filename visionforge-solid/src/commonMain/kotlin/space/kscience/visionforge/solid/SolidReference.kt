@@ -212,7 +212,7 @@ internal class SolidReferenceChild(
 public fun MutableVisionContainer<Solid>.ref(
     templateName: Name,
     name: Name? = null,
-): SolidReference = SolidReference(templateName).also { setChild(name, it) }
+): SolidReference = SolidReference(templateName).also { setVision(name, it) }
 
 public fun MutableVisionContainer<Solid>.ref(
     templateName: Name,
@@ -231,7 +231,7 @@ public fun SolidGroup.newRef(
     val existing = prototypeHolder.getPrototype(prototypeName)
     if (existing == null) {
         prototypeHolder.prototypes {
-            setChild(prototypeName, obj)
+            setVision(prototypeName, obj)
         }
     } else if (existing != obj) {
         error("Can't add different prototype on top of existing one")

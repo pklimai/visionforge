@@ -6,7 +6,6 @@ import space.kscience.dataforge.meta.isEmpty
 import space.kscience.dataforge.names.Name
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
-import space.kscience.visionforge.setChild
 import space.kscience.visionforge.static
 
 public enum class CompositeType {
@@ -42,7 +41,7 @@ public inline fun MutableVisionContainer<Solid>.composite(
 
     res.properties[Name.EMPTY] = group.properties.own
 
-    setChild(name, res)
+    setVision(name, res)
     return res
 }
 

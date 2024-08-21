@@ -5,7 +5,6 @@ import space.kscience.dataforge.meta.string
 import space.kscience.dataforge.names.Name
 import space.kscience.gdml.GdmlShowCase
 import space.kscience.visionforge.Vision
-import space.kscience.visionforge.getChild
 import space.kscience.visionforge.solid.Solid
 import space.kscience.visionforge.solid.SolidMaterial
 import space.kscience.visionforge.solid.material

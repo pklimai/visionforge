@@ -76,7 +76,7 @@ public class ComposeVisionClient : AbstractPlugin(), VisionClient {
         //subscribe to a backwards events propagation for control visions
         if (vision is ControlVision) {
             LaunchedEffect(vision) {
-                vision.controlEventFlow.collect {
+                vision.eventFlow.collect {
                     sendEvent(name, it)
                 }
             }

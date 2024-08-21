@@ -8,7 +8,6 @@ import space.kscience.dataforge.context.PluginTag
 import space.kscience.dataforge.meta.Meta
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.asName
-import space.kscience.plotly.plot
 import space.kscience.visionforge.Vision
 import space.kscience.visionforge.VisionPlugin
 import space.kscience.visionforge.html.ElementVisionRenderer
@@ -23,12 +22,12 @@ public class PlotlyJSPlugin : VisionPlugin(), ElementVisionRenderer {
     override val visionSerializersModule: SerializersModule get() = plotlySerializersModule
 
     override fun rateVision(vision: Vision): Int = when (vision) {
-        is VisionOfPlotly -> ElementVisionRenderer.DEFAULT_RATING
+        is Plot -> ElementVisionRenderer.DEFAULT_RATING
         else -> ElementVisionRenderer.ZERO_RATING
     }
 
     override fun render(element: Element, name: Name, vision: Vision, meta: Meta) {
-        val plot = (vision as? VisionOfPlotly)?.plot ?: error("VisionOfPlotly expected but ${vision::class} found")
+        val plot = (vision as? Plot) ?: error("VisionOfPlotly expected but ${vision::class} found")
         val config = PlotlyConfig.read(meta)
         element.plot(config, plot)
     }

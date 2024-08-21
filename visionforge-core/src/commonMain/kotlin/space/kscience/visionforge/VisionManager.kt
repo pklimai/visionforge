@@ -15,7 +15,7 @@ import space.kscience.dataforge.meta.toMeta
 import space.kscience.dataforge.names.Name
 import space.kscience.visionforge.html.*
 
-public class VisionManager(meta: Meta) : AbstractPlugin(meta), MutableVisionContainer<Vision> {
+public class VisionManager(meta: Meta) : AbstractPlugin(meta) {
     override val tag: PluginTag get() = Companion.tag
 
     /**
@@ -54,7 +54,7 @@ public class VisionManager(meta: Meta) : AbstractPlugin(meta), MutableVisionCont
     public fun encodeToMeta(vision: Vision, descriptor: MetaDescriptor? = null): Meta =
         encodeToJsonElement(vision).toMeta(descriptor)
 
-    override fun setChild(name: Name?, child: Vision?) {
+    override fun setVision(name: Name?, child: Vision?) {
         child?.setAsRoot(this)
     }
 
@@ -124,7 +124,7 @@ public fun Vision.encodeToString(): String =
 /**
  * A root vision attached to [VisionManager]
  */
-public class RootVision(override val manager: VisionManager) : AbstractVisionGroup() {
+public class RootVision(override val manager: VisionManager) : SimpleVisionGroup() {
     override fun createGroup(): SimpleVisionGroup = SimpleVisionGroup()
 }
 

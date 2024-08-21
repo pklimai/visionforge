@@ -2,7 +2,6 @@ package space.kscience.visionforge.solid
 
 import space.kscience.dataforge.names.Name
 import space.kscience.visionforge.Colors
-import space.kscience.visionforge.getChild
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

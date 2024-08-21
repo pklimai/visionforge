@@ -6,7 +6,6 @@ import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.NameToken
 import space.kscience.dataforge.names.parseAsName
-import space.kscience.visionforge.AbstractVisionGroup
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.MutableVisionGroup
 import space.kscience.visionforge.VisionBuilder
@@ -34,8 +33,7 @@ public interface PrototypeHolder {
  */
 @Serializable
 @SerialName("group.solid")
-public class SolidGroup : AbstractVisionGroup(), Solid, PrototypeHolder, MutableVisionGroup,
-    MutableVisionContainer<Solid> {
+public class SolidGroup : Solid, PrototypeHolder, MutableVisionGroup<Solid>{
 
     public val items: Map<NameToken, Solid>
         get() = children.keys.mapNotNull {
@@ -78,8 +76,8 @@ public class SolidGroup : AbstractVisionGroup(), Solid, PrototypeHolder, Mutable
 //        super.update(change)
 //    }
 
-    override fun setChild(name: Name?, child: Solid?) {
-        children.setChild(name, child)
+    override fun setVision(name: Name?, vision: Solid?) {
+        children.setChild(name, vision)
     }
 
     public companion object {
@@ -93,7 +91,7 @@ public operator fun SolidGroup.get(name:String): Solid? = get(name.parseAsName()
 public inline fun MutableVisionContainer<Solid>.solidGroup(
     name: Name? = null,
     builder: SolidGroup.() -> Unit = {},
-): SolidGroup = SolidGroup().also { setChild(name, it) }.apply(builder)
+): SolidGroup = SolidGroup().also { setVision(name, it) }.apply(builder)
 //root first, update later
 
 /**

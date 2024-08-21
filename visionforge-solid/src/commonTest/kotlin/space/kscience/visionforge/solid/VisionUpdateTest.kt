@@ -6,7 +6,6 @@ import space.kscience.dataforge.meta.Meta
 import space.kscience.dataforge.meta.asValue
 import space.kscience.dataforge.names.asName
 import space.kscience.visionforge.VisionChange
-import space.kscience.visionforge.getChild
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

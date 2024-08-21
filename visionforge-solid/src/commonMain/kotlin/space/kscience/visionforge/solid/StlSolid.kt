@@ -4,7 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
-import space.kscience.visionforge.setChild
 
 
 public sealed class StlSolid: SolidBase<StlSolid>()
@@ -22,4 +21,4 @@ public inline fun MutableVisionContainer<Solid>.stl(
     url: String,
     name: String? = null,
     action: StlSolid.() -> Unit = {},
-): StlSolid = StlUrlSolid(url).apply(action).also { setChild(name, it) }
+): StlSolid = StlUrlSolid(url).apply(action).also { setVision(name, it) }

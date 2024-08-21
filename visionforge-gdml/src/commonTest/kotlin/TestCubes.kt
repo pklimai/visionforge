@@ -4,7 +4,6 @@ import space.kscience.dataforge.context.Context
 import space.kscience.dataforge.names.Name
 import space.kscience.gdml.*
 import space.kscience.visionforge.Vision
-import space.kscience.visionforge.getChild
 import space.kscience.visionforge.solid.*
 import space.kscience.visionforge.visionManager
 import kotlin.test.Test

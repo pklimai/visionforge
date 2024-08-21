@@ -3,7 +3,6 @@ package space.kscience.visionforge.solid
 import kotlinx.serialization.json.encodeToJsonElement
 import space.kscience.dataforge.misc.DFExperimental
 import space.kscience.dataforge.names.get
-import space.kscience.visionforge.getChild
 import space.kscience.visionforge.style
 import space.kscience.visionforge.useStyle
 import kotlin.test.Test

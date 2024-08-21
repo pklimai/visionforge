@@ -2,17 +2,24 @@ package space.kscience.plotly
 
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.buildJsonArray
+import space.kscience.dataforge.context.Context
+import space.kscience.dataforge.context.ContextAware
+import space.kscience.dataforge.context.request
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.names.Name
 import space.kscience.visionforge.VisionBuilder
+import space.kscience.visionforge.VisionManager
+import space.kscience.visionforge.html.HtmlFragment
+import space.kscience.visionforge.html.HtmlVisionFragment
 import space.kscience.visionforge.html.VisionOutput
+import space.kscience.visionforge.html.VisionPage
 import kotlin.js.JsName
 
 /**
  * A namespace for utility functions
  */
 @JsName("PlotlyKt")
-public object Plotly {
+public object Plotly : ContextAware {
     public const val VERSION: String = "2.24.1"
 
     public const val PLOTLY_CDN: String = "https://cdn.plot.ly/plotly-${VERSION}.min.js"
@@ -21,6 +28,12 @@ public object Plotly {
     public val coordinateNames: List<String> = listOf(
         "x", "y", "z", "text", "hovertext", "close", "high", "low", "open", "locations", "lon", "lat", "ids"
     )
+
+    override val context: Context = Context("Plotly") {
+        plugin(PlotlyPlugin)
+    }
+
+    public val plugin: PlotlyPlugin = context.request(PlotlyPlugin)
 
     public inline fun plot(block: Plot.() -> Unit): Plot = Plot().apply(block)
 }
@@ -78,3 +91,8 @@ public inline fun VisionOutput.plotly(
     meta = config.meta
     return Plotly.plot(block)
 }
+
+public fun Plotly.page(
+    pageHeaders: Map<String, HtmlFragment> = emptyMap(),
+    content: HtmlVisionFragment,
+): VisionPage = VisionPage(context.request(VisionManager), pageHeaders, content)
