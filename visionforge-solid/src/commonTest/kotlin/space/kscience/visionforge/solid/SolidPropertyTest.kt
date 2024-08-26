@@ -6,9 +6,9 @@ import space.kscience.dataforge.meta.int
 import space.kscience.dataforge.meta.set
 import space.kscience.dataforge.meta.string
 import space.kscience.dataforge.names.asName
-import space.kscience.visionforge.getValue
-import space.kscience.visionforge.styleSheet
+import space.kscience.visionforge.getProperty
 import space.kscience.visionforge.styles
+import space.kscience.visionforge.updateStyle
 import space.kscience.visionforge.useStyle
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -47,17 +47,15 @@ class SolidPropertyTest {
                 box = box(100, 100, 100)
             }
         }
-        assertEquals(22, box?.properties?.getValue("test", inherit = true)?.int)
+        assertEquals(22, box?.getProperty("test".asName(), inherited = true)?.int)
     }
 
     @Test
     fun testStyleProperty() {
         var box: Box? = null
         val group = testSolids.solidGroup {
-            styleSheet {
-                update("testStyle") {
-                    "test" put 22
-                }
+            updateStyle("testStyle") {
+                "test" put 22
             }
             solidGroup {
                 box = box(100, 100, 100) {
@@ -72,10 +70,8 @@ class SolidPropertyTest {
     fun testStyleColor() {
         var box: Box? = null
         val group = SolidGroup().apply {
-            styleSheet {
-                update("testStyle") {
-                    SolidMaterial.MATERIAL_COLOR_KEY put "#555555"
-                }
+            updateStyle("testStyle") {
+                SolidMaterial.MATERIAL_COLOR_KEY put "#555555"
             }
             solidGroup {
                 box = box(100, 100, 100) {
@@ -90,10 +86,8 @@ class SolidPropertyTest {
     fun testReferenceStyleProperty() {
         var box: SolidReference? = null
         val group = testSolids.solidGroup {
-            styleSheet {
-                update("testStyle") {
-                    SolidMaterial.MATERIAL_COLOR_KEY put "#555555"
-                }
+            updateStyle("testStyle") {
+                SolidMaterial.MATERIAL_COLOR_KEY put "#555555"
             }
             prototypes {
                 box(100, 100, 100, name = "box") {

@@ -3,15 +3,13 @@ package space.kscience.visionforge
 import kotlinx.coroutines.flow.Flow
 import space.kscience.dataforge.context.logger
 import space.kscience.dataforge.context.warn
-import space.kscience.dataforge.meta.Meta
-import space.kscience.dataforge.meta.MutableMeta
-import space.kscience.dataforge.meta.asValue
-import space.kscience.dataforge.meta.boolean
+import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.meta.descriptors.Described
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.misc.DfType
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.asName
+import space.kscience.dataforge.names.plus
 import space.kscience.visionforge.SimpleVisionGroup.Companion.updateProperties
 import space.kscience.visionforge.Vision.Companion.TYPE
 
@@ -50,6 +48,7 @@ public interface Vision : Described {
     public companion object {
         public const val TYPE: String = "vision"
         public val STYLE_KEY: Name = "@style".asName()
+        public val STYLESHEET_KEY: Name = "@stylesheet".asName()
         public const val STYLE_TARGET: String = "style"
 
         public val VISIBLE_KEY: Name = "visible".asName()
@@ -82,3 +81,58 @@ public var MutableVision.visible: Boolean?
     set(value) {
         properties.setValue(Vision.VISIBLE_KEY, value?.asValue())
     }
+
+
+public val Vision.styleSheet: Meta?
+    get() = properties[Vision.STYLESHEET_KEY]
+
+/**
+ * List of style names applied to this object. Order matters. Not inherited.
+ */
+public val Vision.styles: List<String>
+    get() = properties[Vision.STYLE_KEY]?.stringList ?: emptyList()
+
+
+public var MutableVision.styles: List<String>
+    get() = properties[Vision.STYLE_KEY]?.stringList ?: emptyList()
+    set(value) {
+        properties[Vision.STYLE_KEY] = value.map { it.asValue() }.asValue()
+    }
+
+public fun MutableVision.setStyle(styleName: String, style: Meta){
+    properties[Vision.STYLESHEET_KEY + styleName] = style
+}
+
+/**
+ * Define or modify a style with given [styleName]. The style is not used immediately. Call [useStyle] to enable it for this vision
+ */
+public fun MutableVision.updateStyle(styleName: String, block: MutableMeta.() -> Unit) {
+    properties.getOrCreate(Vision.STYLESHEET_KEY + styleName).block()
+}
+
+/**
+ * Add style name to the list of styles to be resolved later.
+ * The style with given name does not necessary exist at the moment.
+ */
+public fun MutableVision.useStyle(styleName: String) {
+    val newStyleList = properties[Vision.STYLE_KEY]?.value?.list?.plus(styleName.asValue()) ?: listOf(styleName.asValue())
+    properties.setValue(Vision.STYLE_KEY, newStyleList.asValue())
+}
+
+/**
+ * Resolve a style with given name for given [Vision]. The style is not necessarily applied to this [Vision].
+ */
+public fun Vision.getStyle(name: String): Meta? =
+    properties[Vision.STYLESHEET_KEY + name] ?: parent?.getStyle(name)
+
+/**
+ * Resolve a property from all styles
+ */
+public fun Vision.getStyleProperty(name: Name): Meta? = styles.firstNotNullOfOrNull { getStyle(it)?.get(name) }
+
+/**
+ * Resolve an item in all style layers
+ */
+public fun Vision.getStyleNodes(name: Name): List<Meta> = styles.mapNotNull {
+    getStyle(it)?.get(name)
+}

@@ -1,15 +1,11 @@
 package space.kscience.visionforge.solid
 
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.launch
 import kotlinx.serialization.*
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
-import space.kscience.dataforge.meta.descriptors.get
 import space.kscience.dataforge.names.*
 import space.kscience.visionforge.*
 import space.kscience.visionforge.solid.SolidReference.Companion.REFERENCE_CHILD_PROPERTY_PREFIX
@@ -32,7 +28,7 @@ public val Vision.prototype: Solid
 @SerialName("solid.ref")
 public class SolidReference(
     @SerialName("prototype") public val prototypeName: Name,
-) : VisionGroup, Solid {
+) : AbstractVision(), VisionGroup<Solid>, Solid {
 
     @Transient
     override var parent: Vision? = null
@@ -50,89 +46,94 @@ public class SolidReference(
     override val descriptor: MetaDescriptor get() = prototype.descriptor
 
 
-    @SerialName("properties")
-    @OptIn(ExperimentalSerializationApi::class)
-    @EncodeDefault(EncodeDefault.Mode.NEVER)
-    private val propertiesInternal: MutableMeta = MutableMeta()
-
-    override val properties: MutableVisionProperties by lazy {
-        object : AbstractVisionProperties(this, propertiesInternal) {
-
-            override fun getValue(name: Name, inherit: Boolean?, includeStyles: Boolean?): Value? {
-                if (name == Vision.STYLE_KEY) {
-                    return buildList {
-                        own.getValue(Vision.STYLE_KEY)?.list?.forEach {
-                            add(it)
-                        }
-                        prototype.styles.forEach {
-                            add(it.asValue())
-                        }
-                    }.distinct().asValue()
-                }
-                //1. resolve own properties
-                own.getValue(name)?.let { return it }
-
-                val descriptor = descriptor?.get(name)
-                val inheritFlag = inherit ?: descriptor?.inherited ?: false
-                val stylesFlag = includeStyles ?: descriptor?.usesStyles ?: true
-
-                //2. Resolve prototype onw properties
-                prototype.properties.own.getValue(name)?.let { return it }
-
-                if (stylesFlag) {
-                    //3. own styles
-                    own.getValue(Vision.STYLE_KEY)?.list?.forEach { styleName ->
-                        getStyle(styleName.string)?.getValue(name)?.let { return it }
-                    }
-                    //4. prototype styles
-                    prototype.getStyleProperty(name)?.value?.let { return it }
-                }
-
-                if (inheritFlag) {
-                    //5. own inheritance
-                    parent?.properties?.getValue(name, inheritFlag, includeStyles)?.let { return it }
-                    //6. prototype inheritance
-                    prototype.parent?.properties?.getValue(name, inheritFlag, includeStyles)?.let { return it }
-                }
-
-                return descriptor?.defaultValue
-            }
+    @Suppress("UNCHECKED_CAST")
+    override val items: Map<Name, Solid> = (prototype as? VisionGroup<Solid>)?.items?.mapValues { (key, solid)->
+        SolidReferenceChild(this@SolidReference, this@SolidReference, key)
+    } ?: emptyMap()
 
 
-            override fun invalidate(propertyName: Name) {
-                //send update signal
-                @OptIn(DelicateCoroutinesApi::class)
-                (manager?.context ?: GlobalScope).launch {
-                    changesInternal.emit(propertyName)
-                }
+    @Suppress("UNCHECKED_CAST")
+    override fun getVision(name: Name): Solid? = (prototype as? VisionGroup<Solid>)?.getVision(name)
 
-                // update styles
-                if (propertyName == Vision.STYLE_KEY) {
-                    styles.asSequence()
-                        .mapNotNull { getStyle(it) }
-                        .flatMap { it.items.asSequence() }
-                        .distinctBy { it.key }
-                        .forEach {
-                            invalidate(it.key.asName())
-                        }
-                }
-            }
-        }
-    }
-
-    override val children: VisionChildren
-        get() = object : VisionChildren {
-            override val parent: Vision get() = this@SolidReference
-
-            override val keys: Set<NameToken> get() = prototype.children?.keys ?: emptySet()
-
-            override val changes: Flow<Name> get() = emptyFlow()
-
-            override fun get(token: NameToken): SolidReferenceChild? {
-                if (token !in (prototype.children?.keys ?: emptySet())) return null
-                return SolidReferenceChild(this@SolidReference, this@SolidReference, token.asName())
-            }
-        }
+    //
+//    override val properties: MutableVisionProperties by lazy {
+//        object : AbstractVisionProperties(this, propertiesInternal) {
+//
+//            override fun getValue(name: Name, inherit: Boolean?, includeStyles: Boolean?): Value? {
+//                if (name == Vision.STYLE_KEY) {
+//                    return buildList {
+//                        own.getValue(Vision.STYLE_KEY)?.list?.forEach {
+//                            add(it)
+//                        }
+//                        prototype.styles.forEach {
+//                            add(it.asValue())
+//                        }
+//                    }.distinct().asValue()
+//                }
+//                //1. resolve own properties
+//                own.getValue(name)?.let { return it }
+//
+//                val descriptor = descriptor?.get(name)
+//                val inheritFlag = inherit ?: descriptor?.inherited ?: false
+//                val stylesFlag = includeStyles ?: descriptor?.usesStyles ?: true
+//
+//                //2. Resolve prototype onw properties
+//                prototype.properties.own.getValue(name)?.let { return it }
+//
+//                if (stylesFlag) {
+//                    //3. own styles
+//                    own.getValue(Vision.STYLE_KEY)?.list?.forEach { styleName ->
+//                        getStyle(styleName.string)?.getValue(name)?.let { return it }
+//                    }
+//                    //4. prototype styles
+//                    prototype.getStyleProperty(name)?.value?.let { return it }
+//                }
+//
+//                if (inheritFlag) {
+//                    //5. own inheritance
+//                    parent?.properties?.getValue(name, inheritFlag, includeStyles)?.let { return it }
+//                    //6. prototype inheritance
+//                    prototype.parent?.properties?.getValue(name, inheritFlag, includeStyles)?.let { return it }
+//                }
+//
+//                return descriptor?.defaultValue
+//            }
+//
+//
+//            override fun invalidate(propertyName: Name) {
+//                //send update signal
+//                @OptIn(DelicateCoroutinesApi::class)
+//                (manager?.context ?: GlobalScope).launch {
+//                    changesInternal.emit(propertyName)
+//                }
+//
+//                // update styles
+//                if (propertyName == Vision.STYLE_KEY) {
+//                    styles.asSequence()
+//                        .mapNotNull { getStyle(it) }
+//                        .flatMap { it.items.asSequence() }
+//                        .distinctBy { it.key }
+//                        .forEach {
+//                            invalidate(it.key.asName())
+//                        }
+//                }
+//            }
+//        }
+//    }
+//
+//    val items: VisionChildren
+//        get() = object : VisionChildren {
+//            override val parent: Vision get() = this@SolidReference
+//
+//            override val keys: Set<NameToken> get() = prototype.children?.keys ?: emptySet()
+//
+//            override val changes: Flow<Name> get() = emptyFlow()
+//
+//            override fun get(token: NameToken): SolidReferenceChild? {
+//                if (token !in (prototype.children?.keys ?: emptySet())) return null
+//                return SolidReferenceChild(this@SolidReference, this@SolidReference, token.asName())
+//            }
+//        }
 
     public companion object {
         public const val REFERENCE_CHILD_PROPERTY_PREFIX: String = "@child"
@@ -142,7 +143,7 @@ public class SolidReference(
 /**
  * @param childName A name of reference child relative to prototype root
  */
-internal class SolidReferenceChild(
+private class SolidReferenceChild(
     val owner: SolidReference,
     override var parent: Vision?,
     val childName: Name,
@@ -236,5 +237,5 @@ public fun SolidGroup.newRef(
     } else if (existing != obj) {
         error("Can't add different prototype on top of existing one")
     }
-    return children.ref(prototypeName, name?.parseAsName())
+    return items.ref(prototypeName, name?.parseAsName())
 }

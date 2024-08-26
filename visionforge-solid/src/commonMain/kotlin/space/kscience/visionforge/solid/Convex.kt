@@ -14,7 +14,7 @@ public class Convex(public val points: List<Float32Vector3D>) : SolidBase<Convex
 public inline fun MutableVisionContainer<Solid>.convex(
     name: String? = null,
     action: ConvexBuilder.() -> Unit = {},
-): Convex = ConvexBuilder().apply(action).build().also { setVision(name, it) }
+): Convex = ConvexBuilder().apply(action).build().also { setSolid(name, it) }
 
 public class ConvexBuilder {
     private val points = ArrayList<Float32Vector3D>()

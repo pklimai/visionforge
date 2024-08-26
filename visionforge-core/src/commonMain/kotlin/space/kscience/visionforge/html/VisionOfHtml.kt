@@ -16,13 +16,13 @@ import space.kscience.dataforge.names.asName
 import space.kscience.visionforge.*
 
 
-public interface VisionOfHtml : Vision {
+public interface VisionOfHtml : MutableVision {
 
     /**
      * Html class strings for this instance. Does not use vision inheritance, but uses styles
      */
     public var classes: Set<String>
-        get() = properties[::classes.name, false, true].stringList?.toSet() ?: emptySet()
+        get() = getProperty(::classes.name, false, true).stringList?.toSet() ?: emptySet()
         set(value) {
             properties[::classes.name] = value.map { it.asValue() }
         }
@@ -31,7 +31,7 @@ public interface VisionOfHtml : Vision {
      * A custom style string
      */
     public var styleString: String?
-        get() = properties[::styleString.name,false,true].string
+        get() = getProperty(::styleString.name,false,true).string
         set(value){
             properties[::styleString.name] = value?.asValue()
         }

@@ -33,7 +33,7 @@ internal object UnRef : VisualTreeTransform<SolidGroup>() {
             val reference = value as SolidReference
             val newChild = reference.prototype.updateFrom(reference)
             newChild.parent = null
-            children[key] = newChild // replace proxy with merged object
+            items[key] = newChild // replace proxy with merged object
         }
 
         items.values.filterIsInstance<SolidGroup>().forEach { it.unref(name) }

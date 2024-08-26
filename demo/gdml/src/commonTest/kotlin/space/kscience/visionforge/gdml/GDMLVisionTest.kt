@@ -17,7 +17,7 @@ class GDMLVisionTest {
 
     @Test
     fun testCubesStyles(){
-        val segment = cubes.children.getChild("composite-000.segment-0") as Solid
+        val segment = cubes.items.getChild("composite-000.segment-0") as Solid
         println(segment.properties.getValue(Vision.STYLE_KEY))
 //        println(segment.computePropertyNode(SolidMaterial.MATERIAL_KEY))
 //        println(segment.computeProperty(SolidMaterial.MATERIAL_COLOR_KEY))

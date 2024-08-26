@@ -334,7 +334,7 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
             ?: error("Volume with ref ${divisionVolume.volumeref.ref} could not be resolved")
 
         //TODO add divisions
-        children.static(volume(root, volume))
+        items.static(volume(root, volume))
     }
 
     private fun volume(
@@ -389,7 +389,7 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
 public fun Gdml.toVision(block: GdmlLoaderOptions.() -> Unit = {}): SolidGroup {
     val settings = GdmlLoaderOptions().apply(block)
     return GdmlLoader(settings).transform(this).also {
-        it.children["light"] = settings.light
+        it.items["light"] = settings.light
     }
 }
 
@@ -399,7 +399,7 @@ public fun Gdml.toVision(block: GdmlLoaderOptions.() -> Unit = {}): SolidGroup {
 public fun SolidGroup.gdml(gdml: Gdml, key: String? = null, transformer: GdmlLoaderOptions.() -> Unit = {}) {
     val vision = gdml.toVision(transformer)
     //println(Visual3DPlugin.json.stringify(VisualGroup3D.serializer(), visual))
-    children.setChild(key, vision)
+    items.setChild(key, vision)
 }
 
 @VisionBuilder

@@ -84,4 +84,4 @@ public inline fun MutableVisionContainer<Solid>.sphereLayer(
     phi.toFloat(),
     thetaStart.toFloat(),
     theta.toFloat()
-).apply(action).also { setVision(name, it) }
+).apply(action).also { setSolid(name, it) }

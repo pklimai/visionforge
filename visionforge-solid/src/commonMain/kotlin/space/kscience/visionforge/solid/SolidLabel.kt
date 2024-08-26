@@ -20,4 +20,4 @@ public fun MutableVisionContainer<Solid>.label(
     fontFamily: String = "Arial",
     name: String? = null,
     action: SolidLabel.() -> Unit = {},
-): SolidLabel = SolidLabel(text, fontSize.toDouble(), fontFamily).apply(action).also { setVision(name, it) }
+): SolidLabel = SolidLabel(text, fontSize.toDouble(), fontFamily).apply(action).also { setSolid(name, it) }

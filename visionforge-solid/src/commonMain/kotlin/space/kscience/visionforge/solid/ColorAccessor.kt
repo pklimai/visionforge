@@ -4,10 +4,7 @@ import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.asName
 import space.kscience.dataforge.names.plus
-import space.kscience.visionforge.Colors
-import space.kscience.visionforge.Vision
-import space.kscience.visionforge.VisionBuilder
-import space.kscience.visionforge.root
+import space.kscience.visionforge.*
 import kotlin.properties.ReadOnlyProperty
 
 @VisionBuilder
@@ -28,10 +25,10 @@ public class ColorAccessor(
     }
 }
 
-public fun Vision.colorProperty(
+public fun MutableVision.colorProperty(
     propertyName: Name? = null,
 ): ReadOnlyProperty<Vision, ColorAccessor> = ReadOnlyProperty { _, property ->
-    ColorAccessor(properties.root(true), propertyName ?: property.name.asName())
+    ColorAccessor(properties(inherited = true), propertyName ?: property.name.asName())
 }
 
 public var ColorAccessor.string: String?

@@ -57,4 +57,4 @@ public inline fun MutableVisionContainer<Solid>.sphere(
     action: Sphere.() -> Unit = {},
 ): Sphere = Sphere(
     radius.toFloat(),
-).apply(action).also { setVision(name, it) }
+).apply(action).also { setSolid(name, it) }

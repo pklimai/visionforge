@@ -360,7 +360,7 @@ private fun buildVolume(volume: DGeoVolume, context: RootToSolidContext): Solid?
             }
         }
     }
-    return if (group.children.isEmpty()) {
+    return if (group.items.isEmpty()) {
         null
     } else if (group.items.size == 1 && group.properties.own.isEmpty()) {
         group.items.values.first().apply { parent = null }

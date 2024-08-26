@@ -19,6 +19,10 @@ import kotlin.collections.set
 
 public interface VisionGroup<out V : Vision> : Vision, VisionContainer<V> {
 
+    public val items: Map<Name, V>
+
+    override fun getVision(name: Name): V? = items[name]
+
     override suspend fun receiveEvent(event: VisionEvent) {
         super.receiveEvent(event)
         if (event is VisionChange) {
@@ -90,19 +94,17 @@ public class SimpleVisionGroup : AbstractVision(), MutableVisionGroup<Vision> {
 
     @Serializable
     @SerialName("children")
-    private val _children = mutableMapOf<Name, Vision>()
+    private val _items = mutableMapOf<Name, Vision>()
 
-    public val children: Map<Name, Vision> get() = _children
+    override val items: Map<Name, Vision> get() = _items
 
     override fun convertVisionOrNull(vision: Vision): Vision = vision
 
-    override fun getVision(name: Name): Vision? = children[name]
-
     override fun setVision(name: Name, vision: Vision?) {
         if (vision == null) {
-            _children.remove(name)
+            _items.remove(name)
         } else {
-            _children[name] = vision
+            _items[name] = vision
             vision.parent = this
         }
         emitEvent(VisionGroupCompositionChangedEvent(this, name))

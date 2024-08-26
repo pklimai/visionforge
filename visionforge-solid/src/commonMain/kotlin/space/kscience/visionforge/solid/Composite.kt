@@ -59,15 +59,15 @@ public fun SolidGroup.smartComposite(
         //append directly to group if no properties are defined
         group.items.forEach { (_, value) ->
             value.parent = null
-            children.static(value)
+            items.static(value)
         }
         this
     } else {
-        children.setChild(name, group)
+        items.setChild(name, group)
         group
     }
 } else {
-    children.composite(type, name, builder)
+    items.composite(type, name, builder)
 }
 
 @VisionBuilder

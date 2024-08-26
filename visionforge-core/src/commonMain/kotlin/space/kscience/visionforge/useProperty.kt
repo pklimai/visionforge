@@ -5,24 +5,69 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import space.kscience.dataforge.meta.Meta
+import space.kscience.dataforge.meta.Value
 import space.kscience.dataforge.meta.descriptors.get
 import space.kscience.dataforge.names.Name
-import space.kscience.dataforge.names.asName
 import space.kscience.dataforge.names.parseAsName
-import space.kscience.dataforge.names.startsWith
 import kotlin.reflect.KProperty1
-
 
 private fun Vision.inheritedEventFlow(): Flow<VisionEvent> =
     parent?.let { parent -> merge(eventFlow, parent.inheritedEventFlow()) } ?: eventFlow
+
+/**
+ * Create a flow of a specific property
+ */
+public fun Vision.flowProperty(
+    propertyName: Name,
+    inherited: Boolean = isInheritedProperty(propertyName),
+    useStyles: Boolean = isStyledProperty(propertyName),
+): Flow<Meta> = flow {
+    //Pass initial value.
+    emit(getProperty(propertyName, inherited, useStyles))
+
+    val combinedFlow: Flow<VisionEvent> = if (inherited) {
+        inheritedEventFlow()
+    } else {
+        eventFlow
+    }
+
+    combinedFlow.filterIsInstance<VisionPropertyChangedEvent>().collect { event ->
+        if (event.property == propertyName || (useStyles && event.property == Vision.STYLE_KEY)) {
+            emit(event.source.getProperty(event.property, inherited, useStyles))
+        }
+    }
+}
+
+public fun Vision.flowProperty(
+    propertyName: String,
+    inherited: Boolean = isInheritedProperty(propertyName),
+    useStyles: Boolean = isStyledProperty(propertyName),
+): Flow<Meta> = flowProperty(propertyName.parseAsName(), inherited, useStyles)
+
+/**
+ * Flow the value of specific property
+ */
+public fun Vision.flowPropertyValue(
+    propertyName: Name,
+    inherited: Boolean = isInheritedProperty(propertyName),
+    useStyles: Boolean = isStyledProperty(propertyName),
+): Flow<Value?> = flowProperty(propertyName, inherited, useStyles).map { it.value }
+
+public fun Vision.flowPropertyValue(
+    propertyName: String,
+    inherited: Boolean = isInheritedProperty(propertyName),
+    useStyles: Boolean = isStyledProperty(propertyName),
+): Flow<Value?> = flowPropertyValue(propertyName.parseAsName(), inherited, useStyles)
+
+///
 
 /**
  * Call [callback] on initial value of the property and then on all subsequent values after change
  */
 public fun Vision.useProperty(
     propertyName: Name,
-    inherited: Boolean = descriptor?.get(propertyName)?.inherited ?: false,
-    useStyles: Boolean = descriptor?.get(propertyName)?.usesStyles ?: true,
+    inherited: Boolean = isInheritedProperty(propertyName),
+    useStyles: Boolean = isStyledProperty(propertyName),
     scope: CoroutineScope = manager?.context ?: error("Orphan Vision can't observe properties. Use explicit scope."),
     callback: suspend (Meta) -> Unit,
 ): Job = scope.launch {
@@ -55,7 +100,7 @@ public fun <V : Vision, T> V.useProperty(
     property: KProperty1<V, T>,
     scope: CoroutineScope = manager?.context ?: error("Orphan Vision can't observe properties. Use explicit scope."),
     callback: suspend V.(T) -> Unit,
-): Job = useProperty(property.name, scope = scope){
+): Job = useProperty(property.name, scope = scope) {
     callback(property.get(this))
 }
 
@@ -65,8 +110,8 @@ public fun <V : Vision, T> V.useProperty(
 public fun Vision.onPropertyChange(
     scope: CoroutineScope = manager?.context ?: error("Orphan Vision can't observe properties. Use explicit scope."),
     callback: suspend (Name) -> Unit,
-): Job = properties.changes.onEach {
-    callback(it)
+): Job = inheritedEventFlow().filterIsInstance<VisionPropertyChangedEvent>().onEach {
+    callback(it.property)
 }.launchIn(scope)
 
 /**
@@ -76,6 +121,8 @@ public fun <V : Vision, T> V.onPropertyChange(
     property: KProperty1<V, T>,
     scope: CoroutineScope = manager?.context ?: error("Orphan Vision can't observe properties. Use explicit scope."),
     callback: suspend V.(T) -> Unit,
-): Job = properties.changes.filter { it.startsWith(property.name.asName()) }.onEach {
-    callback(property.get(this))
+): Job = inheritedEventFlow().filterIsInstance<VisionPropertyChangedEvent>().onEach {
+    if (it.property.toString() == property.name) {
+        callback(property.get(this))
+    }
 }.launchIn(scope)

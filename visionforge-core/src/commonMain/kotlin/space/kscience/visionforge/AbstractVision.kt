@@ -15,9 +15,8 @@ import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 @Serializable
 public abstract class AbstractVision(
     @OptIn(ExperimentalSerializationApi::class)
-    @EncodeDefault(EncodeDefault.Mode.NEVER)
-    override val properties: ObservableMutableMeta = ObservableMutableMeta(),
-) : Vision {
+    @EncodeDefault(EncodeDefault.Mode.NEVER) final override val properties: ObservableMutableMeta = ObservableMutableMeta(),
+) : MutableVision {
 
     private val _eventFlow by lazy {
         val scope = manager?.context ?: error("Can't observe orphan vision")

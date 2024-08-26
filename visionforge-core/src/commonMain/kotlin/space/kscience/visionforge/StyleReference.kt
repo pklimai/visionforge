@@ -1,9 +1,9 @@
 package space.kscience.visionforge
 
-import space.kscience.dataforge.meta.Meta
 import space.kscience.dataforge.meta.MutableMeta
 import space.kscience.dataforge.meta.Scheme
 import space.kscience.dataforge.meta.SchemeSpec
+import space.kscience.dataforge.names.parseAsName
 import kotlin.properties.ReadOnlyProperty
 
 /**
@@ -25,22 +25,22 @@ public fun Vision.useStyle(reference: StyleReference, notify: Boolean = true) {
 }
 
 @VisionBuilder
-public fun Vision.style(
+public fun MutableVision.style(
     styleKey: String? = null,
     builder: MutableMeta.() -> Unit,
 ): ReadOnlyProperty<Any?, StyleReference> = ReadOnlyProperty { _, property ->
     val styleName = styleKey ?: property.name
-    styleSheet.define(styleName, Meta(builder))
+    updateStyle(styleName.parseAsName(), builder)
     StyleReference(this, styleName)
 }
 
 @VisionBuilder
-public fun <T : Scheme> Vision.style(
+public fun <T : Scheme> MutableVision.style(
     spec: SchemeSpec<T>,
     styleKey: String? = null,
     builder: T.() -> Unit,
 ): ReadOnlyProperty<Any?, StyleReference> = ReadOnlyProperty { _, property ->
     val styleName = styleKey ?: property.name
-    styleSheet.define(styleName, spec(builder).toMeta())
+    updateStyle(styleName.parseAsName(),  spec(builder))
     StyleReference(this, styleName)
 }

@@ -11,10 +11,8 @@ import space.kscience.dataforge.names.plus
 import space.kscience.kmath.complex.Quaternion
 import space.kscience.kmath.complex.QuaternionField
 import space.kscience.kmath.geometry.*
-import space.kscience.visionforge.Vision
+import space.kscience.visionforge.*
 import space.kscience.visionforge.Vision.Companion.VISIBLE_KEY
-import space.kscience.visionforge.hide
-import space.kscience.visionforge.inherited
 import space.kscience.visionforge.solid.Solid.Companion.DETAIL_KEY
 import space.kscience.visionforge.solid.Solid.Companion.IGNORE_KEY
 import space.kscience.visionforge.solid.Solid.Companion.LAYER_KEY
@@ -39,7 +37,7 @@ import kotlin.reflect.KProperty
 /**
  * Interface for a [Vision] representing a 3D object
  */
-public interface Solid : Vision {
+public interface Solid : MutableVision {
 
     override val descriptor: MetaDescriptor get() = Companion.descriptor
 
@@ -118,7 +116,7 @@ public interface Solid : Vision {
  * Get the layer number this solid belongs to. Return 0 if layer is not defined.
  */
 public var Solid.layer: Int
-    get() = properties.getValue(LAYER_KEY, inherit = true)?.int ?: 0
+    get() = getProperty(LAYER_KEY, inherited = true).int ?: 0
     set(value) {
         properties[LAYER_KEY] = value
     }
@@ -137,15 +135,15 @@ public var Solid.rotationOrder: RotationOrder
  * Preferred number of polygons for displaying the object. If not defined, uses shape or renderer default. Not inherited
  */
 public var Solid.detail: Int?
-    get() = properties.getValue(DETAIL_KEY, inherit = false)?.int
+    get() = getProperty(DETAIL_KEY, inherited = false).int
     set(value) = properties.setValue(DETAIL_KEY, value?.asValue())
 
 /**
  * If this property is true, the object will be ignored on render.
  * Property is not inherited.
  */
-public var Vision.ignore: Boolean?
-    get() = properties.getValue(IGNORE_KEY, inherit = false, includeStyles = false)?.boolean
+public var MutableVision.ignore: Boolean?
+    get() = getProperty(IGNORE_KEY, inherited = false, useStyles = false).boolean
     set(value) = properties.setValue(IGNORE_KEY, value?.asValue())
 
 //var VisualObject.selected: Boolean?
@@ -177,7 +175,7 @@ internal fun float32Vector(
 ): ReadWriteProperty<Solid, Float32Vector3D?> =
     object : ReadWriteProperty<Solid, Float32Vector3D?> {
         override fun getValue(thisRef: Solid, property: KProperty<*>): Float32Vector3D? {
-            val item = thisRef.properties.own[name] ?: return null
+            val item = thisRef.properties[name] ?: return null
             //using dynamic property accessor because values could change
             return object : Float32Vector3D {
                 override val x: Float get() = item[X_KEY]?.float ?: defaultX

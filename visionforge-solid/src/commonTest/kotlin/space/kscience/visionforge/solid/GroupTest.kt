@@ -44,7 +44,7 @@ class GroupTest {
         }
 
         assertEquals(3, group.items.count())
-        assertEquals(300.0, (group.children.getChild("intersect") as Solid).y.toDouble())
-        assertEquals(-300.0, (group.children.getChild("subtract") as Solid).y.toDouble())
+        assertEquals(300.0, (group.items.getChild("intersect") as Solid).y.toDouble())
+        assertEquals(-300.0, (group.items.getChild("subtract") as Solid).y.toDouble())
     }
 }

@@ -1,6 +1,7 @@
 package space.kscience.visionforge
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -122,27 +123,25 @@ public class VisionChangeBuilder : MutableVisionContainer<Vision> {
         }
     }
 
-    public fun consumeEvent(event: VisionEvent) {
-        when (event) {
-            is VisionChange -> updateFrom(Name.EMPTY, event)
+    public fun consumeEvent(event: VisionEvent): Unit = when (event) {
+        is VisionChange -> updateFrom(Name.EMPTY, event)
 
-            is VisionPropertyChangedEvent -> propertyChanged(
-                visionName = Name.EMPTY,
-                propertyName = event.property,
-                item = event.source.properties[event.property]
-            )
+        is VisionPropertyChangedEvent -> propertyChanged(
+            visionName = Name.EMPTY,
+            propertyName = event.property,
+            item = event.source.properties[event.property]
+        )
 
-            is VisionGroupPropertyChangedEvent -> propertyChanged(
-                visionName = event.childName,
-                propertyName = event.propertyName,
-                item = event.source.getVision(event.childName)?.properties?.get(event.propertyName)
-            )
+//            is VisionGroupPropertyChangedEvent -> propertyChanged(
+//                visionName = event.childName,
+//                propertyName = event.propertyName,
+//                item = event.source.getVision(event.childName)?.properties?.get(event.propertyName)
+//            )
 
-            is VisionGroupCompositionChangedEvent -> setVision(event.name, event.source.getVision(event.name))
-            is VisionControlEvent, is VisionMetaEvent -> {
-                //do nothing
-                //TODO add logging
-            }
+        is VisionGroupCompositionChangedEvent -> setVision(event.name, event.source.getVision(event.name))
+        is VisionControlEvent, is VisionMetaEvent -> {
+            //do nothing
+            //TODO add logging
         }
     }
 

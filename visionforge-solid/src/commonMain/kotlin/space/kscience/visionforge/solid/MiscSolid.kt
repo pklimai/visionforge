@@ -28,5 +28,5 @@ public fun MutableVisionContainer<Solid>.axes(
     name: String = "@axes",
     block: AxesSolid.() -> Unit = {},
 ): AxesSolid = AxesSolid(size.toDouble()).apply(block).also {
-    setVision(name, it)
+    setSolid(name, it)
 }

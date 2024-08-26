@@ -102,10 +102,10 @@ public class ThreePlugin : AbstractPlugin(), ComposeHtmlVisionRenderer {
                         }
                     }.launchIn(context)
 
-                    vision.children.changes.onEach { childName ->
+                    vision.items.changes.onEach { childName ->
                         if (childName.isEmpty()) return@onEach
 
-                        val child = vision.children.getChild(childName)
+                        val child = vision.items.getChild(childName)
 
                         logger.debug { "Changing vision $childName to $child" }
 

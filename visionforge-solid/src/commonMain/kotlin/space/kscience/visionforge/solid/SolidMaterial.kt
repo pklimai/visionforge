@@ -111,10 +111,10 @@ public class SolidMaterial : Scheme() {
 }
 
 public val Solid.color: ColorAccessor
-    get() = ColorAccessor(properties.root(true), MATERIAL_COLOR_KEY)
+    get() = ColorAccessor(properties(inherited = true), MATERIAL_COLOR_KEY)
 
 public var Solid.material: SolidMaterial?
-    get() = SolidMaterial.read(properties[MATERIAL_KEY])
+    get() = properties[MATERIAL_KEY]?.let { SolidMaterial.read(it)}
     set(value) = properties.set(MATERIAL_KEY, value?.meta)
 
 @VisionBuilder
@@ -123,7 +123,7 @@ public fun Solid.material(builder: SolidMaterial.() -> Unit) {
 }
 
 public var Solid.opacity: Number?
-    get() = properties.getValue(MATERIAL_OPACITY_KEY, inherit = true)?.number
+    get() = getProperty(MATERIAL_OPACITY_KEY, inherited = true).number
     set(value) {
         properties.setValue(MATERIAL_OPACITY_KEY, value?.asValue())
     }

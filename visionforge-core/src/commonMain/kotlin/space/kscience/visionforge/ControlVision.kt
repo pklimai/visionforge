@@ -20,7 +20,7 @@ public abstract class VisionControlEvent : VisionEvent, MetaRepr {
     override fun toString(): String = toMeta().toString()
 }
 
-public interface ControlVision : Vision {
+public interface ControlVision : MutableVision {
     /**
      * Fire a [VisionControlEvent] on this [ControlVision]
      */

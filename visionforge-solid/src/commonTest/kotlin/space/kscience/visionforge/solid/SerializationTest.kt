@@ -51,7 +51,7 @@ class SerializationTest {
         val string = Solids.encodeToString(group)
         println(string)
         val reconstructed = Solids.decodeFromString(string) as SolidGroup
-        assertEquals(group.children.getChild("cube")?.properties?.own, reconstructed.children.getChild("cube")?.properties?.own)
+        assertEquals(group.items.getChild("cube")?.properties?.own, reconstructed.items.getChild("cube")?.properties?.own)
     }
 
     @Test
@@ -65,7 +65,7 @@ class SerializationTest {
         val serialized = Solids.encodeToString(group)
 
         val reconstructed = Solids.decodeFromString(serialized) as SolidGroup
-        assertEquals(100.0, (reconstructed.children.getChild("@ambientLight") as AmbientLightSource).intensity.toDouble())
+        assertEquals(100.0, (reconstructed.items.getChild("@ambientLight") as AmbientLightSource).intensity.toDouble())
     }
 
 }

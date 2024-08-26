@@ -7,10 +7,10 @@ import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.meta.descriptors.get
 import space.kscience.dataforge.names.*
 
-internal class VisionProperty(
+private class VisionProperty(
     val parent: Vision,
     val nodeName: Name,
-    val inherit: Boolean,
+    val inherited: Boolean,
     val useStyles: Boolean,
     val default: Meta? = null,
 ) : Meta {
@@ -27,7 +27,7 @@ internal class VisionProperty(
                 VisionProperty(
                     parent = parent,
                     nodeName = nodeName + it,
-                    inherit = inherit,
+                    inherited = inherited,
                     useStyles = useStyles,
                     default = default
                 )
@@ -36,7 +36,7 @@ internal class VisionProperty(
 
     override val value: Value?
         get() {
-            return parent.getProperty(nodeName, inherit, useStyles).value ?: default?.getValue(nodeName)
+            return parent.getProperty(nodeName, inherited, useStyles).value ?: default?.getValue(nodeName)
         }
 
     //TODO remove with DataForge 0.9.1
@@ -55,25 +55,40 @@ internal class VisionProperty(
     override fun hashCode(): Int = Meta.hashCode(this)
 }
 
+internal fun Vision.isInheritedProperty(name: Name): Boolean = descriptor?.get(name)?.inherited ?: false
+internal fun Vision.isInheritedProperty(name: String): Boolean = descriptor?.get(name)?.inherited ?: false
+internal fun Vision.isStyledProperty(name: Name): Boolean = descriptor?.get(name)?.usesStyles ?: true
+internal fun Vision.isStyledProperty(name: String): Boolean = descriptor?.get(name)?.usesStyles ?: true
+
+
 /**
  * Read a property, taking into account inherited properties and styles if necessary
  */
 public fun Vision.getProperty(
     name: Name,
-    inherit: Boolean = descriptor?.get(name)?.inherited ?: false,
-    includeStyles: Boolean = descriptor?.get(name)?.usesStyles ?: true,
-): Meta = VisionProperty(this, name, inherit, includeStyles)
+    inherited: Boolean = isInheritedProperty(name),
+    useStyles: Boolean = isStyledProperty(name),
+): Meta = VisionProperty(this, name, inherited, useStyles)
 
+public fun Vision.getProperty(
+    name: String,
+    inherited: Boolean = isInheritedProperty(name),
+    useStyles: Boolean = isStyledProperty(name),
+): Meta = getProperty(name.parseAsName(), inherited, useStyles)
 
+public fun Vision.properties(
+    inherited: Boolean = false,
+    useStyles: Boolean = true,
+): Meta = getProperty(Name.EMPTY,inherited, useStyles)
 
 
 internal class MutableVisionProperty(
     val parent: MutableVision,
     val nodeName: Name,
-    val inherit: Boolean,
+    val inherited: Boolean,
     val useStyles: Boolean,
     val default: Meta? = null,
-) : MutableMeta{
+) : MutableMeta {
 
 
     val descriptor: MetaDescriptor? by lazy { parent.descriptor?.get(nodeName) }
@@ -88,7 +103,7 @@ internal class MutableVisionProperty(
                 MutableVisionProperty(
                     parent = parent,
                     nodeName = nodeName + it,
-                    inherit = inherit,
+                    inherited = inherited,
                     useStyles = useStyles,
                     default = default
                 )
@@ -97,7 +112,7 @@ internal class MutableVisionProperty(
 
     override var value: Value?
         get() {
-            return parent.getProperty(nodeName, inherit, useStyles).value ?: default?.getValue(nodeName)
+            return parent.getProperty(nodeName, inherited, useStyles).value ?: default?.getValue(nodeName)
         }
         set(value) {
             parent.properties.setValue(nodeName, value)
@@ -115,11 +130,10 @@ internal class MutableVisionProperty(
     }
 
 
-
     override fun getOrCreate(name: Name): MutableVisionProperty = MutableVisionProperty(
         parent = parent,
         nodeName = nodeName + name,
-        inherit = inherit,
+        inherited = inherited,
         useStyles = useStyles,
         default = default
     )
@@ -135,6 +149,17 @@ internal class MutableVisionProperty(
 
 public fun MutableVision.getProperty(
     name: Name,
-    inherit: Boolean = descriptor?.get(name)?.inherited ?: false,
-    includeStyles: Boolean = descriptor?.get(name)?.usesStyles ?: true,
-): MutableMeta = MutableVisionProperty(this, name, inherit, includeStyles)
+    inherited: Boolean = isInheritedProperty(name),
+    useStyles: Boolean = isStyledProperty(name),
+): MutableMeta = MutableVisionProperty(this, name, inherited, useStyles)
+
+public fun MutableVision.getProperty(
+    name: String,
+    inherited: Boolean = isInheritedProperty(name),
+    useStyles: Boolean = isStyledProperty(name),
+): MutableMeta = getProperty(name.parseAsName(), inherited, useStyles)
+
+public fun MutableVision.properties(
+    inherited: Boolean = false,
+    useStyles: Boolean = true,
+): MutableMeta = getProperty(Name.EMPTY,inherited, useStyles)
