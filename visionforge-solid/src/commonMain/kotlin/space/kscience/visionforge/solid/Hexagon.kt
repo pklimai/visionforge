@@ -57,7 +57,9 @@ public inline fun MutableVisionContainer<Solid>.box(
     zSize: Number,
     name: String? = null,
     block: Box.() -> Unit = {},
-): Box = Box(xSize.toFloat(), ySize.toFloat(), zSize.toFloat()).apply(block).also { setSolid(name, it) }
+): Box = Box(xSize.toFloat(), ySize.toFloat(), zSize.toFloat()).apply(block).also { 
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}
 
 @Serializable
 @SerialName("solid.hexagon")
@@ -84,4 +86,6 @@ public inline fun MutableVisionContainer<Solid>.hexagon(
     node8: Float32Vector3D,
     name: String? = null,
     action: Hexagon.() -> Unit = {},
-): Hexagon = GenericHexagon(node1, node2, node3, node4, node5, node6, node7, node8).apply(action).also { setSolid(name, it) }
+): Hexagon = GenericHexagon(node1, node2, node3, node4, node5, node6, node7, node8).apply(action).also { 
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}

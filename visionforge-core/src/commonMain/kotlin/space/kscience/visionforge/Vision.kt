@@ -6,11 +6,14 @@ import space.kscience.dataforge.context.warn
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.meta.descriptors.Described
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
+import space.kscience.dataforge.meta.descriptors.get
 import space.kscience.dataforge.misc.DfType
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.asName
+import space.kscience.dataforge.names.parseAsName
 import space.kscience.dataforge.names.plus
 import space.kscience.visionforge.SimpleVisionGroup.Companion.updateProperties
+import space.kscience.visionforge.Vision.Companion.STYLESHEET_KEY
 import space.kscience.visionforge.Vision.Companion.TYPE
 
 /**
@@ -45,6 +48,23 @@ public interface Vision : Described {
         manager?.logger?.warn { "Undispatched event: $event" }
     }
 
+    /**
+     * Read a property, taking into account inherited properties and styles if necessary
+     */
+    public fun readProperty(
+        name: Name,
+        inherited: Boolean = isInheritedProperty(name),
+        useStyles: Boolean = isStyledProperty(name),
+    ): Meta? {
+        val ownMeta = properties[name]
+        val styleMeta = if (useStyles) getStyleProperty(name) else null
+        val inheritMeta = if (inherited) parent?.readProperty(name, inherited, useStyles) else null
+        val defaultMeta = descriptor?.defaultNode?.get(name)
+        val listOfMeta = listOf(ownMeta, styleMeta, inheritMeta, defaultMeta)
+
+        return if (listOfMeta.all { it == null }) null else Laminate(listOfMeta)
+    }
+
     public companion object {
         public const val TYPE: String = "vision"
         public val STYLE_KEY: Name = "@style".asName()
@@ -54,6 +74,23 @@ public interface Vision : Described {
         public val VISIBLE_KEY: Name = "visible".asName()
     }
 }
+
+internal fun Vision.isInheritedProperty(name: Name): Boolean = descriptor?.get(name)?.inherited ?: false
+internal fun Vision.isInheritedProperty(name: String): Boolean = descriptor?.get(name)?.inherited ?: false
+internal fun Vision.isStyledProperty(name: Name): Boolean = descriptor?.get(name)?.usesStyles ?: true
+internal fun Vision.isStyledProperty(name: String): Boolean = descriptor?.get(name)?.usesStyles ?: true
+
+public fun Vision.readProperty(
+    name: String,
+    inherited: Boolean = isInheritedProperty(name),
+    useStyles: Boolean = isStyledProperty(name),
+): Meta? = readProperty(name.parseAsName(), inherited, useStyles)
+
+
+public fun Vision.readProperties(
+    inherited: Boolean = false,
+    useStyles: Boolean = true,
+): Meta = readProperty(Name.EMPTY, inherited, useStyles) ?: Meta.EMPTY
 
 public interface MutableVision : Vision {
     override val properties: MutableMeta
@@ -71,7 +108,26 @@ public interface MutableVision : Vision {
             }
         } else super.receiveEvent(event)
     }
+
+    public fun writeProperty(
+        name: Name,
+        inherited: Boolean = isInheritedProperty(name),
+        useStyles: Boolean = isStyledProperty(name),
+    ): MutableMeta {
+
+        val styleMeta = if (useStyles) getStyleProperty(name) else null
+        val inheritMeta = if (inherited) parent?.readProperty(name, inherited, useStyles) else null
+        val defaultMeta = descriptor?.defaultNode?.get(name)
+        val listOfMeta = listOf(styleMeta, inheritMeta, defaultMeta)
+
+        return properties.getOrCreate(name).withDefault(Laminate(listOfMeta))
+    }
 }
+
+public fun MutableVision.writeProperties(
+    inherited: Boolean = false,
+    useStyles: Boolean = true,
+): MutableMeta = writeProperty(Name.EMPTY, inherited, useStyles)
 
 /**
  * Control visibility of the element
@@ -84,7 +140,7 @@ public var MutableVision.visible: Boolean?
 
 
 public val Vision.styleSheet: Meta?
-    get() = properties[Vision.STYLESHEET_KEY]
+    get() = properties[STYLESHEET_KEY]
 
 /**
  * List of style names applied to this object. Order matters. Not inherited.
@@ -99,7 +155,7 @@ public var MutableVision.styles: List<String>
         properties[Vision.STYLE_KEY] = value.map { it.asValue() }.asValue()
     }
 
-public fun MutableVision.setStyle(styleName: String, style: Meta){
+public fun MutableVision.setStyle(styleName: String, style: Meta) {
     properties[Vision.STYLESHEET_KEY + styleName] = style
 }
 
@@ -115,7 +171,8 @@ public fun MutableVision.updateStyle(styleName: String, block: MutableMeta.() ->
  * The style with given name does not necessary exist at the moment.
  */
 public fun MutableVision.useStyle(styleName: String) {
-    val newStyleList = properties[Vision.STYLE_KEY]?.value?.list?.plus(styleName.asValue()) ?: listOf(styleName.asValue())
+    val newStyleList =
+        properties[Vision.STYLE_KEY]?.value?.list?.plus(styleName.asValue()) ?: listOf(styleName.asValue())
     properties.setValue(Vision.STYLE_KEY, newStyleList.asValue())
 }
 
@@ -123,7 +180,7 @@ public fun MutableVision.useStyle(styleName: String) {
  * Resolve a style with given name for given [Vision]. The style is not necessarily applied to this [Vision].
  */
 public fun Vision.getStyle(name: String): Meta? =
-    properties[Vision.STYLESHEET_KEY + name] ?: parent?.getStyle(name)
+    properties[STYLESHEET_KEY + name] ?: parent?.getStyle(name)
 
 /**
  * Resolve a property from all styles

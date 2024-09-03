@@ -70,8 +70,8 @@ public class ThreePlugin : AbstractPlugin(), ComposeHtmlVisionRenderer {
         is SolidReference -> ThreeReferenceFactory.build(this, vision, observe)
         is SolidGroup -> {
             val group = ThreeGroup()
-            vision.items.forEach { (token, child) ->
-                if (token != SolidGroup.PROTOTYPES_TOKEN && child.ignore != true) {
+            vision.solids.forEach { (token, child) ->
+                if (child.ignore != true) {
                     try {
                         val object3D = buildObject3D(
                             child,

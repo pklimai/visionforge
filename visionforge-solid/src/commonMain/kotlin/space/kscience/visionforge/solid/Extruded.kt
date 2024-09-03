@@ -104,4 +104,6 @@ public class Extruded(
 public fun MutableVisionContainer<Solid>.extruded(
     name: String? = null,
     action: Extruded.Builder.() -> Unit = {},
-): Extruded = Extruded.Builder().apply(action).build().also { setSolid(name, it) }
+): Extruded = Extruded.Builder().apply(action).build().also {
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}

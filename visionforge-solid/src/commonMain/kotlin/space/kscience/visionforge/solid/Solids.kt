@@ -22,7 +22,7 @@ public class Solids(meta: Meta) : VisionPlugin(meta), MutableVisionContainer<Sol
 
     override val visionSerializersModule: SerializersModule get() = serializersModuleForSolids
 
-    override fun setVision(name: Name?, vision: Solid?) {
+    override fun setVision(name: Name, vision: Solid?) {
         vision?.setAsRoot(visionManager)
     }
 
@@ -91,7 +91,7 @@ public inline fun VisionOutput.solid(options: Canvas3DOptions? = null, block: So
         meta = options.meta
     }
     return SolidGroup().apply(block).apply {
-        if (items.values.none { it is LightSource }) {
+        if (solids.values.none { it is LightSource }) {
             ambientLight()
         }
     }

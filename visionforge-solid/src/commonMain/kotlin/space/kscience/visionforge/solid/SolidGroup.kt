@@ -15,7 +15,7 @@ public interface PrototypeHolder {
      * Build or update the prototype tree
      */
     @VisionBuilder
-    public fun prototypes(builder: MutableVisionGroup<Solid>.() -> Unit)
+    public fun prototypes(builder: SolidGroup.() -> Unit)
 
     /**
      * Resolve a prototype from this container. Should never return a ref.
@@ -25,45 +25,40 @@ public interface PrototypeHolder {
 
 private fun MutableMap<Name, Solid>.fillFrom(prefix: Name, solids: Map<NameToken, Solid>) {
     solids.forEach { (token, solid) ->
-        if(!token.body.startsWith("@")) {
-            put(prefix + token, solid)
-            if (solid is SolidGroup) {
-                fillFrom(prefix + token, solid.solids)
-            }
+        put(prefix + token, solid)
+        if (solid is SolidGroup) {
+            fillFrom(prefix + token, solid.solids)
         }
     }
 }
+
+public interface SolidContainer : VisionContainer<Solid> {
+
+    public val solids: Map<NameToken, Solid>
+
+    public operator fun get(token: NameToken): Solid? = solids[token]
+
+    override fun getVision(name: Name): Solid? = when (name.length) {
+        0 -> this as? Solid
+        1 -> get(name.first())
+        else -> (get(name.first()) as? SolidContainer)?.get(name.cutFirst())
+    }
+}
+
+public operator fun SolidContainer.get(name: Name): Solid? = getVision(name)
 
 /**
  * A [Solid] group with additional accessor methods
  */
 @Serializable
 @SerialName("group.solid")
-public class SolidGroup : AbstractVision(), Solid, PrototypeHolder, MutableVisionGroup<Solid> {
+public class SolidGroup : AbstractVision(), Solid, PrototypeHolder, SolidContainer, MutableVisionContainer<Solid> {
 
     private val _solids = LinkedHashMap<NameToken, Solid>()
 
-    public val solids: Map<NameToken, Solid> get() = _solids
+    override val solids: Map<NameToken, Solid> get() = _solids
 
-    /**
-     * All items in this [SolidGroup] excluding invisible items (starting with @)
-     */
-    override val items: Map<Name, Solid> get() = buildMap { fillFrom(Name.EMPTY, solids) }
-
-    /**
-     * Get a child solid with given relative [name] if it exists
-     */
-    public operator fun get(name: Name): Solid? = items[name] as? Solid
-
-    private var prototypes: SolidGroup?
-        get() = _solids[PROTOTYPES_TOKEN] as? SolidGroup
-        set(value) {
-            if (value == null) {
-                _solids.remove(PROTOTYPES_TOKEN)
-            } else {
-                _solids[PROTOTYPES_TOKEN] = value
-            }
-        }
+    private var prototypes: SolidGroup? = null
 
     override val descriptor: MetaDescriptor get() = Solid.descriptor
 
@@ -77,14 +72,11 @@ public class SolidGroup : AbstractVision(), Solid, PrototypeHolder, MutableVisio
     /**
      * Create or edit prototype node as a group
      */
-    override fun prototypes(builder: MutableVisionGroup<Solid>.() -> Unit): Unit {
-        (prototypes ?: SolidGroup().also { prototypes = it }).apply(builder)
-    }
-
-    override fun getVision(name: Name): Solid? = when (name.length) {
-        0 -> this
-        1 -> solids[name.first()]
-        else -> (solids[name.first()] as? SolidGroup)?.getVision(name.cutFirst())
+    override fun prototypes(builder: SolidGroup.() -> Unit): Unit {
+        (prototypes ?: SolidGroup().also {
+            prototypes = it
+            parent = this
+        }).apply(builder)
     }
 
     private fun getOrCreateGroup(name: Name): SolidGroup = when (name.length) {
@@ -105,18 +97,18 @@ public class SolidGroup : AbstractVision(), Solid, PrototypeHolder, MutableVisio
     override fun setVision(name: Name, vision: Solid?) {
         if (name.isEmpty()) error("Can't set vision with empty name")
         if (vision == null) {
-            getVision(name.cutLast())
+            (get(name.cutLast()) as SolidGroup)._solids.remove(name.last())
         } else {
             val parent = getOrCreateGroup(name.cutLast())
             vision.parent = parent
             parent._solids[name.last()] = vision
         }
+        emitEvent(VisionGroupCompositionChangedEvent(this, name))
     }
 
-    override fun convertVisionOrNull(vision: Vision): Solid? = vision as? Solid
-
     public companion object {
-        public val PROTOTYPES_TOKEN: NameToken = NameToken("@prototypes")
+        public fun staticNameFor(vision: Vision): Name = NameToken("@static", vision.hashCode().toString(16)).asName()
+        public fun inferNameFor(name: String?, vision: Vision): Name = name?.parseAsName() ?: staticNameFor(vision)
     }
 }
 
@@ -142,7 +134,9 @@ public fun MutableVisionContainer<Solid>.setSolid(name: String?, vision: Solid?)
 public inline fun MutableVisionContainer<Solid>.solidGroup(
     name: Name? = null,
     builder: SolidGroup.() -> Unit = {},
-): SolidGroup = SolidGroup().also { setSolid(name, it) }.apply(builder)
+): SolidGroup = SolidGroup().also {
+    setVision(name ?: SolidGroup.staticNameFor(it), it)
+}.apply(builder)
 //root first, update later
 
 /**

@@ -22,12 +22,12 @@ internal class PropertyFlowTest {
     fun testChildrenPropertyFlow() = runBlocking{
         val group = Global.request(VisionManager).group {
 
-            properties {
+            writeProperties {
                 "test" put 11
             }
 
             group("child") {
-                properties {
+                writeProperties {
                     "test" put 22
                 }
             }

@@ -111,7 +111,7 @@ public class SolidMaterial : Scheme() {
 }
 
 public val Solid.color: ColorAccessor
-    get() = ColorAccessor(properties(inherited = true), MATERIAL_COLOR_KEY)
+    get() = ColorAccessor(writeProperties(inherited = true), MATERIAL_COLOR_KEY)
 
 public var Solid.material: SolidMaterial?
     get() = properties[MATERIAL_KEY]?.let { SolidMaterial.read(it)}
@@ -119,11 +119,11 @@ public var Solid.material: SolidMaterial?
 
 @VisionBuilder
 public fun Solid.material(builder: SolidMaterial.() -> Unit) {
-    properties[MATERIAL_KEY].updateWith(SolidMaterial, builder)
+    writeProperty(MATERIAL_KEY, inherited = false, useStyles = false).updateWith(SolidMaterial, builder)
 }
 
 public var Solid.opacity: Number?
-    get() = getProperty(MATERIAL_OPACITY_KEY, inherited = true).number
+    get() = readProperty(MATERIAL_OPACITY_KEY, inherited = true).number
     set(value) {
         properties.setValue(MATERIAL_OPACITY_KEY, value?.asValue())
     }
@@ -132,5 +132,5 @@ public var Solid.opacity: Number?
 @VisionBuilder
 public fun Solid.edges(enabled: Boolean = true, block: SolidMaterial.() -> Unit = {}) {
     properties[SolidMaterial.EDGES_ENABLED_KEY] = enabled
-    SolidMaterial.write(properties[SolidMaterial.EDGES_MATERIAL_KEY]).apply(block)
+    SolidMaterial.write(writeProperty(SolidMaterial.EDGES_MATERIAL_KEY)).apply(block)
 }

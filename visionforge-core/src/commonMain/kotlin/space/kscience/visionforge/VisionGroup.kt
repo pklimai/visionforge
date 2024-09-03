@@ -40,8 +40,10 @@ public interface VisionGroup<out V : Vision> : Vision, VisionContainer<V> {
 /**
  * An event that indicates that [VisionGroup] composition is invalidated (not necessarily changed
  */
-public data class VisionGroupCompositionChangedEvent(public val source: VisionGroup<*>, public val name: Name) :
-    VisionEvent
+public data class VisionGroupCompositionChangedEvent(
+    public val source: VisionContainer<*>,
+    public val name: Name
+) : VisionEvent
 
 ///**
 // * An event that indicates that child property value has been invalidated

@@ -334,7 +334,8 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
             ?: error("Volume with ref ${divisionVolume.volumeref.ref} could not be resolved")
 
         //TODO add divisions
-        items.static(volume(root, volume))
+        setSolid()
+        solids.static(volume(root, volume))
     }
 
     private fun volume(
@@ -368,18 +369,16 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
             Solid.ROTATION_ORDER_KEY put RotationOrder.ZXY
         }
 
-        rootSolid.useStyle(rootStyle, false)
+        rootSolid.useStyle(rootStyle)
 
         rootSolid.prototypes {
-            templates.items.forEach { (token, item) ->
+            templates.solids.forEach { (token, item) ->
                 item.parent = null
                 setVision(token.asName(), item)
             }
         }
         settings.styleCache.forEach {
-            rootSolid.styleSheet {
-                define(it.key.toString(), it.value)
-            }
+            rootSolid.setStyle(it.key.toString(), it.value)
         }
         return rootSolid
     }
@@ -389,7 +388,7 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
 public fun Gdml.toVision(block: GdmlLoaderOptions.() -> Unit = {}): SolidGroup {
     val settings = GdmlLoaderOptions().apply(block)
     return GdmlLoader(settings).transform(this).also {
-        it.items["light"] = settings.light
+        it.setVision("light", settings.light)
     }
 }
 
@@ -399,7 +398,7 @@ public fun Gdml.toVision(block: GdmlLoaderOptions.() -> Unit = {}): SolidGroup {
 public fun SolidGroup.gdml(gdml: Gdml, key: String? = null, transformer: GdmlLoaderOptions.() -> Unit = {}) {
     val vision = gdml.toVision(transformer)
     //println(Visual3DPlugin.json.stringify(VisualGroup3D.serializer(), visual))
-    items.setChild(key, vision)
+    setSolid(key, vision)
 }
 
 @VisionBuilder

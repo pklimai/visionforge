@@ -6,7 +6,6 @@ import space.kscience.dataforge.meta.isEmpty
 import space.kscience.dataforge.names.Name
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
-import space.kscience.visionforge.static
 
 public enum class CompositeType {
     GROUP, // Dumb sum of meshes
@@ -33,15 +32,15 @@ public inline fun MutableVisionContainer<Solid>.composite(
     @VisionBuilder builder: SolidGroup.() -> Unit,
 ): Composite {
     val group = SolidGroup().apply(builder)
-    val children = group.items.values.toList()
+    val children = group.solids.values.toList()
     if (children.size != 2) {
         error("Composite requires exactly two children, but found ${children.size}")
     }
     val res = Composite(type, children[0], children[1])
 
-    res.properties[Name.EMPTY] = group.properties.own
+    res.properties[Name.EMPTY] = group.properties
 
-    setVision(name, res)
+    setVision(SolidGroup.inferNameFor(name, res), res)
     return res
 }
 
@@ -55,19 +54,19 @@ public fun SolidGroup.smartComposite(
     @VisionBuilder builder: SolidGroup.() -> Unit,
 ): Solid = if (type == CompositeType.GROUP) {
     val group = SolidGroup().apply(builder)
-    if (name == null && group.properties.own.isEmpty()) {
+    if (name == null && group.properties.isEmpty()) {
         //append directly to group if no properties are defined
-        group.items.forEach { (_, value) ->
+        group.solids.forEach { (_, value) ->
             value.parent = null
-            items.static(value)
+            static(value)
         }
         this
     } else {
-        items.setChild(name, group)
+        setVision(SolidGroup.inferNameFor(name, group), group)
         group
     }
 } else {
-    items.composite(type, name, builder)
+    composite(type, name, builder)
 }
 
 @VisionBuilder

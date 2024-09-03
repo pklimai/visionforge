@@ -59,11 +59,11 @@ internal class VisionPropertyTest {
     @Test
     fun testChildrenPropertyPropagation() = runTest(timeout = 200.milliseconds) {
         val group = Global.request(VisionManager).group {
-            properties {
+            writeProperties {
                 "test" put 11
             }
             group("child") {
-                properties {
+                writeProperties {
                     "test" put 22
                 }
             }
@@ -96,12 +96,12 @@ internal class VisionPropertyTest {
     fun testChildrenPropertyFlow() = runTest(timeout = 500.milliseconds) {
         val group = Global.request(VisionManager).group {
 
-            properties {
+            writeProperties {
                 "test" put 11
             }
 
             group("child") {
-                properties {
+                writeProperties {
                     "test" put 22
                 }
             }

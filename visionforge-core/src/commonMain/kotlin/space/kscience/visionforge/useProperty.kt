@@ -23,7 +23,7 @@ public fun Vision.flowProperty(
     useStyles: Boolean = isStyledProperty(propertyName),
 ): Flow<Meta> = flow {
     //Pass initial value.
-    emit(getProperty(propertyName, inherited, useStyles))
+    readProperty(propertyName, inherited, useStyles)?.let { emit(it) }
 
     val combinedFlow: Flow<VisionEvent> = if (inherited) {
         inheritedEventFlow()
@@ -33,7 +33,7 @@ public fun Vision.flowProperty(
 
     combinedFlow.filterIsInstance<VisionPropertyChangedEvent>().collect { event ->
         if (event.property == propertyName || (useStyles && event.property == Vision.STYLE_KEY)) {
-            emit(event.source.getProperty(event.property, inherited, useStyles))
+            readProperty(event.property, inherited, useStyles)?.let { emit(it) }
         }
     }
 }
@@ -73,7 +73,7 @@ public fun Vision.useProperty(
 ): Job = scope.launch {
     //Pass initial value synchronously
 
-    callback(getProperty(propertyName, inherited, useStyles))
+    readProperty(propertyName, inherited, useStyles)?.let { callback(it) }
 
     val combinedFlow = if (inherited) {
         inheritedEventFlow()
@@ -81,9 +81,9 @@ public fun Vision.useProperty(
         eventFlow
     }
 
-    combinedFlow.filterIsInstance<VisionPropertyChangedEvent>().onEach {
-        if (it.property == propertyName || (useStyles && it.property == Vision.STYLE_KEY)) {
-            callback(getProperty(propertyName, inherited, useStyles))
+    combinedFlow.filterIsInstance<VisionPropertyChangedEvent>().onEach { event ->
+        if (event.property == propertyName || (useStyles && event.property == Vision.STYLE_KEY)) {
+            readProperty(event.property, inherited, useStyles)?.let { callback(it) }
         }
     }.collect()
 }

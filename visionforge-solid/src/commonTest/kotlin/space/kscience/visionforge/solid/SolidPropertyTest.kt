@@ -6,7 +6,6 @@ import space.kscience.dataforge.meta.int
 import space.kscience.dataforge.meta.set
 import space.kscience.dataforge.meta.string
 import space.kscience.dataforge.names.asName
-import space.kscience.visionforge.getProperty
 import space.kscience.visionforge.styles
 import space.kscience.visionforge.updateStyle
 import space.kscience.visionforge.useStyle
@@ -47,7 +46,7 @@ class SolidPropertyTest {
                 box = box(100, 100, 100)
             }
         }
-        assertEquals(22, box?.getProperty("test".asName(), inherited = true)?.int)
+        assertEquals(22, box?.readProperty("test".asName(), inherited = true)?.int)
     }
 
     @Test

@@ -21,7 +21,7 @@ class ConvexTest {
             }
         }
 
-        val convex = group.items.values.first() as Convex
+        val convex = group.solids.values.first() as Convex
 
         val json = Solids.jsonForSolids.encodeToJsonElement(Convex.serializer(), convex)
         val meta = json.toMeta()

@@ -22,7 +22,7 @@ public interface VisionOfHtml : MutableVision {
      * Html class strings for this instance. Does not use vision inheritance, but uses styles
      */
     public var classes: Set<String>
-        get() = getProperty(::classes.name, false, true).stringList?.toSet() ?: emptySet()
+        get() = readProperty(::classes.name, false, true).stringList?.toSet() ?: emptySet()
         set(value) {
             properties[::classes.name] = value.map { it.asValue() }
         }
@@ -31,7 +31,7 @@ public interface VisionOfHtml : MutableVision {
      * A custom style string
      */
     public var styleString: String?
-        get() = getProperty(::styleString.name,false,true).string
+        get() = readProperty(::styleString.name,false,true).string
         set(value){
             properties[::styleString.name] = value?.asValue()
         }

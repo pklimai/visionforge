@@ -136,7 +136,9 @@ public inline fun MutableVisionContainer<Solid>.tube(
     topInnerRadius = innerRadius.toFloat(),
     phiStart = startAngle.toFloat(),
     phi = angle.toFloat()
-).apply(block).also { setSolid(name, it) }
+).apply(block).also { 
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}
 
 @VisionBuilder
 public inline fun MutableVisionContainer<Solid>.coneSurface(
@@ -157,4 +159,6 @@ public inline fun MutableVisionContainer<Solid>.coneSurface(
     topInnerRadius = topInnerRadius.toFloat(),
     phiStart = startAngle.toFloat(),
     phi = angle.toFloat()
-).apply(block).also { setSolid(name, it) }
+).apply(block).also { 
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}

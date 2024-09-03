@@ -21,4 +21,6 @@ public inline fun MutableVisionContainer<Solid>.stl(
     url: String,
     name: String? = null,
     action: StlSolid.() -> Unit = {},
-): StlSolid = StlUrlSolid(url).apply(action).also { setSolid(name, it) }
+): StlSolid = StlUrlSolid(url).apply(action).also { 
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}

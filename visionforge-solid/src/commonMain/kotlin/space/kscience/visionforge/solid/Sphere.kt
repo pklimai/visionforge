@@ -2,6 +2,7 @@ package space.kscience.visionforge.solid
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import space.kscience.dataforge.names.parseAsName
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
 import kotlin.math.PI
@@ -57,4 +58,6 @@ public inline fun MutableVisionContainer<Solid>.sphere(
     action: Sphere.() -> Unit = {},
 ): Sphere = Sphere(
     radius.toFloat(),
-).apply(action).also { setSolid(name, it) }
+).apply(action).also { 
+    setVision(name?.parseAsName() ?: SolidGroup.staticNameFor(it), it) 
+}

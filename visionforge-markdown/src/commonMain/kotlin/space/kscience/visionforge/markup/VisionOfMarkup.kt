@@ -12,7 +12,6 @@ import space.kscience.visionforge.AbstractVision
 import space.kscience.visionforge.Vision
 import space.kscience.visionforge.VisionBuilder
 import space.kscience.visionforge.html.VisionOutput
-import space.kscience.visionforge.root
 
 @Serializable
 @SerialName("vision.markup")
@@ -22,7 +21,7 @@ public class VisionOfMarkup(
 
     //TODO add templates
 
-    public var content: String? by properties.root().string(CONTENT_PROPERTY_KEY)
+    public var content: String? by properties.string(CONTENT_PROPERTY_KEY)
 
     public companion object {
         public val CONTENT_PROPERTY_KEY: Name = "content".asName()

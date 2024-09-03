@@ -3,7 +3,6 @@ package space.kscience.visionforge
 import space.kscience.dataforge.meta.MutableMeta
 import space.kscience.dataforge.meta.Scheme
 import space.kscience.dataforge.meta.SchemeSpec
-import space.kscience.dataforge.names.parseAsName
 import kotlin.properties.ReadOnlyProperty
 
 /**
@@ -18,10 +17,10 @@ private tailrec fun styleIsDefined(vision: Vision, reference: StyleReference): B
 }
 
 @VisionBuilder
-public fun Vision.useStyle(reference: StyleReference, notify: Boolean = true) {
+public fun MutableVision.useStyle(reference: StyleReference) {
     //check that style is defined in a parent
     //check(styleIsDefined(this, reference)) { "Style reference does not belong to a Vision parent" }
-    useStyle(reference.name, notify)
+    useStyle(reference.name)
 }
 
 @VisionBuilder
@@ -30,7 +29,7 @@ public fun MutableVision.style(
     builder: MutableMeta.() -> Unit,
 ): ReadOnlyProperty<Any?, StyleReference> = ReadOnlyProperty { _, property ->
     val styleName = styleKey ?: property.name
-    updateStyle(styleName.parseAsName(), builder)
+    updateStyle(styleName, builder)
     StyleReference(this, styleName)
 }
 
@@ -41,6 +40,6 @@ public fun <T : Scheme> MutableVision.style(
     builder: T.() -> Unit,
 ): ReadOnlyProperty<Any?, StyleReference> = ReadOnlyProperty { _, property ->
     val styleName = styleKey ?: property.name
-    updateStyle(styleName.parseAsName(),  spec(builder))
+    setStyle(styleName,  spec.invoke(builder).toMeta())
     StyleReference(this, styleName)
 }

@@ -11,8 +11,11 @@ import space.kscience.dataforge.names.plus
 import space.kscience.kmath.complex.Quaternion
 import space.kscience.kmath.complex.QuaternionField
 import space.kscience.kmath.geometry.*
-import space.kscience.visionforge.*
+import space.kscience.visionforge.MutableVision
+import space.kscience.visionforge.Vision
 import space.kscience.visionforge.Vision.Companion.VISIBLE_KEY
+import space.kscience.visionforge.hide
+import space.kscience.visionforge.inherited
 import space.kscience.visionforge.solid.Solid.Companion.DETAIL_KEY
 import space.kscience.visionforge.solid.Solid.Companion.IGNORE_KEY
 import space.kscience.visionforge.solid.Solid.Companion.LAYER_KEY
@@ -116,7 +119,7 @@ public interface Solid : MutableVision {
  * Get the layer number this solid belongs to. Return 0 if layer is not defined.
  */
 public var Solid.layer: Int
-    get() = getProperty(LAYER_KEY, inherited = true).int ?: 0
+    get() = readProperty(LAYER_KEY, inherited = true).int ?: 0
     set(value) {
         properties[LAYER_KEY] = value
     }
@@ -135,7 +138,7 @@ public var Solid.rotationOrder: RotationOrder
  * Preferred number of polygons for displaying the object. If not defined, uses shape or renderer default. Not inherited
  */
 public var Solid.detail: Int?
-    get() = getProperty(DETAIL_KEY, inherited = false).int
+    get() = readProperty(DETAIL_KEY, inherited = false).int
     set(value) = properties.setValue(DETAIL_KEY, value?.asValue())
 
 /**
@@ -143,7 +146,7 @@ public var Solid.detail: Int?
  * Property is not inherited.
  */
 public var MutableVision.ignore: Boolean?
-    get() = getProperty(IGNORE_KEY, inherited = false, useStyles = false).boolean
+    get() = readProperty(IGNORE_KEY, inherited = false, useStyles = false).boolean
     set(value) = properties.setValue(IGNORE_KEY, value?.asValue())
 
 //var VisualObject.selected: Boolean?

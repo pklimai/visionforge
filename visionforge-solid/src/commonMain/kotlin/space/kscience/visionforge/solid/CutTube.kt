@@ -164,4 +164,6 @@ public inline fun MutableVisionContainer<Solid>.cutTube(
     phi = angle.toFloat(),
     nTop = topNormal,
     nBottom = bottomNormal
-).apply(block).also { setSolid(name, it) }
+).apply(block).also { 
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}

@@ -28,7 +28,7 @@ public class ColorAccessor(
 public fun MutableVision.colorProperty(
     propertyName: Name? = null,
 ): ReadOnlyProperty<Vision, ColorAccessor> = ReadOnlyProperty { _, property ->
-    ColorAccessor(properties(inherited = true), propertyName ?: property.name.asName())
+    ColorAccessor(writeProperties(inherited = true), propertyName ?: property.name.asName())
 }
 
 public var ColorAccessor.string: String?

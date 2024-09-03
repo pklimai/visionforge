@@ -169,4 +169,6 @@ public class Surface(
 public fun MutableVisionContainer<Solid>.surface(
     name: String? = null,
     action: Surface.Builder.() -> Unit = {},
-): Surface = Surface.Builder().apply(action).build().also { setSolid(name, it) }
+): Surface = Surface.Builder().apply(action).build().also {
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}

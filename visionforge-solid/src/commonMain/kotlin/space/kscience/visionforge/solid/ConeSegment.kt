@@ -80,7 +80,9 @@ public inline fun MutableVisionContainer<Solid>.cylinder(
     r.toFloat(),
     height.toFloat(),
     r.toFloat()
-).apply(block).also { setSolid(name, it) }
+).apply(block).also { 
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}
 
 @VisionBuilder
 public inline fun MutableVisionContainer<Solid>.cone(
@@ -97,4 +99,6 @@ public inline fun MutableVisionContainer<Solid>.cone(
     topRadius = upperRadius.toFloat(),
     phiStart = startAngle.toFloat(),
     phi = angle.toFloat()
-).apply(block).also { setSolid(name, it) }
+).apply(block).also { 
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}

@@ -1,10 +1,16 @@
 package space.kscience.visionforge.solid
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
-import kotlinx.serialization.*
-import space.kscience.dataforge.meta.*
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.map
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
+import space.kscience.dataforge.meta.Laminate
+import space.kscience.dataforge.meta.Meta
+import space.kscience.dataforge.meta.MutableMeta
+import space.kscience.dataforge.meta.MutableMetaProxy
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.names.*
 import space.kscience.visionforge.*
@@ -28,7 +34,7 @@ public val Vision.prototype: Solid
 @SerialName("solid.ref")
 public class SolidReference(
     @SerialName("prototype") public val prototypeName: Name,
-) : AbstractVision(), VisionGroup<Solid>, Solid {
+) : AbstractVision(), Solid, SolidContainer {
 
     @Transient
     override var parent: Vision? = null
@@ -43,17 +49,48 @@ public class SolidReference(
         (parent as? PrototypeHolder)?.getPrototype(prototypeName)
             ?: error("Prototype with name $prototypeName not found")
     }
+
     override val descriptor: MetaDescriptor get() = prototype.descriptor
 
+    override val solids: Map<NameToken, Solid>
+        get() = (prototype as? SolidContainer)?.solids?.mapValues { (key, _) ->
+            SolidReferenceChild(this@SolidReference, this@SolidReference, key.asName())
+        } ?: emptyMap()
 
-    @Suppress("UNCHECKED_CAST")
-    override val items: Map<Name, Solid> = (prototype as? VisionGroup<Solid>)?.items?.mapValues { (key, solid)->
-        SolidReferenceChild(this@SolidReference, this@SolidReference, key)
-    } ?: emptyMap()
+
+    override fun getVision(name: Name): Solid? = (prototype as? SolidContainer)?.getVision(name)
 
 
-    @Suppress("UNCHECKED_CAST")
-    override fun getVision(name: Name): Solid? = (prototype as? VisionGroup<Solid>)?.getVision(name)
+    override fun readProperty(
+        name: Name,
+        inherited: Boolean,
+        useStyles: Boolean
+    ): Meta? {
+        val listOfMeta = buildList {
+            //1. resolve own properties
+            add(properties[name])
+            //2. Resolve prototype own properties
+            add(prototype.properties[name])
+
+            if (useStyles) {
+                //3. own styles
+                add(getStyleProperty(name))
+                //4. prototype styles
+                add(prototype.getStyleProperty(name))
+            }
+
+            if (inherited) {
+                //5. own inheritance
+                add(parent?.readProperty(name, inherited, useStyles))
+                //6. prototype inheritance
+                add(prototype.parent?.readProperty(name, inherited, useStyles))
+            }
+
+            add(descriptor.defaultNode[name])
+        }
+
+        return if (listOfMeta.all { it == null }) null else Laminate(listOfMeta)
+    }
 
     //
 //    override val properties: MutableVisionProperties by lazy {
@@ -147,54 +184,89 @@ private class SolidReferenceChild(
     val owner: SolidReference,
     override var parent: Vision?,
     val childName: Name,
-) : Solid, VisionGroup {
+) : Solid, SolidContainer {
+
+    private val childToken = childToken(childName)
 
     val prototype: Solid
-        get() = owner.prototype.children?.getChild(childName) as? Solid
+        get() = (owner.prototype as SolidContainer)[childName]
             ?: error("Prototype with name $childName not found")
 
     override val descriptor: MetaDescriptor get() = prototype.descriptor
 
-    @Transient
-    override val properties: MutableVisionProperties = object : MutableVisionProperties {
-        override val descriptor: MetaDescriptor get() = this@SolidReferenceChild.descriptor
-
-        override val own: MutableMeta by lazy { owner.properties[childToken(childName).asName()] }
-
-        override fun getValue(
-            name: Name,
-            inherit: Boolean?,
-            includeStyles: Boolean?,
-        ): Value? = own.getValue(name) ?: prototype.properties.getValue(name, inherit, includeStyles)
-
-        override fun set(name: Name, item: Meta?, notify: Boolean) {
-            own[name] = item
+    override val eventFlow: Flow<VisionEvent>
+        get() = owner.eventFlow.filterIsInstance<VisionPropertyChangedEvent>().filter {
+            it.property.startsWith(childToken)
+        }.map {
+            VisionPropertyChangedEvent(this@SolidReferenceChild, it.property.cutFirst())
         }
 
-        override fun setValue(name: Name, value: Value?, notify: Boolean) {
-            own.setValue(name, value)
+
+    override val properties: MutableMeta = MutableMetaProxy(owner.properties, childToken.asName())
+
+    override fun readProperty(
+        name: Name,
+        inherited: Boolean,
+        useStyles: Boolean
+    ): Meta? {
+        val listOfMeta = buildList {
+            //1. resolve own properties
+            add(properties[name])
+            //2. Resolve prototype own properties
+            add(prototype.properties[name])
+
+            if (useStyles) {
+                //3. own styles
+                add(getStyleProperty(name))
+                //4. prototype styles
+                add(prototype.getStyleProperty(name))
+            }
+
+            if (inherited) {
+                //5. own inheritance
+                add(parent?.readProperty(name, inherited, useStyles))
+                //6. prototype inheritance
+                add(prototype.parent?.readProperty(name, inherited, useStyles))
+            }
+
+            add(descriptor.defaultNode[name])
         }
 
-        override val changes: Flow<Name>
-            get() = owner.properties.changes.filter { it.startsWith(childToken(childName)) }
-
-        override fun invalidate(propertyName: Name) {
-            owner.properties.invalidate(childPropertyName(childName, propertyName))
-        }
+        return if (listOfMeta.all { it == null }) null else Laminate(listOfMeta)
     }
 
-    override val children: VisionChildren = object : VisionChildren {
-        override val parent: Vision get() = this@SolidReferenceChild
+    override val solids: Map<NameToken, Solid>
+        get() = (prototype as? SolidContainer)?.solids?.mapValues { (key, _) ->
+            SolidReferenceChild(owner, this, childName + key)
+        } ?: emptyMap()
 
-        override val keys: Set<NameToken> get() = prototype.children?.keys ?: emptySet()
-
-        override val changes: Flow<Name> get() = emptyFlow()
-
-        override fun get(token: NameToken): SolidReferenceChild? {
-            if (token !in (prototype.children?.keys ?: emptySet())) return null
-            return SolidReferenceChild(this@SolidReferenceChild.owner, this@SolidReferenceChild, childName + token)
-        }
-    }
+    //    @Transient
+//    override val properties: MutableVisionProperties = object : MutableVisionProperties {
+//        override val descriptor: MetaDescriptor get() = this@SolidReferenceChild.descriptor
+//
+//        override val own: MutableMeta by lazy { owner.properties[childToken(childName).asName()] }
+//
+//        override fun getValue(
+//            name: Name,
+//            inherit: Boolean?,
+//            includeStyles: Boolean?,
+//        ): Value? = own.getValue(name) ?: prototype.properties.getValue(name, inherit, includeStyles)
+//
+//        override fun set(name: Name, item: Meta?, notify: Boolean) {
+//            own[name] = item
+//        }
+//
+//        override fun setValue(name: Name, value: Value?, notify: Boolean) {
+//            own.setValue(name, value)
+//        }
+//
+//        override val changes: Flow<Name>
+//            get() = owner.properties.changes.filter { it.startsWith(childToken(childName)) }
+//
+//        override fun invalidate(propertyName: Name) {
+//            owner.properties.invalidate(childPropertyName(childName, propertyName))
+//        }
+//    }
 
     companion object {
 
@@ -213,7 +285,9 @@ private class SolidReferenceChild(
 public fun MutableVisionContainer<Solid>.ref(
     templateName: Name,
     name: Name? = null,
-): SolidReference = SolidReference(templateName).also { setVision(name, it) }
+): SolidReference = SolidReference(templateName).also {
+    setVision(name ?: SolidGroup.staticNameFor(it), it)
+}
 
 public fun MutableVisionContainer<Solid>.ref(
     templateName: Name,
@@ -237,5 +311,5 @@ public fun SolidGroup.newRef(
     } else if (existing != obj) {
         error("Can't add different prototype on top of existing one")
     }
-    return items.ref(prototypeName, name?.parseAsName())
+    return ref(prototypeName, name?.parseAsName())
 }

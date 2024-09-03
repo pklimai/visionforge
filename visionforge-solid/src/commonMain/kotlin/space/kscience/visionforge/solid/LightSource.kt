@@ -16,7 +16,7 @@ public abstract class LightSource : MiscSolid() {
     override val descriptor: MetaDescriptor get() = LightSource.descriptor
 
     public val color: ColorAccessor by colorProperty(SolidMaterial.COLOR_KEY)
-    public var intensity: Number by properties.root(includeStyles = false).number(INTENSITY_KEY) { 1.0 }
+    public var intensity: Number by properties.number(INTENSITY_KEY) { 1.0 }
 
     public companion object {
         public val INTENSITY_KEY: Name = "intensity".asName()
@@ -55,7 +55,9 @@ public class AmbientLightSource : LightSource()
 public fun MutableVisionContainer<Solid>.ambientLight(
     name: String? = "@ambientLight",
     block: AmbientLightSource.() -> Unit = {},
-): AmbientLightSource = AmbientLightSource().apply(block).also { setSolid(name, it) }
+): AmbientLightSource = AmbientLightSource().apply(block).also { 
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}
 
 @Serializable
 @SerialName("solid.light.point")

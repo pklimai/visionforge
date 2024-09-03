@@ -11,7 +11,6 @@ import space.kscience.dataforge.misc.DFExperimental
 import space.kscience.tables.*
 import space.kscience.visionforge.AbstractVision
 import space.kscience.visionforge.html.VisionOutput
-import space.kscience.visionforge.root
 import kotlin.jvm.JvmName
 import kotlin.reflect.typeOf
 
@@ -42,14 +41,14 @@ public class VisionOfTable(
 ) : AbstractVision(), Rows<Value> {
 
     public var data: List<Meta>
-        get() = properties.root().getIndexed("rows").entries.sortedBy {
+        get() = properties.getIndexed("rows").entries.sortedBy {
             it.key?.toInt()
         }.map {
             it.value
         }
         set(value) {
             //TODO Make it better
-            properties.root()["rows"] = value
+            properties["rows"] = value
         }
 
     public val rows: List<MetaRow> get() = data.map(::MetaRow)
