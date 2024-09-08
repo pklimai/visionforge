@@ -334,8 +334,7 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
             ?: error("Volume with ref ${divisionVolume.volumeref.ref} could not be resolved")
 
         //TODO add divisions
-        setSolid()
-        solids.static(volume(root, volume))
+        static(volume(root, volume))
     }
 
     private fun volume(
@@ -398,7 +397,7 @@ public fun Gdml.toVision(block: GdmlLoaderOptions.() -> Unit = {}): SolidGroup {
 public fun SolidGroup.gdml(gdml: Gdml, key: String? = null, transformer: GdmlLoaderOptions.() -> Unit = {}) {
     val vision = gdml.toVision(transformer)
     //println(Visual3DPlugin.json.stringify(VisualGroup3D.serializer(), visual))
-    setSolid(key, vision)
+    setVision(SolidGroup.inferNameFor(key,vision), vision)
 }
 
 @VisionBuilder

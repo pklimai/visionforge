@@ -1,8 +1,10 @@
 package space.kscience.plotly.models
 
 import space.kscience.dataforge.meta.*
+import space.kscience.plotly.Plot
 import space.kscience.plotly.intGreaterThan
 import space.kscience.plotly.numberGreaterThan
+import space.kscience.plotly.scheme
 import kotlin.js.JsName
 
 
@@ -209,7 +211,13 @@ public open class Histogram : Trace() {
         ybins = Bins(block)
     }
 
-    public companion object : SchemeSpec<Histogram>(::Histogram)
+    public companion object
+}
+
+public inline fun Plot.histogram(block: Histogram.() -> Unit): Histogram {
+    val trace = Histogram().apply(block)
+    traces(trace)
+    return trace
 }
 
 public class Histogram2D : Histogram(), Table2D {
@@ -232,8 +240,16 @@ public class Histogram2D : Histogram(), Table2D {
      */
     override var zsmooth: ZsmoothType by enum(ZsmoothType.best)
 
-    public companion object : SchemeSpec<Histogram2D>(::Histogram2D)
+    public companion object
 }
+
+
+public inline fun Plot.histogram2d(block: Histogram2D.() -> Unit): Histogram2D {
+    val trace = Histogram2D().apply(block)
+    traces(trace)
+    return trace
+}
+
 
 public class Histogram2DContour : Histogram(), ContourSpec {
     init {
@@ -261,5 +277,11 @@ public class Histogram2DContour : Histogram(), ContourSpec {
         contours = Contours(block)
     }
 
-    public companion object : SchemeSpec<Histogram2DContour>(::Histogram2DContour)
+    public companion object
+}
+
+public inline fun Plot.histogram2dcontour(block: Histogram2DContour.() -> Unit): Histogram2DContour {
+    val trace = Histogram2DContour().apply(block)
+    traces(trace)
+    return trace
 }

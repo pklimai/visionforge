@@ -9,7 +9,7 @@ import kotlin.properties.ReadOnlyProperty
  * A color value customizer
  * TODO add a hook for descriptor generation
  */
-public class Color internal constructor(parent: Scheme, key: Name) {
+public class Color internal constructor(parent: MutableMetaProvider, key: Name) {
     public var value: Value? by parent.value(key = key)
 
     public var string: String?
@@ -35,6 +35,8 @@ public class Color internal constructor(parent: Scheme, key: Name) {
     }
 }
 
-public fun Scheme.color(key: Name? = null): ReadOnlyProperty<Scheme, Color> = ReadOnlyProperty { _, property ->
+public fun MutableMetaProvider.color(
+    key: Name? = null
+): ReadOnlyProperty<MutableMetaProvider, Color> = ReadOnlyProperty { _, property ->
     Color(this, key ?: property.name.asName())
 }

@@ -1,6 +1,5 @@
 package space.kscience.plotly.models.geo
 
-import space.kscience.dataforge.meta.SchemeSpec
 import space.kscience.plotly.Plot
 import space.kscience.plotly.models.TraceType
 import space.kscience.plotly.models.TraceValues
@@ -14,11 +13,11 @@ public class ScatterGeo : GeoTrace() {
     public val lat: TraceValues by axis
     public val lon: TraceValues by axis
 
-    public companion object : SchemeSpec<ScatterGeo>(::ScatterGeo)
+    public companion object
 }
 
 public inline fun Plot.scattergeo(block: ScatterGeo.() -> Unit): ScatterGeo {
-    val trace = ScatterGeo(block)
+    val trace = ScatterGeo().apply(block)
     traces(trace)
     return trace
 }

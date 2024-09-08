@@ -7,6 +7,7 @@ import space.kscience.dataforge.context.ContextAware
 import space.kscience.dataforge.context.request
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.names.Name
+import space.kscience.plotly.models.Trace
 import space.kscience.visionforge.VisionBuilder
 import space.kscience.visionforge.VisionManager
 import space.kscience.visionforge.html.HtmlFragment
@@ -43,14 +44,14 @@ public object Plotly : ContextAware {
  */
 public fun Scheme.toJsonString(): String = meta.toJson().toString()
 
-private fun List<Scheme>.toJson(): JsonArray = buildJsonArray {
-    forEach { add(it.meta.toJson()) }
+private fun List<Trace>.toJson(): JsonArray = buildJsonArray {
+    forEach { add(it.properties.toJson()) }
 }
 
 /**
  * Convert list of type-safe configurators to json array string
  */
-public fun List<Scheme>.toJsonString(): String = toJson().toString()
+public fun List<Trace>.toJsonString(): String = toJson().toString()
 
 @RequiresOptIn("Unstable API subjected to change in future releases", RequiresOptIn.Level.WARNING)
 public annotation class UnstablePlotlyAPI

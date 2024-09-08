@@ -32,8 +32,8 @@ public fun Vision.flowProperty(
     }
 
     combinedFlow.filterIsInstance<VisionPropertyChangedEvent>().collect { event ->
-        if (event.property == propertyName || (useStyles && event.property == Vision.STYLE_KEY)) {
-            readProperty(event.property, inherited, useStyles)?.let { emit(it) }
+        if (event.propertyName == propertyName || (useStyles && event.propertyName == Vision.STYLE_KEY)) {
+            readProperty(event.propertyName, inherited, useStyles)?.let { emit(it) }
         }
     }
 }
@@ -82,8 +82,8 @@ public fun Vision.useProperty(
     }
 
     combinedFlow.filterIsInstance<VisionPropertyChangedEvent>().onEach { event ->
-        if (event.property == propertyName || (useStyles && event.property == Vision.STYLE_KEY)) {
-            readProperty(event.property, inherited, useStyles)?.let { callback(it) }
+        if (event.propertyName == propertyName || (useStyles && event.propertyName == Vision.STYLE_KEY)) {
+            readProperty(event.propertyName, inherited, useStyles)?.let { callback(it) }
         }
     }.collect()
 }
@@ -111,7 +111,7 @@ public fun Vision.onPropertyChange(
     scope: CoroutineScope = manager?.context ?: error("Orphan Vision can't observe properties. Use explicit scope."),
     callback: suspend (Name) -> Unit,
 ): Job = inheritedEventFlow().filterIsInstance<VisionPropertyChangedEvent>().onEach {
-    callback(it.property)
+    callback(it.propertyName)
 }.launchIn(scope)
 
 /**
@@ -122,7 +122,7 @@ public fun <V : Vision, T> V.onPropertyChange(
     scope: CoroutineScope = manager?.context ?: error("Orphan Vision can't observe properties. Use explicit scope."),
     callback: suspend V.(T) -> Unit,
 ): Job = inheritedEventFlow().filterIsInstance<VisionPropertyChangedEvent>().onEach {
-    if (it.property.toString() == property.name) {
+    if (it.propertyName.toString() == property.name) {
         callback(property.get(this))
     }
 }.launchIn(scope)

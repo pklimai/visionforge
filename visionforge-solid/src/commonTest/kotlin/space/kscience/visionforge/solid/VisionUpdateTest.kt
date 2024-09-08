@@ -1,5 +1,6 @@
 package space.kscience.visionforge.solid
 
+import kotlinx.coroutines.test.runTest
 import space.kscience.dataforge.context.Global
 import space.kscience.dataforge.context.request
 import space.kscience.dataforge.meta.Meta
@@ -15,7 +16,7 @@ internal class VisionUpdateTest {
     val visionManager = solidManager.visionManager
 
     @Test
-    fun testVisionUpdate() {
+    fun testVisionUpdate() = runTest {
         val targetVision = testSolids.solidGroup {
             box(200, 200, 200, name = "origin")
         }
@@ -27,12 +28,12 @@ internal class VisionUpdateTest {
             propertyChanged("top".asName(), SolidMaterial.MATERIAL_COLOR_KEY, Meta("red".asValue()))
             propertyChanged("origin".asName(), SolidMaterial.MATERIAL_COLOR_KEY, Meta("red".asValue()))
         }
-        targetVision.update(dif)
-        assertTrue { targetVision.items.getChild("top") is SolidGroup }
-        assertEquals("red", (targetVision.items.getChild("origin") as Solid).color.string) // Should work
+        targetVision.receiveEvent(dif)
+        assertTrue { targetVision.get("top") is SolidGroup }
+        assertEquals("red", (targetVision.get("origin") as Solid).color.string) // Should work
         assertEquals(
             "#00007b",
-            (targetVision.items.getChild("top") as Solid).color.string
+            (targetVision.get("top") as Solid).color.string
         ) // new item always takes precedence
     }
 

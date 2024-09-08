@@ -7,10 +7,7 @@ import org.jetbrains.compose.web.css.cursor
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
-import space.kscience.dataforge.names.Name
-import space.kscience.dataforge.names.lastOrNull
-import space.kscience.dataforge.names.plus
-import space.kscience.dataforge.names.startsWith
+import space.kscience.dataforge.names.*
 import space.kscience.visionforge.Vision
 import space.kscience.visionforge.VisionGroup
 
@@ -47,9 +44,9 @@ public fun VisionTree(
     var expanded: Boolean by remember { mutableStateOf(selected?.startsWith(name) ?: false) }
 
     //display as node if any child is visible
-    if (vision is VisionGroup) {
+    if (vision is VisionGroup<*>) {
         FlexRow {
-            if (vision.items.keys.any { !it.body.startsWith("@") }) {
+            if (vision.items.keys.any { !it.first().body.startsWith("@") }) {
                 Span({
                     classes(TreeStyles.treeCaret)
                     if (expanded) {
@@ -67,8 +64,8 @@ public fun VisionTree(
                 classes(TreeStyles.tree)
             }) {
                 vision.items.asSequence()
-                    .filter { !it.first.toString().startsWith("@") } // ignore statics and other hidden children
-                    .sortedBy { (it.second as? VisionGroup)?.items?.isEmpty() ?: true } // ignore empty groups
+                    .filter { !it.key.toString().startsWith("@") } // ignore statics and other hidden children
+                    .sortedBy { (it.value as? VisionGroup<Vision>)?.items?.isEmpty() ?: true } // ignore empty groups
                     .forEach { (childToken, child) ->
                         Div({ classes(TreeStyles.treeItem) }) {
                             VisionTree(

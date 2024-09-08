@@ -1,11 +1,18 @@
-@file:Suppress("PropertyName", "FunctionName")
+@file:Suppress("PropertyName", "FunctionName", "EnumEntryName")
 
 package space.kscience.plotly.models
 
+import com.benasher44.uuid.uuid4
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import space.kscience.dataforge.meta.*
+import space.kscience.dataforge.meta.descriptors.Described
+import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.names.Name
+import space.kscience.dataforge.names.NameToken
 import space.kscience.dataforge.names.asName
 import space.kscience.plotly.*
+import space.kscience.visionforge.AbstractVision
 import kotlin.js.JsName
 import kotlin.properties.ReadOnlyProperty
 
@@ -707,20 +714,36 @@ public class Hoverlabel : Scheme() {
     public companion object : SchemeSpec<Hoverlabel>(::Hoverlabel)
 }
 
+
 /**
  * A base class for Plotly traces
+ *
+ * @param uid an unique identifier for this trace
  */
-public open class Trace : Scheme() {
-    public fun axis(axisName: String): TraceValues = TraceValues(this, Name.parse(axisName))
+@Serializable
+public open class Trace(
+    @Transient internal val uid: Name = NameToken("trace", uuid4().leastSignificantBits.toString(16)).asName()
+) : AbstractVision(), MutableMetaProvider, MetaRepr {
 
-    public val axis: ReadOnlyProperty<Scheme, TraceValues> = ReadOnlyProperty { thisRef, property ->
-        TraceValues(thisRef, property.name.asName())
+    override fun get(name: Name): MutableMeta? = properties.get(name)
+
+    override fun set(name: Name, node: Meta?) {
+        properties[name] = node
     }
+
+    override fun setValue(name: Name, value: Value?) {
+        properties.setValue(name, value)
+    }
+
+    override fun toMeta(): Meta  = properties
+
+
+    public fun axis(axisName: String): TraceValues = TraceValues(this, Name.parse(axisName))
 
     /**
      * Sets the x coordinates.
      */
-    public val x: TraceValues = axis(X_AXIS)
+    public val x: TraceValues by lazy { axis(X_AXIS) }
 
     /**
      * Alternate to `x`. Builds a linear space of x coordinates.
@@ -738,12 +761,12 @@ public open class Trace : Scheme() {
     /**
      * Sets the y coordinates.
      */
-    public val y: TraceValues = axis(Y_AXIS)
+    public val y: TraceValues by lazy { axis(Y_AXIS) }
 
     /**
      * Z coordinates
      */
-    public val z: TraceValues = axis(Z_AXIS)
+    public val z: TraceValues by lazy { axis(Z_AXIS) }
 
     /**
      * Alternate to `y`. Builds a linear space of y coordinates.
@@ -875,7 +898,7 @@ public open class Trace : Scheme() {
      * If trace `hoverinfo` contains a "text" flag and "hovertext" is not set,
      * these elements will be seen in the hover labels.
      */
-    public val text: TraceValues = axis(TEXT_AXIS)
+    public val text: TraceValues by lazy { axis(TEXT_AXIS) }
 
     /**
      * Sets the position of the `text` elements
@@ -1003,22 +1026,32 @@ public open class Trace : Scheme() {
         hoverlabel = Hoverlabel(block)
     }
 
-    public companion object : SchemeSpec<Trace>(::Trace) {
+    public companion object : Described {
         public const val X_AXIS: String = "x"
         public const val Y_AXIS: String = "y"
         public const val Z_AXIS: String = "z"
         public const val TEXT_AXIS: String = "text"
+
+        public val axis: ReadOnlyProperty<Trace, TraceValues> = ReadOnlyProperty { thisRef, property ->
+            TraceValues(thisRef, property.name.asName())
+        }
+
+
+        //FIXME implement trace descriptor
+        override val descriptor: MetaDescriptor? = null
     }
 }
 
-public operator fun <T : Trace> SchemeSpec<T>.invoke(
-    xs: Any,
-    ys: Any? = null,
-    zs: Any? = null,
-    block: Trace.() -> Unit,
-): T = invoke {
-    x.set(xs)
-    if (ys != null) y.set(ys)
-    if (zs != null) z.set(zs)
-    block()
-}
+public inline fun Trace(block: Trace.()->Unit): Trace = Trace().apply(block)
+
+//public operator fun <T : Trace> SchemeSpec<T>.invoke(
+//    xs: Any,
+//    ys: Any? = null,
+//    zs: Any? = null,
+//    block: Trace.() -> Unit,
+//): T = invoke {
+//    x.set(xs)
+//    if (ys != null) y.set(ys)
+//    if (zs != null) z.set(zs)
+//    block()
+//}

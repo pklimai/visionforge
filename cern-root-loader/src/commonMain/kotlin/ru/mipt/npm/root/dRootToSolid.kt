@@ -1,15 +1,11 @@
 package ru.mipt.npm.root
 
 import space.kscience.dataforge.meta.*
-import space.kscience.dataforge.names.Name
-import space.kscience.dataforge.names.parseAsName
-import space.kscience.dataforge.names.plus
-import space.kscience.dataforge.names.withIndex
+import space.kscience.dataforge.names.*
 import space.kscience.kmath.complex.Quaternion
 import space.kscience.kmath.geometry.fromRotationMatrix
 import space.kscience.kmath.linear.VirtualMatrix
 import space.kscience.visionforge.MutableVisionContainer
-import space.kscience.visionforge.isEmpty
 import space.kscience.visionforge.solid.*
 import space.kscience.visionforge.solid.SolidMaterial.Companion.MATERIAL_COLOR_KEY
 import kotlin.math.PI
@@ -362,7 +358,7 @@ private fun buildVolume(volume: DGeoVolume, context: RootToSolidContext): Solid?
     }
     return if (group.items.isEmpty()) {
         null
-    } else if (group.items.size == 1 && group.properties.own.isEmpty()) {
+    } else if (group.items.size == 1 && group.properties.isEmpty()) {
         group.items.values.first().apply { parent = null }
     } else {
         group
@@ -395,7 +391,7 @@ private fun SolidGroup.addRootVolume(
         } else {
             it
         }
-    }
+    } ?: NameToken("volume[${volume.hashCode().toString(16)}]").asName()
 
     if (!cache) {
         val group = buildVolume(volume, context)?.apply(block) ?: return

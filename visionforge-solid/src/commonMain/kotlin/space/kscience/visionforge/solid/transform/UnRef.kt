@@ -2,6 +2,7 @@ package space.kscience.visionforge.solid.transform
 
 import space.kscience.dataforge.misc.DFExperimental
 import space.kscience.dataforge.names.Name
+import space.kscience.dataforge.names.asName
 import space.kscience.visionforge.solid.SolidGroup
 import space.kscience.visionforge.solid.SolidReference
 import kotlin.collections.component1
@@ -11,7 +12,7 @@ import kotlin.collections.set
 @DFExperimental
 internal object UnRef : VisualTreeTransform<SolidGroup>() {
     private fun SolidGroup.countRefs(): Map<Name, Int> {
-        return items.values.fold(HashMap()) { reducer, vision ->
+        return solids.values.fold(HashMap()) { reducer, vision ->
             if (vision is SolidGroup) {
                 val counter = vision.countRefs()
                 counter.forEach { (key, value) ->
@@ -29,14 +30,14 @@ internal object UnRef : VisualTreeTransform<SolidGroup>() {
         prototypes{
             setVision(name, null)
         }
-        items.filter { (it.value as? SolidReference)?.prototypeName == name }.forEach { (key, value) ->
+        solids.filter { (it.value as? SolidReference)?.prototypeName == name }.forEach { (key, value) ->
             val reference = value as SolidReference
             val newChild = reference.prototype.updateFrom(reference)
             newChild.parent = null
-            items[key] = newChild // replace proxy with merged object
+            setVision(key.asName(),newChild) // replace proxy with merged object
         }
 
-        items.values.filterIsInstance<SolidGroup>().forEach { it.unref(name) }
+        solids.values.filterIsInstance<SolidGroup>().forEach { it.unref(name) }
     }
 
     override fun SolidGroup.transformInPlace() {

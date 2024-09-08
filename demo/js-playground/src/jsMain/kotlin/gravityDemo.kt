@@ -18,7 +18,6 @@ import space.kscience.visionforge.Colors
 import space.kscience.visionforge.html.Vision
 import space.kscience.visionforge.html.zIndex
 import space.kscience.visionforge.markup.VisionOfMarkup
-import space.kscience.visionforge.plotly.asVision
 import space.kscience.visionforge.solid.*
 import space.kscience.visionforge.solid.three.compose.ThreeView
 import kotlin.math.sqrt
@@ -33,7 +32,7 @@ fun Plot(
     context = context,
     attrs = attrs,
     meta = meta,
-    vision = Plot().apply(block).asVision()
+    vision = Plot().apply(block)
 )
 
 @Composable

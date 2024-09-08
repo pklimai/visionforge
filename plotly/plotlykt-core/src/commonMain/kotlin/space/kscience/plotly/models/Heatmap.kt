@@ -1,7 +1,7 @@
 package space.kscience.plotly.models
 
-import space.kscience.dataforge.meta.SchemeSpec
 import space.kscience.dataforge.meta.enum
+import space.kscience.plotly.Plot
 import space.kscience.plotly.numberGreaterThan
 
 public open class Heatmap : Trace(), Table2D, HeatmapContour {
@@ -36,7 +36,13 @@ public open class Heatmap : Trace(), Table2D, HeatmapContour {
      */
     override var ytype: DataType by enum(DataType.array)
 
-    public companion object : SchemeSpec<Heatmap>(::Heatmap)
+    public companion object
+}
+
+public inline fun Plot.heatmap(block: Heatmap.() -> Unit): Heatmap {
+    val trace = Heatmap().apply(block)
+    traces(trace)
+    return trace
 }
 
 public class HeatmapGL : Heatmap() {
@@ -44,5 +50,11 @@ public class HeatmapGL : Heatmap() {
         type = TraceType.heatmapgl
     }
 
-    public companion object : SchemeSpec<HeatmapGL>(::HeatmapGL)
+    public companion object
+}
+
+public inline fun Plot.heatmapGl(block: HeatmapGL.() -> Unit): HeatmapGL {
+    val trace = HeatmapGL().apply(block)
+    traces(trace)
+    return trace
 }

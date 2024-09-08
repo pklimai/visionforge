@@ -7,6 +7,7 @@ import space.kscience.visionforge.onPropertyChange
 import space.kscience.visionforge.solid.Solid
 import space.kscience.visionforge.solid.SolidReference
 import space.kscience.visionforge.solid.SolidReference.Companion.REFERENCE_CHILD_PROPERTY_PREFIX
+import space.kscience.visionforge.solid.get
 import three.core.Object3D
 import three.objects.Mesh
 import kotlin.reflect.KClass
@@ -53,8 +54,8 @@ public object ThreeReferenceFactory : ThreeFactory<SolidReference> {
                     val childName = name.firstOrNull()?.index?.let(Name::parse)
                         ?: error("Wrong syntax for reference child property: '$name'")
                     val propertyName = name.cutFirst()
-                    val referenceChild =
-                        vision.items.getChild(childName) ?: error("Reference child with name '$childName' not found")
+                    val referenceChild = vision[childName]
+                        ?: error("Reference child with name '$childName' not found")
                     val child = object3D.findChild(childName) ?: error("Object child with name '$childName' not found")
                     child.updateProperty(referenceChild, propertyName)
                 } else {

@@ -1,6 +1,5 @@
 package space.kscience.plotly.models.geo
 
-import space.kscience.dataforge.meta.SchemeSpec
 import space.kscience.plotly.Plot
 import space.kscience.plotly.models.TraceType
 import kotlin.js.JsName
@@ -21,11 +20,11 @@ public class Choropleth : GeoTrace() {
         type = TraceType.choropleth
     }
 
-    public companion object : SchemeSpec<Choropleth>(::Choropleth)
+    public companion object
 }
 
 public inline fun Plot.choropleth(block: Choropleth.() -> Unit): Choropleth {
-    val trace = Choropleth(block)
+    val trace = Choropleth().apply(block)
     traces(trace)
     return trace
 }

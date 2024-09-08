@@ -4,6 +4,8 @@ import androidx.compose.runtime.*
 import bootstrap.Card
 import bootstrap.Column
 import bootstrap.Row
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.map
 import kotlinx.dom.clear
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
@@ -11,10 +13,11 @@ import space.kscience.dataforge.context.Context
 import space.kscience.dataforge.context.request
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.isEmpty
+import space.kscience.visionforge.VisionPropertyChangedEvent
 import space.kscience.visionforge.html.*
-import space.kscience.visionforge.root
 import space.kscience.visionforge.solid.Solid
 import space.kscience.visionforge.solid.SolidGroup
+import space.kscience.visionforge.solid.get
 import space.kscience.visionforge.solid.specifications.Canvas3DOptions
 import space.kscience.visionforge.solid.three.ThreeCanvas
 import space.kscience.visionforge.solid.three.ThreePlugin
@@ -133,11 +136,11 @@ public fun ThreeView(
                             NameCrumbs(selected) { selected = it }
                             Hr()
                             PropertyEditor(
-                                rootMeta = vision.properties.root(),
+                                rootMeta = vision.properties,
                                 getPropertyState = { name ->
-                                    if (vision.properties.own[name] != null) {
+                                    if (vision.properties[name] != null) {
                                         EditorPropertyState.Defined
-                                    } else if (vision.properties.root()[name] != null) {
+                                    } else if (vision.properties[name] != null) {
                                         // TODO differentiate
                                         EditorPropertyState.Default()
                                     } else {
@@ -145,7 +148,9 @@ public fun ThreeView(
                                     }
                                 },
                                 name = Name.EMPTY,
-                                updates = vision.properties.changes,
+                                updates = vision.eventFlow
+                                    .filterIsInstance<VisionPropertyChangedEvent>()
+                                    .map { it.propertyName },
                                 rootDescriptor = vision.descriptor
                             )
                             vision.styles.takeIf { it.isNotEmpty() }?.let { styles ->

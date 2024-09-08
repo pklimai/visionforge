@@ -30,7 +30,7 @@ class SerializationTest {
         val string = Solids.encodeToString(cube)
         println(string)
         val newCube = Solids.decodeFromString(string)
-        assertEquals(cube.properties.own, newCube.properties.own)
+        assertEquals(cube.properties, newCube.properties)
     }
 
     @Test

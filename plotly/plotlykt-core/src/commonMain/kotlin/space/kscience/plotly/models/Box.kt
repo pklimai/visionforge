@@ -1,9 +1,10 @@
 package space.kscience.plotly.models
 
-import space.kscience.dataforge.meta.*
-import space.kscience.plotly.doubleInRange
-import space.kscience.plotly.listOfValues
-import space.kscience.plotly.numberGreaterThan
+import space.kscience.dataforge.meta.Value
+import space.kscience.dataforge.meta.boolean
+import space.kscience.dataforge.meta.enum
+import space.kscience.dataforge.meta.numberList
+import space.kscience.plotly.*
 import kotlin.js.JsName
 
 public enum class BoxMean {
@@ -220,5 +221,11 @@ public class Box : Trace(), SelectedPoints {
         unselected = SelectPoints(block)
     }
 
-    public companion object : SchemeSpec<Box>(::Box)
+    public companion object
+}
+
+public inline fun Plot.box(block: Box.() -> Unit): Box {
+    val trace = Box().apply(block)
+    traces(trace)
+    return trace
 }

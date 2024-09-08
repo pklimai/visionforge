@@ -26,8 +26,8 @@ class SolidPluginTest {
         val reconstructed = visionManager.decodeFromMeta(meta) as SolidGroup
 
         assertEquals(
-            visionManager.encodeToJsonElement(vision.items.getChild("aBox")!!),
-            visionManager.encodeToJsonElement(reconstructed.items.getChild("aBox")!!)
+            visionManager.encodeToJsonElement(vision["aBox"]!!),
+            visionManager.encodeToJsonElement(reconstructed["aBox"]!!)
         )
     }
 }

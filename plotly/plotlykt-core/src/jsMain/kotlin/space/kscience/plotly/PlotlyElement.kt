@@ -1,5 +1,11 @@
 package space.kscience.plotly
 
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.html.TagConsumer
 import kotlinx.html.div
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -8,27 +14,27 @@ import kotlinx.serialization.json.decodeFromDynamic
 import kotlinx.serialization.json.encodeToDynamic
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.MutationObserver
 import org.w3c.dom.events.MouseEvent
+import space.kscience.dataforge.meta.MetaRepr
 import space.kscience.dataforge.meta.MetaSerializer
-import space.kscience.dataforge.meta.Scheme
 import space.kscience.dataforge.meta.Value
-import space.kscience.dataforge.names.Name
 import space.kscience.plotly.events.PlotlyEvent
 import space.kscience.plotly.events.PlotlyEventListenerType
 import space.kscience.plotly.events.PlotlyEventPoint
-import space.kscience.plotly.models.Trace
+import space.kscience.visionforge.VisionGroupCompositionChangedEvent
+import space.kscience.visionforge.VisionPropertyChangedEvent
 
 @OptIn(ExperimentalSerializationApi::class)
-private fun Scheme.toDynamic(): dynamic = Json.encodeToDynamic(MetaSerializer, meta)
+private fun MetaRepr.toDynamic(): dynamic = Json.encodeToDynamic(MetaSerializer, toMeta())
 
-private fun List<Scheme>.toDynamic(): Array<dynamic> = map { it.toDynamic() }.toTypedArray()
+private fun List<MetaRepr>.toDynamic(): Array<dynamic> = map { it.toDynamic() }.toTypedArray()
 
 /**
  * Attach a plot to this element or update the existing plot
  */
+@OptIn(DelicateCoroutinesApi::class)
 public fun Element.plot(plotlyConfig: PlotlyConfig = PlotlyConfig(), plot: Plot) {
-    val tracesData = plot.data.toDynamic()
-    val layout = plot.layout.toDynamic()
 
 //    console.info("""
 //                        Plotly.react(
@@ -38,25 +44,48 @@ public fun Element.plot(plotlyConfig: PlotlyConfig = PlotlyConfig(), plot: Plot)
 //                        );
 //                    """.trimIndent())
 
-    PlotlyJs.react(this, tracesData, layout, plotlyConfig.toDynamic())
+    //send initial data
+    PlotlyJs.react(
+        graphDiv = this,
+        data = plot.data.toDynamic(),
+        layout = plot.layout.toDynamic(),
+        config = plotlyConfig.toDynamic()
+    )
 
-    plot.layout.meta.onChange(this){
-        PlotlyJs.relayout(this@plot, plot.layout.toDynamic())
-    }
+    //start updates
+    val listenJob = (plot.manager?.context ?: GlobalScope).launch {
+        plot.data.forEachIndexed { index, trace ->
+            trace.eventFlow.filterIsInstance<VisionPropertyChangedEvent>().onEach { event ->
+                val traceData = trace.toDynamic()
 
-    plot.onDataChange(this){ index: Int, trace: Trace, _: Name ->
-        val traceData = trace.toDynamic()
+                Plotly.coordinateNames.forEach { coordinate ->
+                    val data = traceData[coordinate]
+                    if (traceData[coordinate] != null) {
+                        traceData[coordinate] = arrayOf(data)
+                    }
+                }
 
-        Plotly.coordinateNames.forEach { coordinate ->
-            val data = traceData[coordinate]
-            if (traceData[coordinate] != null) {
-                traceData[coordinate] = arrayOf(data)
-            }
+                PlotlyJs.restyle(this@plot, traceData, arrayOf(index))
+            }.launchIn(this)
         }
 
-        PlotlyJs.restyle(this@plot, traceData, arrayOf(index))
+        plot.eventFlow.onEach { event ->
+            when (event) {
+                is VisionGroupCompositionChangedEvent -> PlotlyJs.restyle(this@plot, plot.data.toDynamic())
+                is VisionPropertyChangedEvent -> PlotlyJs.relayout(this@plot, plot.layout.toDynamic())
+                else -> {
+                    //ignore
+                }
+            }
+        }.launchIn(this)
     }
-    //TODO remove listeners on element removal
+
+    //observe node removal to avoid memory leak
+    MutationObserver { records, _ ->
+        if (records.firstOrNull()?.removedNodes?.length != 0) {
+            listenJob.cancel()
+        }
+    }.observe(this)
 }
 
 @Deprecated("Change arguments positions", ReplaceWith("plot(plotlyConfig, plot)"))

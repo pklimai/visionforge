@@ -27,20 +27,3 @@ public fun Plot.makeFile(
 ) {
     makeFile(path.toPath(), config)
 }
-
-/**
- * Export a page html to a file.
- */
-@UnstablePlotlyAPI
-public fun PlotlyPage.makeFile(path: Path) {
-    FileSystem.SYSTEM.write(path, true) {
-        writeUtf8(render())
-    }
-}
-
-@UnstablePlotlyAPI
-public fun PlotlyPage.makeFile(
-    path: String,
-) {
-    makeFile(path.toPath())
-}

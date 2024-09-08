@@ -55,7 +55,7 @@ public class AmbientLightSource : LightSource()
 public fun MutableVisionContainer<Solid>.ambientLight(
     name: String? = "@ambientLight",
     block: AmbientLightSource.() -> Unit = {},
-): AmbientLightSource = AmbientLightSource().apply(block).also { 
+): AmbientLightSource = AmbientLightSource().apply(block).also {
     setVision(SolidGroup.inferNameFor(name, it), it)
 }
 
@@ -73,5 +73,5 @@ public fun MutableVisionContainer<Solid>.pointLight(
     block: PointLightSource.() -> Unit = {},
 ): PointLightSource = PointLightSource().apply(block).also {
     it.position = Float32Vector3D(x, y, z)
-    setSolid(name, it)
+    setVision(SolidGroup.inferNameFor(name, it), it)
 }

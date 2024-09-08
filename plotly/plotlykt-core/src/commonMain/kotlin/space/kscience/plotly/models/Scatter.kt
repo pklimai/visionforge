@@ -1,6 +1,10 @@
 package space.kscience.plotly.models
 
-import space.kscience.dataforge.meta.*
+import space.kscience.dataforge.meta.enum
+import space.kscience.dataforge.meta.numberList
+import space.kscience.dataforge.meta.string
+import space.kscience.plotly.Plot
+import space.kscience.plotly.scheme
 import kotlin.js.JsName
 
 public enum class ScatterMode {
@@ -146,7 +150,13 @@ public open class Scatter : Trace(), SelectedPoints {
         unselected = SelectPoints(block)
     }
 
-    public companion object : SchemeSpec<Scatter>(::Scatter)
+    public companion object
+}
+
+public inline fun Plot.scatter(block: Scatter.() -> Unit): Scatter {
+    val trace = Scatter().apply(block)
+    traces(trace)
+    return trace
 }
 
 public class ScatterGL : Scatter() {
@@ -154,5 +164,11 @@ public class ScatterGL : Scatter() {
         type = TraceType.scattergl
     }
 
-    public companion object : SchemeSpec<ScatterGL>(::ScatterGL)
+    public companion object
+}
+
+public inline fun Plot.scatterGl(block: ScatterGL.() -> Unit): ScatterGL {
+    val trace = ScatterGL().apply(block)
+    traces(trace)
+    return trace
 }

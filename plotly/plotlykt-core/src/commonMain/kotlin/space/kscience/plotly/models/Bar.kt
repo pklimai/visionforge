@@ -1,8 +1,12 @@
 package space.kscience.plotly.models
 
-import space.kscience.dataforge.meta.*
+import space.kscience.dataforge.meta.enum
+import space.kscience.dataforge.meta.number
+import space.kscience.dataforge.meta.numberList
 import space.kscience.dataforge.names.asName
+import space.kscience.plotly.Plot
 import space.kscience.plotly.numberGreaterThan
+import space.kscience.plotly.scheme
 
 public class Bar : Trace(), SelectedPoints {
     init {
@@ -62,5 +66,11 @@ public class Bar : Trace(), SelectedPoints {
         unselected = SelectPoints(block)
     }
 
-    public companion object : SchemeSpec<Bar>(::Bar)
+    public companion object
+}
+
+public inline fun Plot.bar(block: Bar.() -> Unit): Bar {
+    val trace = Bar().apply(block)
+    traces(trace)
+    return trace
 }

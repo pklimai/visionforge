@@ -128,8 +128,8 @@ public class VisionChangeBuilder : MutableVisionContainer<Vision> {
 
         is VisionPropertyChangedEvent -> propertyChanged(
             visionName = Name.EMPTY,
-            propertyName = event.property,
-            item = event.source.properties[event.property]
+            propertyName = event.propertyName,
+            item = event.source.properties[event.propertyName]
         )
 
 //            is VisionGroupPropertyChangedEvent -> propertyChanged(
@@ -138,7 +138,7 @@ public class VisionChangeBuilder : MutableVisionContainer<Vision> {
 //                item = event.source.getVision(event.childName)?.properties?.get(event.propertyName)
 //            )
 
-        is VisionGroupCompositionChangedEvent -> setVision(event.name, event.source.getVision(event.name))
+        is VisionGroupCompositionChangedEvent -> setVision(event.childName, event.source.getVision(event.childName))
         is VisionControlEvent, is VisionMetaEvent -> {
             //do nothing
             //TODO add logging

@@ -9,16 +9,13 @@ import org.w3c.dom.HTMLElement
 import space.kscience.dataforge.context.*
 import space.kscience.dataforge.meta.Meta
 import space.kscience.dataforge.names.*
-import space.kscience.visionforge.Vision
-import space.kscience.visionforge.VisionChildren
-import space.kscience.visionforge.VisionClient
+import space.kscience.visionforge.*
 import space.kscience.visionforge.html.ComposeHtmlVisionRenderer
 import space.kscience.visionforge.html.ElementVisionRenderer
 import space.kscience.visionforge.html.JsVisionClient
 import space.kscience.visionforge.solid.*
 import space.kscience.visionforge.solid.specifications.Canvas3DOptions
 import space.kscience.visionforge.solid.three.compose.ThreeView
-import space.kscience.visionforge.visible
 import three.core.Object3D
 import kotlin.collections.set
 import kotlin.reflect.KClass
@@ -75,7 +72,7 @@ public class ThreePlugin : AbstractPlugin(), ComposeHtmlVisionRenderer {
                     try {
                         val object3D = buildObject3D(
                             child,
-                            if (token.body == VisionChildren.STATIC_TOKEN_BODY) false else observe
+                            if (token.body == SolidGroup.STATIC_TOKEN_BODY) false else observe
                         )
                         // disable tracking changes for statics
                         group[token] = object3D
@@ -89,41 +86,50 @@ public class ThreePlugin : AbstractPlugin(), ComposeHtmlVisionRenderer {
                 updatePosition(vision)
                 //obj.onChildrenChange()
                 if (observe) {
-                    vision.properties.changes.onEach { name ->
-                        if (
-                            name.startsWith(Solid.POSITION_KEY) ||
-                            name.startsWith(Solid.ROTATION_KEY) ||
-                            name.startsWith(Solid.SCALE_KEY)
-                        ) {
-                            //update position of mesh using this object
-                            updatePosition(vision)
-                        } else if (name == Vision.VISIBLE_KEY) {
-                            visible = vision.visible ?: true
-                        }
-                    }.launchIn(context)
+                    vision.eventFlow.onEach { event ->
+                        when (event) {
+                            is VisionPropertyChangedEvent -> {
+                                val propertyName = event.propertyName
+                                if (
+                                    propertyName.startsWith(Solid.POSITION_KEY) ||
+                                    propertyName.startsWith(Solid.ROTATION_KEY) ||
+                                    propertyName.startsWith(Solid.SCALE_KEY)
+                                ) {
+                                    //update position of mesh using this object
+                                    updatePosition(vision)
+                                } else if (propertyName == Vision.VISIBLE_KEY) {
+                                    visible = vision.visible ?: true
+                                }
+                            }
+                            is VisionGroupCompositionChangedEvent -> {
+                                val childName = event.childName
+                                if (childName.isEmpty()) return@onEach
 
-                    vision.items.changes.onEach { childName ->
-                        if (childName.isEmpty()) return@onEach
+                                val child = vision.get(childName)
 
-                        val child = vision.items.getChild(childName)
+                                logger.debug { "Changing vision $childName to $child" }
 
-                        logger.debug { "Changing vision $childName to $child" }
+                                //removing old object
+                                findChild(childName)?.let { oldChild ->
+                                    oldChild.parent?.remove(oldChild)
+                                }
 
-                        //removing old object
-                        findChild(childName)?.let { oldChild ->
-                            oldChild.parent?.remove(oldChild)
-                        }
-
-                        //adding new object
-                        if (child != null && child is Solid) {
-                            try {
-                                val object3D = buildObject3D(child)
-                                set(childName, object3D)
-                            } catch (ex: Throwable) {
-                                logger.error(ex) { "Failed to render vision with name $childName" }
+                                //adding new object
+                                if (child != null) {
+                                    try {
+                                        val object3D = buildObject3D(child)
+                                        set(childName, object3D)
+                                    } catch (ex: Throwable) {
+                                        logger.error(ex) { "Failed to render vision with name $childName" }
+                                    }
+                                }
+                            }
+                            else -> {
+                                //ignore
                             }
                         }
                     }.launchIn(context)
+
                 }
             }
         }
@@ -169,7 +175,7 @@ public class ThreePlugin : AbstractPlugin(), ComposeHtmlVisionRenderer {
     override fun rateVision(vision: Vision): Int =
         if (vision is Solid) ElementVisionRenderer.DEFAULT_RATING else ElementVisionRenderer.ZERO_RATING
 
-    override fun toString(): String  = "ThreeJS"
+    override fun toString(): String = "ThreeJS"
 
     /**
      * Render the given [Solid] Vision in a [ThreeCanvas] attached

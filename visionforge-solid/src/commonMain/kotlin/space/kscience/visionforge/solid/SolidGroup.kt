@@ -52,15 +52,26 @@ public operator fun SolidContainer.get(name: Name): Solid? = getVision(name)
  */
 @Serializable
 @SerialName("group.solid")
-public class SolidGroup : AbstractVision(), Solid, PrototypeHolder, SolidContainer, MutableVisionContainer<Solid> {
+public class SolidGroup : AbstractVision(), Solid, PrototypeHolder, SolidContainer, MutableVisionGroup<Solid> {
 
     private val _solids = LinkedHashMap<NameToken, Solid>()
 
     override val solids: Map<NameToken, Solid> get() = _solids
 
+    override val items: Map<Name, Solid>
+        get() = solids.mapKeys { it.key.asName() }
+
     private var prototypes: SolidGroup? = null
 
     override val descriptor: MetaDescriptor get() = Solid.descriptor
+
+    override fun getVision(name: Name): Solid? = when (name.length) {
+        0 -> this
+        1 -> solids[name.first()]
+        else -> (solids[name.first()] as? SolidGroup)?.get(name.cutFirst())
+    }
+
+    override fun convertVisionOrNull(vision: Vision): Solid? = vision as? Solid
 
     /**
      * Get a prototype redirecting the request to the parent if prototype is not found.
@@ -107,27 +118,20 @@ public class SolidGroup : AbstractVision(), Solid, PrototypeHolder, SolidContain
     }
 
     public companion object {
-        public fun staticNameFor(vision: Vision): Name = NameToken("@static", vision.hashCode().toString(16)).asName()
+        public const val STATIC_TOKEN_BODY: String = "@static"
+
+        public fun staticNameFor(vision: Vision): Name = NameToken(STATIC_TOKEN_BODY, vision.hashCode().toString(16)).asName()
         public fun inferNameFor(name: String?, vision: Vision): Name = name?.parseAsName() ?: staticNameFor(vision)
     }
 }
 
 public operator fun SolidGroup.get(name: String): Solid? = get(name.parseAsName())
 
-public fun MutableVisionContainer<Solid>.setSolid(name: Name?, vision: Solid?) {
-    if (name == null) {
-        if (vision != null) {
-            setVision("@static[${vision.hashCode().toString(16)}]".parseAsName(), vision)
-        } else {
-            //do nothing
-        }
-    } else {
-        setVision(name, vision)
-    }
-}
-
-public fun MutableVisionContainer<Solid>.setSolid(name: String?, vision: Solid?) {
-    setSolid(name?.parseAsName(), vision)
+/**
+ * Add anonymous (auto-assigned name) child to a SolidGroup
+ */
+public fun MutableVisionContainer<Solid>.static(solid: Solid) {
+    setVision(SolidGroup.staticNameFor(solid), solid)
 }
 
 @VisionBuilder

@@ -18,7 +18,10 @@ public sealed interface VisionEvent {
 /**
  * An event that designates that property value is invalidated (not necessary changed
  */
-public data class VisionPropertyChangedEvent(public val source: Vision, public val property: Name): VisionEvent
+public data class VisionPropertyChangedEvent(
+    public val source: Vision,
+    public val propertyName: Name
+): VisionEvent
 
 /**
  * An event that consists of custom meta

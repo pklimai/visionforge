@@ -42,7 +42,7 @@ public interface VisionGroup<out V : Vision> : Vision, VisionContainer<V> {
  */
 public data class VisionGroupCompositionChangedEvent(
     public val source: VisionContainer<*>,
-    public val name: Name
+    public val childName: Name
 ) : VisionEvent
 
 ///**
@@ -145,6 +145,10 @@ public inline fun MutableVisionContainer<Vision>.group(
     name: String,
     builder: SimpleVisionGroup.() -> Unit = {},
 ): SimpleVisionGroup = group(name.parseAsName(), builder)
+
+public fun VisionGroup(
+    block: MutableVisionGroup<Vision>.() -> Unit
+): VisionGroup<Vision> = SimpleVisionGroup().apply(block)
 
 //fun VisualObject.findStyle(styleName: Name): Meta? {
 //    if (this is VisualGroup) {

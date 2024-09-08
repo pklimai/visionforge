@@ -9,6 +9,9 @@ import kotlinx.coroutines.test.runTest
 import space.kscience.dataforge.context.Global
 import space.kscience.dataforge.context.request
 import space.kscience.dataforge.meta.*
+import space.kscience.dataforge.names.asName
+import space.kscience.dataforge.names.get
+import space.kscience.dataforge.names.parseAsName
 import space.kscience.visionforge.*
 import kotlin.test.Ignore
 import kotlin.test.Test
@@ -29,7 +32,7 @@ internal class VisionPropertyTest {
 
     @Test
     fun testPropertyWrite() {
-        val vision = manager.group()
+        val vision = SimpleVisionGroup()
         vision.properties["fff"] = 2
         vision.properties["fff.ddd"] = false
 
@@ -39,8 +42,8 @@ internal class VisionPropertyTest {
 
     @Test
     fun testPropertyEdit() {
-        val vision = manager.group()
-        vision.properties["fff.ddd"].apply {
+        val vision = SimpleVisionGroup()
+        vision.writeProperty("fff.ddd".parseAsName()).apply {
             value = 2.asValue()
         }
         assertEquals(2, vision.properties.getValue("fff.ddd")?.int)
@@ -49,8 +52,8 @@ internal class VisionPropertyTest {
 
     @Test
     fun testPropertyUpdate() {
-        val vision = manager.group()
-        vision.properties["fff"].updateWith(TestScheme) {
+        val vision = SimpleVisionGroup()
+        vision.writeProperty("fff".asName()).updateWith(TestScheme) {
             ddd = 2
         }
         assertEquals(2, vision.properties.getValue("fff.ddd")?.int)
@@ -58,24 +61,24 @@ internal class VisionPropertyTest {
 
     @Test
     fun testChildrenPropertyPropagation() = runTest(timeout = 200.milliseconds) {
-        val group = Global.request(VisionManager).group {
-            writeProperties {
+        val group = VisionGroup {
+            properties {
                 "test" put 11
             }
             group("child") {
-                writeProperties {
+                properties {
                     "test" put 22
                 }
             }
         }
 
-        val child = group.children["child"]!!
+        val child = group.items["child"] as MutableVision
 
         val deferred: CompletableDeferred<Value?> = CompletableDeferred()
 
         var callCounter = 0
 
-        val subscription = child.useProperty("test", inherit = true) {
+        val subscription = child.useProperty("test", inherited = true) {
             deferred.complete(it.value)
             callCounter++
         }
@@ -85,7 +88,7 @@ internal class VisionPropertyTest {
 
         child.properties.remove("test")
 
-        assertEquals(11, child.properties.get("test", inherit = true).int)
+        assertEquals(11, child.readProperty("test", inherited = true).int)
 //        assertEquals(11, deferred.await()?.int)
 //        assertEquals(2, callCounter)
         subscription.cancel()
@@ -94,25 +97,25 @@ internal class VisionPropertyTest {
     @Test
     @Ignore
     fun testChildrenPropertyFlow() = runTest(timeout = 500.milliseconds) {
-        val group = Global.request(VisionManager).group {
+        val group = SimpleVisionGroup().apply {
 
-            writeProperties {
+            properties {
                 "test" put 11
             }
 
             group("child") {
-                writeProperties {
+                properties {
                     "test" put 22
                 }
             }
 
         }
 
-        val child = group.children["child"]!!
+        val child = group.items["child"] as MutableVision
 
         val semaphore = Semaphore(1, 1)
 
-        val changesFlow = child.flowPropertyValue("test", inherit = true).map {
+        val changesFlow = child.flowPropertyValue("test", inherited = true).map {
             semaphore.release()
             it!!.int
         }
@@ -123,16 +126,16 @@ internal class VisionPropertyTest {
             collectedValues.add(it)
         }.launchIn(this)
 
-        assertEquals(22, child.properties["test", true].int)
+        assertEquals(22, child.readProperty("test", true).int)
 
         semaphore.acquire()
         child.properties.remove("test")
 
-        assertEquals(11, child.properties["test", true].int)
+        assertEquals(11, child.readProperty("test", true).int)
 
         semaphore.acquire()
         group.properties["test"] = 33
-        assertEquals(33, child.properties["test", true].int)
+        assertEquals(33, child.readProperty("test", true).int)
 
         semaphore.acquire()
         collectorJob.cancel()

@@ -124,6 +124,10 @@ public interface MutableVision : Vision {
     }
 }
 
+public fun MutableVision.properties(block: MutableMeta.() -> Unit) {
+    properties.apply(block)
+}
+
 public fun MutableVision.writeProperties(
     inherited: Boolean = false,
     useStyles: Boolean = true,

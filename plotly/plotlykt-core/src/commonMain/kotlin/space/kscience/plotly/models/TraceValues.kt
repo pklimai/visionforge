@@ -6,7 +6,7 @@ import space.kscience.dataforge.names.Name
 /**
  * Type-safe accessor class for values in the trace
  */
-public class TraceValues internal constructor(public val owner: Scheme, name: Name) {
+public class TraceValues internal constructor(public val owner: MutableMetaProvider, name: Name) {
     public var value: Value? by owner.value(key = name)
 
     public var doubles: DoubleArray

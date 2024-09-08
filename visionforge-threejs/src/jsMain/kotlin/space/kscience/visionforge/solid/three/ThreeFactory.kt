@@ -64,7 +64,7 @@ public fun Object3D.updatePosition(vision: Vision) {
 /**
  * Update non-position non-geometry property
  */
-public fun Object3D.updateProperty(source: Vision, propertyName: Name) {
+public fun Object3D.updateProperty(source: Solid, propertyName: Name) {
     // console.log("$source updated $propertyName with ${source.computeProperty(propertyName)}")
     if (isMesh(this) && propertyName.startsWith(MATERIAL_KEY)) {
         updateMaterialProperty(source, propertyName)

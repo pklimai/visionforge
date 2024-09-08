@@ -196,9 +196,9 @@ private class SolidReferenceChild(
 
     override val eventFlow: Flow<VisionEvent>
         get() = owner.eventFlow.filterIsInstance<VisionPropertyChangedEvent>().filter {
-            it.property.startsWith(childToken)
+            it.propertyName.startsWith(childToken)
         }.map {
-            VisionPropertyChangedEvent(this@SolidReferenceChild, it.property.cutFirst())
+            VisionPropertyChangedEvent(this@SolidReferenceChild, it.propertyName.cutFirst())
         }
 
 

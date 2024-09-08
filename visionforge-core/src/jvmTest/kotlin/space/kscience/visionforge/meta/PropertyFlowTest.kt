@@ -20,23 +20,23 @@ internal class PropertyFlowTest {
     @Test
     @Timeout(200)
     fun testChildrenPropertyFlow() = runBlocking{
-        val group = Global.request(VisionManager).group {
+        val group = SimpleVisionGroup().apply {
 
-            writeProperties {
+            properties {
                 "test" put 11
             }
 
             group("child") {
-                writeProperties {
+                properties {
                     "test" put 22
                 }
             }
 
         }
 
-        val child = group.children["child"]!!
+        val child = group.getVision("child") as MutableVisionGroup<*>
 
-        val changesFlow = child.flowPropertyValue("test", inherit = true).map {
+        val changesFlow = child.flowPropertyValue("test", inherited = true).map {
             it!!.int
         }
 
@@ -48,16 +48,16 @@ internal class PropertyFlowTest {
 
 
         delay(2)
-        assertEquals(22, child.properties["test", true].int)
+        assertEquals(22, child.readProperty("test", true).int)
 
         child.properties.remove("test")
         delay(2)
 
-        assertEquals(11, child.properties["test", true].int)
+        assertEquals(11, child.readProperty("test", true).int)
         group.properties["test"] = 33
         delay(2)
 
-        assertEquals(33, child.properties["test", true].int)
+        assertEquals(33, child.readProperty("test", true).int)
 
         collectorJob.cancel()
         assertEquals(listOf(22, 11, 33), collectedValues)

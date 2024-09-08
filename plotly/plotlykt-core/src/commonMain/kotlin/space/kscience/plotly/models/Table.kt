@@ -2,7 +2,9 @@ package space.kscience.plotly.models
 
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.names.asName
+import space.kscience.plotly.Plot
 import space.kscience.plotly.numberGreaterThan
+import space.kscience.plotly.scheme
 
 /**
  * Scheme to define table cell colors.
@@ -211,5 +213,11 @@ public class Table : Trace() {
         cells = Cells(block)
     }
 
-    public companion object : SchemeSpec<Table>(::Table)
+    public companion object
+}
+
+public inline fun Plot.table(block: Table.() -> Unit): Table {
+    val trace = Table().apply(block)
+    traces(trace)
+    return trace
 }

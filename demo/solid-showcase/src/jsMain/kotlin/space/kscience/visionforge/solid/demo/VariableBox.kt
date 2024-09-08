@@ -6,6 +6,7 @@ import space.kscience.dataforge.meta.number
 import space.kscience.dataforge.names.asName
 import space.kscience.dataforge.names.startsWith
 import space.kscience.visionforge.onPropertyChange
+import space.kscience.visionforge.setVision
 import space.kscience.visionforge.solid.SolidGroup
 import space.kscience.visionforge.solid.SolidMaterial.Companion.EDGES_KEY
 import space.kscience.visionforge.solid.layer

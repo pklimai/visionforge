@@ -3,7 +3,9 @@ package space.kscience.plotly.models
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.asName
+import space.kscience.plotly.Plot
 import space.kscience.plotly.doubleInRange
+import space.kscience.plotly.scheme
 
 
 public enum class XPeriodAlignment{
@@ -80,5 +82,11 @@ public class CandleStick : Trace() {
      */
     public var whiskerwidth: Double by doubleInRange(0.0..1.0)
 
-    public companion object: SchemeSpec<CandleStick>(::CandleStick)
+    public companion object
+}
+
+public inline fun Plot.candlestick(block: CandleStick.() -> Unit): CandleStick {
+    val trace = CandleStick().apply(block)
+    traces(trace)
+    return trace
 }

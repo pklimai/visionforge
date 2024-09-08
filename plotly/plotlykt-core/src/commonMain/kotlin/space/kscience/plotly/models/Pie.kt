@@ -1,7 +1,11 @@
 package space.kscience.plotly.models
 
-import space.kscience.dataforge.meta.*
+import space.kscience.dataforge.meta.boolean
+import space.kscience.dataforge.meta.enum
+import space.kscience.dataforge.meta.number
+import space.kscience.dataforge.meta.numberList
 import space.kscience.dataforge.names.asName
+import space.kscience.plotly.Plot
 import space.kscience.plotly.numberInRange
 import kotlin.js.JsName
 
@@ -110,5 +114,11 @@ public class Pie : Trace() {
      */
     public var textinfo: TextInfo by enum(TextInfo.percent)
 
-    public companion object : SchemeSpec<Pie>(::Pie)
+    public companion object
+}
+
+public inline fun Plot.pie(block: Pie.() -> Unit): Pie {
+    val trace = Pie().apply(block)
+    traces(trace)
+    return trace
 }
