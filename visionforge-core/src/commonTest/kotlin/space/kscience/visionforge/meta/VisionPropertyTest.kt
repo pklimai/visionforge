@@ -61,7 +61,7 @@ internal class VisionPropertyTest {
 
     @Test
     fun testChildrenPropertyPropagation() = runTest(timeout = 200.milliseconds) {
-        val group = VisionGroup {
+        val group = VisionGroup(Global.visionManager) {
             properties {
                 "test" put 11
             }

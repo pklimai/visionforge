@@ -12,6 +12,7 @@ import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.asName
 import space.kscience.dataforge.names.parseAsName
 import space.kscience.dataforge.names.plus
+import space.kscience.dataforge.provider.Provider
 import space.kscience.visionforge.SimpleVisionGroup.Companion.updateProperties
 import space.kscience.visionforge.Vision.Companion.STYLESHEET_KEY
 import space.kscience.visionforge.Vision.Companion.TYPE
@@ -20,7 +21,7 @@ import space.kscience.visionforge.Vision.Companion.TYPE
  * A root type for display hierarchy
  */
 @DfType(TYPE)
-public interface Vision : Described {
+public interface Vision : Described, Provider {
 
     /**
      * The parent object of this one. If null, this one is a root.
@@ -65,8 +66,19 @@ public interface Vision : Described {
         return if (listOfMeta.all { it == null }) null else Laminate(listOfMeta)
     }
 
+    override val defaultTarget: String get() = VISION_PROPERTY_TARGET
+
+    override fun content(target: String): Map<Name, Any> = if (target == VISION_PROPERTY_TARGET) {
+        readProperties().items.entries.associate { it.key.asName() to it.value }
+    } else {
+        emptyMap()
+    }
+
     public companion object {
         public const val TYPE: String = "vision"
+
+        public const val VISION_PROPERTY_TARGET: String = "property"
+
         public val STYLE_KEY: Name = "@style".asName()
         public val STYLESHEET_KEY: Name = "@stylesheet".asName()
         public const val STYLE_TARGET: String = "style"

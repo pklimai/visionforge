@@ -1,5 +1,6 @@
 package space.kscience.visionforge
 
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.onCompletion
@@ -15,27 +16,32 @@ import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 @Serializable
 public abstract class AbstractVision(
     @OptIn(ExperimentalSerializationApi::class)
-    @EncodeDefault(EncodeDefault.Mode.NEVER) final override val properties: ObservableMutableMeta = ObservableMutableMeta(),
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(ObservableMutableMetaSerializer::class)
+    final override val properties: ObservableMutableMeta = ObservableMutableMeta(),
 ) : MutableVision {
 
-    private val _eventFlow by lazy {
-        val scope = manager?.context ?: error("Can't observe orphan vision")
-        MutableSharedFlow<VisionEvent>().also { flow ->
-            properties.onChange(flow) {
-                scope.launch {
-                    flow.emit(VisionPropertyChangedEvent(this@AbstractVision, it))
-                }
-            }
+    @Transient
+    private val _eventFlow = MutableSharedFlow<VisionEvent>(1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-            flow.onCompletion {
-                properties.removeListener(flow)
+    protected fun emitEvent(event: VisionEvent) {
+        val context = manager?.context
+        if (context == null) {
+            _eventFlow.tryEmit(event)
+        } else {
+            context.launch {
+                _eventFlow.emit(event)
             }
         }
     }
 
-    protected fun emitEvent(event: VisionEvent) {
-        manager?.context?.launch {
-            _eventFlow.emit(event)
+    init {
+        properties.onChange(_eventFlow) {
+            emitEvent(VisionPropertyChangedEvent(this@AbstractVision, it))
+        }
+
+        _eventFlow.onCompletion {
+            properties.removeListener(_eventFlow)
         }
     }
 
@@ -44,9 +50,7 @@ public abstract class AbstractVision(
     @Transient
     override var parent: Vision? = null
         set(value) {
-            if (value == null) {
-                error("Can't remove parent for existing vision")
-            } else if (field != null) {
+            if (parent != null && field != null) {
                 error("Parent is already set")
             } else {
                 field = value

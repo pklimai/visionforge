@@ -60,7 +60,7 @@ public class VisionManager(meta: Meta) : AbstractPlugin(meta), Vision {
     override val manager: VisionManager get() = this
 
     override var parent: Vision?
-        get() = this
+        get() = null
         set(_) {}
 
     override val descriptor: MetaDescriptor? get() = null
@@ -133,13 +133,6 @@ public val Context.visionManager: VisionManager get() = request(VisionManager)
 
 public fun Vision.encodeToString(): String =
     manager?.encodeToString(this) ?: error("Orphan vision could not be encoded")
-
-///**
-// * A root vision attached to [VisionManager]
-// */
-//public class RootVision(override val manager: VisionManager) : VisionGroup<Vision> {
-//    override fun createGroup(): SimpleVisionGroup = SimpleVisionGroup()
-//}
 
 /**
  * Designate this [Vision] as a root and assign a [VisionManager] as its parent

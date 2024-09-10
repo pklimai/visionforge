@@ -2,7 +2,6 @@ package space.kscience.visionforge.solid.transform
 
 import space.kscience.dataforge.misc.DFExperimental
 import space.kscience.dataforge.names.Name
-import space.kscience.dataforge.names.asName
 import space.kscience.kmath.complex.QuaternionField
 import space.kscience.visionforge.solid.*
 
@@ -28,16 +27,16 @@ internal object RemoveSingleChild : VisualTreeTransform<SolidGroup>() {
 
     override fun SolidGroup.transformInPlace() {
         fun SolidGroup.replaceChildren() {
-            solids.forEach { (childName, parent) ->
+            items.forEach { (childName, parent) ->
                 if (parent is SolidReference) return@forEach //ignore refs
                 if (parent is SolidGroup) {
                     parent.replaceChildren()
                 }
-                if (parent is SolidGroup && parent.solids.size == 1) {
-                    val child: Solid = parent.solids.values.first()
+                if (parent is SolidGroup && parent.items.size == 1) {
+                    val child: Solid = parent.items.values.first()
                     val newParent = child.updateFrom(parent)
                     newParent.parent = null
-                    setVision(childName.asName(), newParent)
+                    setVision(childName, newParent)
                 }
             }
         }

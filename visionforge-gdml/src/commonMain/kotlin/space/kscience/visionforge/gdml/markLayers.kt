@@ -4,7 +4,6 @@ import space.kscience.dataforge.context.Global
 import space.kscience.dataforge.context.info
 import space.kscience.dataforge.context.logger
 import space.kscience.dataforge.names.Name
-import space.kscience.dataforge.names.NameToken
 import space.kscience.dataforge.names.length
 import space.kscience.dataforge.names.plus
 import space.kscience.visionforge.solid.Solid
@@ -22,8 +21,8 @@ private class VisionCounterTree(
     // self count for prototypes
     var selfCount = 1
 
-    val children: Map<NameToken, VisionCounterTree> by lazy {
-        (vision as? SolidGroup)?.solids?.mapValues { (key, vision) ->
+    val children: Map<Name, VisionCounterTree> by lazy {
+        (vision as? SolidGroup)?.items?.mapValues { (key, vision) ->
             if (vision is SolidReference) {
                 prototypes.getOrPut(vision.prototypeName) {
                     VisionCounterTree(vision.prototypeName, vision.prototype, prototypes)

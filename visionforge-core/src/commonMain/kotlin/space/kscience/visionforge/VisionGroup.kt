@@ -12,6 +12,7 @@ import space.kscience.dataforge.names.parseAsName
 import space.kscience.dataforge.names.plus
 import space.kscience.visionforge.SimpleVisionGroup.Companion.updateProperties
 import space.kscience.visionforge.Vision.Companion.STYLE_KEY
+import space.kscience.visionforge.Vision.Companion.VISION_PROPERTY_TARGET
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
@@ -34,6 +35,20 @@ public interface VisionGroup<out V : Vision> : Vision, VisionContainer<V> {
                 }
             }
         }
+    }
+
+    override val defaultTarget: String get() = VISION_CHILD_TARGET
+
+    override val defaultChainTarget: String get() = VISION_PROPERTY_TARGET
+
+    override fun content(target: String): Map<Name, Any> = when (target) {
+        VISION_PROPERTY_TARGET -> readProperties().items.entries.associate { it.key.asName() to it.value }
+        VISION_CHILD_TARGET -> items
+        else -> emptyMap()
+    }
+
+    public companion object {
+        public const val VISION_CHILD_TARGET: String = "vision"
     }
 }
 
@@ -147,8 +162,18 @@ public inline fun MutableVisionContainer<Vision>.group(
 ): SimpleVisionGroup = group(name.parseAsName(), builder)
 
 public fun VisionGroup(
+    parent: Vision? = null,
     block: MutableVisionGroup<Vision>.() -> Unit
-): VisionGroup<Vision> = SimpleVisionGroup().apply(block)
+): VisionGroup<Vision> = SimpleVisionGroup().apply(block).also {
+    it.parent = parent
+}
+
+public fun MutableVisionGroup(
+    parent: Vision? = null,
+    block: MutableVisionGroup<Vision>.() -> Unit
+): MutableVisionGroup<Vision> = SimpleVisionGroup().apply(block).also {
+    it.parent = parent
+}
 
 //fun VisualObject.findStyle(styleName: Name): Meta? {
 //    if (this is VisualGroup) {

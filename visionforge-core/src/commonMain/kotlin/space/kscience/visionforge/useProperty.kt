@@ -11,7 +11,7 @@ import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.parseAsName
 import kotlin.reflect.KProperty1
 
-private fun Vision.inheritedEventFlow(): Flow<VisionEvent> =
+public fun Vision.inheritedEventFlow(): Flow<VisionEvent> =
     parent?.let { parent -> merge(eventFlow, parent.inheritedEventFlow()) } ?: eventFlow
 
 /**
@@ -21,9 +21,9 @@ public fun Vision.flowProperty(
     propertyName: Name,
     inherited: Boolean = isInheritedProperty(propertyName),
     useStyles: Boolean = isStyledProperty(propertyName),
-): Flow<Meta> = flow {
+): Flow<Meta?> = flow {
     //Pass initial value.
-    readProperty(propertyName, inherited, useStyles)?.let { emit(it) }
+    emit(readProperty(propertyName, inherited, useStyles))
 
     val combinedFlow: Flow<VisionEvent> = if (inherited) {
         inheritedEventFlow()
@@ -33,7 +33,7 @@ public fun Vision.flowProperty(
 
     combinedFlow.filterIsInstance<VisionPropertyChangedEvent>().collect { event ->
         if (event.propertyName == propertyName || (useStyles && event.propertyName == Vision.STYLE_KEY)) {
-            readProperty(event.propertyName, inherited, useStyles)?.let { emit(it) }
+            emit(readProperty(event.propertyName, inherited, useStyles))
         }
     }
 }
@@ -42,7 +42,7 @@ public fun Vision.flowProperty(
     propertyName: String,
     inherited: Boolean = isInheritedProperty(propertyName),
     useStyles: Boolean = isStyledProperty(propertyName),
-): Flow<Meta> = flowProperty(propertyName.parseAsName(), inherited, useStyles)
+): Flow<Meta?> = flowProperty(propertyName.parseAsName(), inherited, useStyles)
 
 /**
  * Flow the value of specific property
@@ -51,7 +51,7 @@ public fun Vision.flowPropertyValue(
     propertyName: Name,
     inherited: Boolean = isInheritedProperty(propertyName),
     useStyles: Boolean = isStyledProperty(propertyName),
-): Flow<Value?> = flowProperty(propertyName, inherited, useStyles).map { it.value }
+): Flow<Value?> = flowProperty(propertyName, inherited, useStyles).map { it?.value }
 
 public fun Vision.flowPropertyValue(
     propertyName: String,
@@ -62,7 +62,7 @@ public fun Vision.flowPropertyValue(
 ///
 
 /**
- * Call [callback] on initial value of the property and then on all subsequent values after change
+ * Call [callback] on initial value of the property and then on all following values after change
  */
 public fun Vision.useProperty(
     propertyName: Name,

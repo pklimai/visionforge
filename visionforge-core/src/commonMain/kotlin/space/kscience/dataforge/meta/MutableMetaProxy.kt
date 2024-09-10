@@ -4,6 +4,9 @@ import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.NameToken
 import space.kscience.dataforge.names.plus
 
+/**
+ * A [Meta] child proxy that creates required node on write
+ */
 public class MutableMetaProxy(
     public val upstream: MutableMeta,
     public val proxyName: Name

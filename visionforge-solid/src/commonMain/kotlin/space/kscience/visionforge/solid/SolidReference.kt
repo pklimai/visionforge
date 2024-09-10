@@ -34,7 +34,7 @@ public val Vision.prototype: Solid
 @SerialName("solid.ref")
 public class SolidReference(
     @SerialName("prototype") public val prototypeName: Name,
-) : AbstractVision(), Solid, SolidContainer {
+) : AbstractVision(), SolidContainer {
 
     @Transient
     override var parent: Vision? = null
@@ -52,9 +52,9 @@ public class SolidReference(
 
     override val descriptor: MetaDescriptor get() = prototype.descriptor
 
-    override val solids: Map<NameToken, Solid>
-        get() = (prototype as? SolidContainer)?.solids?.mapValues { (key, _) ->
-            SolidReferenceChild(this@SolidReference, this@SolidReference, key.asName())
+    override val items: Map<Name, Solid>
+        get() = (prototype as? SolidContainer)?.items?.mapValues { (key, _) ->
+            SolidReferenceChild(this@SolidReference, this@SolidReference, key)
         } ?: emptyMap()
 
 
@@ -184,12 +184,12 @@ private class SolidReferenceChild(
     val owner: SolidReference,
     override var parent: Vision?,
     val childName: Name,
-) : Solid, SolidContainer {
+) : SolidContainer {
 
     private val childToken = childToken(childName)
 
     val prototype: Solid
-        get() = (owner.prototype as SolidContainer)[childName]
+        get() = (owner.prototype as SolidContainer).getVision(childName)
             ?: error("Prototype with name $childName not found")
 
     override val descriptor: MetaDescriptor get() = prototype.descriptor
@@ -235,8 +235,8 @@ private class SolidReferenceChild(
         return if (listOfMeta.all { it == null }) null else Laminate(listOfMeta)
     }
 
-    override val solids: Map<NameToken, Solid>
-        get() = (prototype as? SolidContainer)?.solids?.mapValues { (key, _) ->
+    override val items: Map<Name, Solid>
+        get() = (prototype as? SolidContainer)?.items?.mapValues { (key, _) ->
             SolidReferenceChild(owner, this, childName + key)
         } ?: emptyMap()
 

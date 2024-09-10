@@ -73,8 +73,8 @@ class Model(val manager: VisionManager) {
         map.values.forEach {
             it.properties[SolidMaterial.MATERIAL_COLOR_KEY] = null
         }
-        tracks.solids.keys.forEach {
-            tracks.setVision(it.asName(), null)
+        tracks.items.keys.forEach {
+            tracks.setVision(it, null)
         }
     }
 

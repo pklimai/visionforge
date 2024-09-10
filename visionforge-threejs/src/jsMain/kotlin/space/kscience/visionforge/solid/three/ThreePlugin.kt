@@ -67,17 +67,17 @@ public class ThreePlugin : AbstractPlugin(), ComposeHtmlVisionRenderer {
         is SolidReference -> ThreeReferenceFactory.build(this, vision, observe)
         is SolidGroup -> {
             val group = ThreeGroup()
-            vision.solids.forEach { (token, child) ->
+            vision.items.forEach { (name, child) ->
                 if (child.ignore != true) {
                     try {
                         val object3D = buildObject3D(
                             child,
-                            if (token.body == SolidGroup.STATIC_TOKEN_BODY) false else observe
+                            if (name.first().body == SolidGroup.STATIC_TOKEN_BODY) false else observe
                         )
                         // disable tracking changes for statics
-                        group[token] = object3D
+                        group[name] = object3D
                     } catch (ex: Throwable) {
-                        logger.error(ex) { "Failed to render vision with token $token and type ${child::class}" }
+                        logger.error(ex) { "Failed to render vision with token $name and type ${child::class}" }
                     }
                 }
             }

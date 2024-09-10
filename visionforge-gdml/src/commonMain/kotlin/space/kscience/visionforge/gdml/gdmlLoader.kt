@@ -371,9 +371,9 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
         rootSolid.useStyle(rootStyle)
 
         rootSolid.prototypes {
-            templates.solids.forEach { (token, item) ->
+            templates.items.forEach { (name, item) ->
                 item.parent = null
-                setVision(token.asName(), item)
+                setVision(name, item)
             }
         }
         settings.styleCache.forEach {
