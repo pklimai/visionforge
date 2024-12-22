@@ -8,16 +8,21 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.application.install
 import io.ktor.server.application.log
+import io.ktor.server.engine.ConnectorType
 import io.ktor.server.engine.EngineConnectorConfig
 import io.ktor.server.html.respondHtml
 import io.ktor.server.plugins.cors.routing.CORS
+import io.ktor.server.plugins.origin
 import io.ktor.server.request.header
 import io.ktor.server.request.host
 import io.ktor.server.request.port
 import io.ktor.server.response.header
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
-import io.ktor.server.routing.*
+import io.ktor.server.routing.application
+import io.ktor.server.routing.get
+import io.ktor.server.routing.route
+import io.ktor.server.routing.routing
 import io.ktor.server.util.getOrFail
 import io.ktor.server.util.url
 import io.ktor.server.websocket.WebSockets
@@ -101,6 +106,7 @@ public fun Application.serveVisionData(
     require(WebSockets)
     routing {
         route(configuration.route) {
+            //TODO do more precise CORS policy
             install(CORS) {
                 anyHost()
             }
@@ -134,7 +140,7 @@ public fun Application.serveVisionData(
                     this.application.log.info("WebSocket update channel for $name is closed with exception: $t")
                 }
             }
-            //Plots in their json representation
+            //Visions in their json representation
             get("data") {
                 val name: String = call.request.queryParameters.getOrFail("name")
 
@@ -182,6 +188,11 @@ public fun Application.visionPage(
         get(route) {
             val host = connector?.host ?: call.request.host()
             val port = connector?.port ?: call.request.port()
+            val schema = connector?.type ?: when (val originSchema = call.request.origin.scheme.uppercase()) {
+                "HTTP" -> ConnectorType.HTTP
+                "HTTPS" -> ConnectorType.HTTPS
+                else -> ConnectorType(originSchema)
+            }
             call.respondHtml {
                 head {
                     meta {
@@ -205,13 +216,13 @@ public fun Application.visionPage(
                         } else null,
                         updatesUrl = if (configuration.dataMode == VisionRoute.Mode.UPDATE) {
                             url {
-                                protocol = URLProtocol.WS
+                                protocol = if (schema == ConnectorType.HTTPS) URLProtocol.WSS else URLProtocol.WS
                                 this.host = host
                                 this.port = port
                                 path(route, "ws")
                             }
                         } else null,
-                        displayCache =  cache,
+                        displayCache = cache,
                         fragment = visionFragment
                     )
                 }
