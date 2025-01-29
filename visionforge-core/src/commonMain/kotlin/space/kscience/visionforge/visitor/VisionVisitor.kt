@@ -38,7 +38,7 @@ public interface VisionVisitor {
             visionVisitor.visitChildren(name, vision)
 
             if (vision is VisionGroup<*>) {
-                vision.items.forEach { (token, child) ->
+                vision.visions.forEach { (token, child) ->
                     visitTreeAsync(visionVisitor, name + token, child)
                 }
             }

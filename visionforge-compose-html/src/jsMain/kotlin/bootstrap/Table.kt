@@ -3,15 +3,14 @@ package bootstrap
 import androidx.compose.runtime.*
 import org.jetbrains.compose.web.attributes.Scope
 import org.jetbrains.compose.web.attributes.scope
-import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.CSSLengthOrPercentageValue
+import org.jetbrains.compose.web.css.StyleScope
+import org.jetbrains.compose.web.css.top
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLTableCaptionElement
 import org.w3c.dom.HTMLTableCellElement
 import org.w3c.dom.HTMLTableElement
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
 import kotlin.math.max
 import kotlin.math.min
 
@@ -31,16 +30,16 @@ public object Table {
         val footer: Footer?
     )
 
-    public data class Cell internal constructor(
+    public class Cell internal constructor(
         public val color: Color? = null,
-        val scope: Scope?,
-        val verticalAlignment: Layout.VerticalAlignment?,
-        val content: ContentBuilder<HTMLTableCellElement>
+        public val scope: Scope?,
+        public val verticalAlignment: Layout.VerticalAlignment?,
+        public val content: ContentBuilder<HTMLTableCellElement>
     )
 
-    public data class Footer internal constructor(
+    public class Footer internal constructor(
         public val color: Color? = null,
-        val content: @Composable ElementScope<HTMLTableCellElement>.(List<Cell>) -> Unit
+        public val content: @Composable ElementScope<HTMLTableCellElement>.(List<Cell>) -> Unit
     )
 
     public data class Header(

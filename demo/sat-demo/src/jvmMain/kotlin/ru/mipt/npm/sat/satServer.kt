@@ -25,7 +25,7 @@ import kotlin.random.Random
 
 
 @Suppress("ExtractKtorModule")
-fun main() {
+suspend fun main() {
     val satContext = Context("sat") {
         plugin(Solids)
     }

@@ -5,7 +5,6 @@ import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.asName
 import space.kscience.plotly.Plot
 import space.kscience.plotly.doubleInRange
-import space.kscience.plotly.scheme
 
 
 public enum class XPeriodAlignment{

@@ -8,20 +8,13 @@ import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.meta.descriptors.node
 import space.kscience.dataforge.misc.DFBuilder
-import space.kscience.dataforge.names.Name
+import space.kscience.dataforge.names.NameToken
 import space.kscience.plotly.models.Layout
 import space.kscience.plotly.models.Trace
-import space.kscience.visionforge.*
-import kotlin.properties.ReadWriteProperty
-
-/**
- * A temporary plug until DataForge 0.9.1
- *
- */
-internal fun <T : Scheme> MutableVision.scheme(
-    spec: SchemeSpec<T>,
-    key: Name? = null
-): ReadWriteProperty<Any?, T> = properties.scheme(spec, key)
+import space.kscience.visionforge.AbstractVision
+import space.kscience.visionforge.VisionEvent
+import space.kscience.visionforge.VisionGroup
+import space.kscience.visionforge.VisionGroupCompositionChangedEvent
 
 /**
  * The main plot class.
@@ -34,7 +27,7 @@ public class Plot : AbstractVision(), VisionGroup<Trace> {
     private val _data = mutableListOf<Trace>()
     public val data: List<Trace> get() = _data
 
-    override val items: Map<Name, Trace>
+    override val visions: Map<NameToken, Trace>
         get() = data.associateBy { it.uid }
 
     override suspend fun receiveEvent(event: VisionEvent) {
@@ -44,7 +37,7 @@ public class Plot : AbstractVision(), VisionGroup<Trace> {
     /**
      * Layout specification for th plot
      */
-    public val layout: Layout by scheme(Layout)
+    public val layout: Layout by properties.scheme(Layout)
 
     public fun addTrace(trace: Trace) {
         _data.add(trace)

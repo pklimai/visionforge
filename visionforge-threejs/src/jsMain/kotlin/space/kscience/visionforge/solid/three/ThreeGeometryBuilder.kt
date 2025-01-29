@@ -1,8 +1,8 @@
 package space.kscience.visionforge.solid.three
 
 import space.kscience.dataforge.meta.Meta
-import space.kscience.visionforge.solid.Float32Euclidean3DSpace
-import space.kscience.visionforge.solid.Float32Vector3D
+import space.kscience.kmath.geometry.euclidean3d.Float32Space3D
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.visionforge.solid.GeometryBuilder
 import three.core.BufferGeometry
 import three.core.Float32BufferAttribute
@@ -44,7 +44,7 @@ public class ThreeGeometryBuilder : GeometryBuilder<BufferGeometry> {
         vertex3: Float32Vector3D,
         normal: Float32Vector3D?,
         meta: Meta,
-    ) = with(Float32Euclidean3DSpace) {
+    ) = with(Float32Space3D) {
         val actualNormal: Float32Vector3D = normal ?: ((vertex3 - vertex2) cross (vertex1 - vertex2))
         indices.add(
             vertex(vertex1, actualNormal),

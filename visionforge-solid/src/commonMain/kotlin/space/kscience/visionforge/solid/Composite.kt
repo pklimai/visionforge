@@ -3,7 +3,7 @@ package space.kscience.visionforge.solid
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import space.kscience.dataforge.meta.isEmpty
-import space.kscience.dataforge.names.Name
+import space.kscience.dataforge.meta.update
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
 
@@ -32,13 +32,13 @@ public inline fun MutableVisionContainer<Solid>.composite(
     @VisionBuilder builder: SolidGroup.() -> Unit,
 ): Composite {
     val group = SolidGroup().apply(builder)
-    val children = group.items.values.toList()
+    val children = group.visions.values.toList()
     if (children.size != 2) {
         error("Composite requires exactly two children, but found ${children.size}")
     }
     val res = Composite(type, children[0], children[1])
 
-    res.properties[Name.EMPTY] = group.properties
+    res.properties.update(group.properties)
 
     setVision(SolidGroup.inferNameFor(name, res), res)
     return res
@@ -56,7 +56,7 @@ public fun SolidGroup.smartComposite(
     val group = SolidGroup().apply(builder)
     if (name == null && group.properties.isEmpty()) {
         //append directly to group if no properties are defined
-        group.items.forEach { (_, value) ->
+        group.visions.forEach { (_, value) ->
             value.parent = null
             static(value)
         }

@@ -4,6 +4,9 @@ import space.kscience.dataforge.meta.Meta
 import space.kscience.dataforge.meta.MetaProvider
 import space.kscience.dataforge.meta.float
 import space.kscience.dataforge.meta.get
+import space.kscience.kmath.geometry.euclidean2d.Float32Vector2D
+import space.kscience.kmath.geometry.euclidean3d.Float32Space3D
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.visionforge.solid.Solid.Companion.X_KEY
 import space.kscience.visionforge.solid.Solid.Companion.Y_KEY
 import space.kscience.visionforge.solid.Solid.Companion.Z_KEY
@@ -35,7 +38,7 @@ internal fun Meta.toVector2D(): Float32Vector2D =
 //    z /= norm
 //}
 
-internal fun MetaProvider.point3D(default: Float = 0f) = Float32Euclidean3DSpace.vector(
+internal fun MetaProvider.point3D(default: Float = 0f) = Float32Space3D.vector(
     get(X_KEY).float ?: default,
     get(Y_KEY).float ?: default,
     get(Z_KEY).float ?: default

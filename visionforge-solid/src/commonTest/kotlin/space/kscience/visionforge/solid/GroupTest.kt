@@ -43,7 +43,7 @@ class GroupTest {
             }
         }
 
-        assertEquals(3, group.items.count())
+        assertEquals(3, group.visions.count())
         assertEquals(300.0, group["intersect"]?.y?.toDouble())
         assertEquals(-300.0, group["subtract"]?.y?.toDouble())
     }

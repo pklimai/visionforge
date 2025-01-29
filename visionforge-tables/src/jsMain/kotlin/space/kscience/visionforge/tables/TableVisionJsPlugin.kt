@@ -1,5 +1,6 @@
 package space.kscience.visionforge.tables
 
+import js.import.importAsync
 import js.objects.jso
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
@@ -25,8 +26,8 @@ public class TableVisionJsPlugin : AbstractPlugin(), ElementVisionRenderer {
 
     override fun attach(context: Context) {
         super.attach(context)
-        kotlinext.js.require<Any>("tabulator-tables/dist/css/tabulator.min.css")
-        kotlinext.js.require<Any>("tabulator-tables/src/js/modules/ResizeColumns/ResizeColumns.js")
+        importAsync<Any>("tabulator-tables/dist/css/tabulator.min.css")
+        importAsync<Any>("tabulator-tables/src/js/modules/ResizeColumns/ResizeColumns.js")
     }
 
     override fun rateVision(vision: Vision): Int = when (vision) {
@@ -81,7 +82,7 @@ public class TableVisionJsPlugin : AbstractPlugin(), ElementVisionRenderer {
         TabulatorFull(element as HTMLElement, tableOptions)
     }
 
-    override fun toString(): String  = "Table"
+    override fun toString(): String = "Table"
 
     override fun content(target: String): Map<Name, Any> = when (target) {
         ElementVisionRenderer.TYPE -> mapOf("table".asName() to this)

@@ -87,13 +87,13 @@ public open class VisionOfHtmlInput(
  */
 public fun VisionOfHtmlInput.onValueChange(
     scope: CoroutineScope = manager?.context ?: error("Coroutine context is not resolved for $this"),
-    callback: suspend VisionValueChangeEvent.() -> Unit,
-): Job = eventFlow.filterIsInstance<VisionValueChangeEvent>().onEach(callback).launchIn(scope)
+    callback: suspend ControlValueChangeEvent.() -> Unit,
+): Job = eventFlow.filterIsInstance<ControlValueChangeEvent>().onEach(callback).launchIn(scope)
 
 public fun VisionOfHtmlInput.onInput(
     scope: CoroutineScope = manager?.context ?: error("Coroutine context is not resolved for $this"),
-    callback: suspend VisionInputEvent.() -> Unit,
-): Job = eventFlow.filterIsInstance<VisionInputEvent>().onEach(callback).launchIn(scope)
+    callback: suspend ControlInputEvent.() -> Unit,
+): Job = eventFlow.filterIsInstance<ControlInputEvent>().onEach(callback).launchIn(scope)
 
 @Suppress("UnusedReceiverParameter")
 public inline fun VisionOutput.htmlInput(

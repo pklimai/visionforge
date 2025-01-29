@@ -4,15 +4,21 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import space.kscience.dataforge.meta.Laminate
 import space.kscience.dataforge.meta.Meta
 import space.kscience.dataforge.meta.MutableMeta
 import space.kscience.dataforge.meta.MutableMetaProxy
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.names.*
+import space.kscience.dataforge.provider.Path
 import space.kscience.visionforge.*
 import space.kscience.visionforge.solid.SolidReference.Companion.REFERENCE_CHILD_PROPERTY_PREFIX
 
@@ -29,6 +35,20 @@ public val Vision.prototype: Solid
         is Solid -> this
         else -> error("This Vision is neither Solid nor SolidReference")
     }
+
+public object PathSerializer : KSerializer<Path> {
+
+    override val descriptor: SerialDescriptor
+        get() = String.serializer().descriptor
+
+    override fun serialize(encoder: Encoder, value: Path) {
+        encoder.encodeString(value.toString())
+    }
+
+    override fun deserialize(decoder: Decoder): Path {
+        return Path.parse(decoder.decodeString())
+    }
+}
 
 @Serializable
 @SerialName("solid.ref")
@@ -52,13 +72,13 @@ public class SolidReference(
 
     override val descriptor: MetaDescriptor get() = prototype.descriptor
 
-    override val items: Map<Name, Solid>
-        get() = (prototype as? SolidContainer)?.items?.mapValues { (key, _) ->
-            SolidReferenceChild(this@SolidReference, this@SolidReference, key)
+    override val visions: Map<NameToken, Solid>
+        get() = (prototype as? SolidContainer)?.visions?.mapValues { (key, _) ->
+            SolidReferenceChild(this@SolidReference, this@SolidReference, key.asName())
         } ?: emptyMap()
 
 
-    override fun getVision(name: Name): Solid? = (prototype as? SolidContainer)?.getVision(name)
+    override fun getVision(token: NameToken): Solid? = (prototype as? SolidContainer)?.getVision(token)
 
 
     override fun readProperty(
@@ -235,8 +255,8 @@ private class SolidReferenceChild(
         return if (listOfMeta.all { it == null }) null else Laminate(listOfMeta)
     }
 
-    override val items: Map<Name, Solid>
-        get() = (prototype as? SolidContainer)?.items?.mapValues { (key, _) ->
+    override val visions: Map<NameToken, Solid>
+        get() = (prototype as? SolidContainer)?.visions?.mapValues { (key, _) ->
             SolidReferenceChild(owner, this, childName + key)
         } ?: emptyMap()
 
@@ -284,15 +304,15 @@ private class SolidReferenceChild(
  */
 public fun MutableVisionContainer<Solid>.ref(
     templateName: Name,
-    name: Name? = null,
+    token: NameToken? = null,
 ): SolidReference = SolidReference(templateName).also {
-    setVision(name ?: SolidGroup.staticNameFor(it), it)
+    setVision(token ?: SolidGroup.staticNameFor(it), it)
 }
 
 public fun MutableVisionContainer<Solid>.ref(
     templateName: Name,
     name: String,
-): SolidReference = ref(templateName, name.parseAsName())
+): SolidReference = ref(templateName, NameToken.parse(name))
 
 /**
  * Add new [SolidReference] wrapping given object and automatically adding it to the prototypes.
@@ -306,10 +326,10 @@ public fun SolidGroup.newRef(
     val existing = prototypeHolder.getPrototype(prototypeName)
     if (existing == null) {
         prototypeHolder.prototypes {
-            setVision(prototypeName, obj)
+            set(prototypeName, obj)
         }
     } else if (existing != obj) {
         error("Can't add different prototype on top of existing one")
     }
-    return ref(prototypeName, name?.parseAsName())
+    return ref(prototypeName, name?.let { NameToken.parse(it) })
 }

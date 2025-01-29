@@ -6,7 +6,7 @@ plugins {
     alias(spclibs.plugins.kotlinx.kover)
 }
 
-val dataforgeVersion by extra("0.9.0")
+val dataforgeVersion by extra("0.10.0")
 
 allprojects {
     group = "space.kscience"
@@ -26,7 +26,7 @@ subprojects {
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         compilerOptions {
-            freeCompilerArgs.add("-Xcontext-receivers")
+            freeCompilerArgs.addAll("-Xcontext-receivers")
         }
     }
 
@@ -44,7 +44,7 @@ ksciencePublish {
         useSPCTeam()
     }
     repository("spc","https://maven.sciprog.center/kscience")
-    sonatype()
+    central()
 }
 
 apiValidation {

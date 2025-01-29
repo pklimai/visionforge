@@ -9,8 +9,8 @@ import org.w3c.dom.HTMLInputElement
 import space.kscience.dataforge.meta.asValue
 import space.kscience.dataforge.meta.double
 import space.kscience.dataforge.meta.string
-import space.kscience.visionforge.VisionInputEvent
-import space.kscience.visionforge.VisionValueChangeEvent
+import space.kscience.visionforge.ControlInputEvent
+import space.kscience.visionforge.ControlValueChangeEvent
 import space.kscience.visionforge.asyncControlEvent
 import space.kscience.visionforge.useProperty
 
@@ -60,11 +60,11 @@ internal val inputVisionRenderer: ElementVisionRenderer = ElementVisionRenderer<
     }.also { htmlInputElement ->
 
         htmlInputElement.onchange = {
-            vision.asyncControlEvent(VisionValueChangeEvent(htmlInputElement.value.asValue(), name))
+            vision.asyncControlEvent(ControlValueChangeEvent(htmlInputElement.value.asValue(), name))
         }
 
         htmlInputElement.oninput = {
-            vision.asyncControlEvent(VisionInputEvent(htmlInputElement.value.asValue(), name))
+            vision.asyncControlEvent(ControlInputEvent(htmlInputElement.value.asValue(), name))
         }
 
         htmlInputElement.subscribeToInput(vision)
@@ -81,11 +81,11 @@ internal val checkboxVisionRenderer: ElementVisionRenderer =
         }.also { htmlInputElement ->
 
             htmlInputElement.onchange = {
-                vision.asyncControlEvent(VisionValueChangeEvent(htmlInputElement.value.asValue(), name))
+                vision.asyncControlEvent(ControlValueChangeEvent(htmlInputElement.value.asValue(), name))
             }
 
             htmlInputElement.oninput = {
-                vision.asyncControlEvent(VisionInputEvent(htmlInputElement.value.asValue(), name))
+                vision.asyncControlEvent(ControlInputEvent(htmlInputElement.value.asValue(), name))
             }
 
 
@@ -103,11 +103,11 @@ internal val textVisionRenderer: ElementVisionRenderer =
         }.also { htmlInputElement ->
 
             htmlInputElement.onchange = {
-                vision.asyncControlEvent(VisionValueChangeEvent(htmlInputElement.value.asValue(), name))
+                vision.asyncControlEvent(ControlValueChangeEvent(htmlInputElement.value.asValue(), name))
             }
 
             htmlInputElement.oninput = {
-                vision.asyncControlEvent(VisionInputEvent(htmlInputElement.value.asValue(), name))
+                vision.asyncControlEvent(ControlInputEvent(htmlInputElement.value.asValue(), name))
             }
 
             htmlInputElement.subscribeToInput(vision)
@@ -125,13 +125,13 @@ internal val numberVisionRenderer: ElementVisionRenderer =
 
             htmlInputElement.onchange = {
                 htmlInputElement.value.toDoubleOrNull()?.let {
-                    vision.asyncControlEvent(VisionValueChangeEvent(it.asValue(), name))
+                    vision.asyncControlEvent(ControlValueChangeEvent(it.asValue(), name))
                 }
             }
 
             htmlInputElement.oninput = {
                 htmlInputElement.value.toDoubleOrNull()?.let {
-                    vision.asyncControlEvent(VisionInputEvent(it.asValue(), name))
+                    vision.asyncControlEvent(ControlInputEvent(it.asValue(), name))
                 }
             }
 
@@ -154,13 +154,13 @@ internal val rangeVisionRenderer: ElementVisionRenderer =
 
             htmlInputElement.onchange = {
                 htmlInputElement.value.toDoubleOrNull()?.let {
-                    vision.asyncControlEvent(VisionValueChangeEvent(it.asValue(), name))
+                    vision.asyncControlEvent(ControlValueChangeEvent(it.asValue(), name))
                 }
             }
 
             htmlInputElement.oninput = {
                 htmlInputElement.value.toDoubleOrNull()?.let {
-                    vision.asyncControlEvent(VisionInputEvent(it.asValue(), name))
+                    vision.asyncControlEvent(ControlInputEvent(it.asValue(), name))
                 }
             }
 

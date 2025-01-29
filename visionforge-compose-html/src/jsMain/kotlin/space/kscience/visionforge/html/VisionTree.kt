@@ -7,7 +7,10 @@ import org.jetbrains.compose.web.css.cursor
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
-import space.kscience.dataforge.names.*
+import space.kscience.dataforge.names.Name
+import space.kscience.dataforge.names.lastOrNull
+import space.kscience.dataforge.names.plus
+import space.kscience.dataforge.names.startsWith
 import space.kscience.visionforge.Vision
 import space.kscience.visionforge.VisionGroup
 
@@ -46,7 +49,7 @@ public fun VisionTree(
     //display as node if any child is visible
     if (vision is VisionGroup<*>) {
         FlexRow {
-            if (vision.items.keys.any { !it.first().body.startsWith("@") }) {
+            if (vision.visions.keys.any { !it.body.startsWith("@") }) {
                 Span({
                     classes(TreeStyles.treeCaret)
                     if (expanded) {
@@ -63,9 +66,9 @@ public fun VisionTree(
             FlexColumn({
                 classes(TreeStyles.tree)
             }) {
-                vision.items.asSequence()
+                vision.visions.asSequence()
                     .filter { !it.key.toString().startsWith("@") } // ignore statics and other hidden children
-                    .sortedBy { (it.value as? VisionGroup<Vision>)?.items?.isEmpty() ?: true } // ignore empty groups
+                    .sortedBy { (it.value as? VisionGroup<Vision>)?.visions?.isEmpty() ?: true } // ignore empty groups
                     .forEach { (childToken, child) ->
                         Div({ classes(TreeStyles.treeItem) }) {
                             VisionTree(

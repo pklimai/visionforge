@@ -5,12 +5,16 @@
 ### Added
 
 ### Changed
+- Simplified Vision and VisionGroup logic. Observation logic moved out.
+- Use `Name` for child designation and `Path` for tree access
 
 ### Deprecated
 
 ### Removed
+- VisionChildren and VisionProperties
 
 ### Fixed
+- Vision server now automatically switches to WSS protocol for updates if incoming protocol is HTTPS
 
 ### Security
 

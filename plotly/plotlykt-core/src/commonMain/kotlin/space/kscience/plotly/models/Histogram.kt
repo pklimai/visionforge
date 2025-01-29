@@ -4,7 +4,6 @@ import space.kscience.dataforge.meta.*
 import space.kscience.plotly.Plot
 import space.kscience.plotly.intGreaterThan
 import space.kscience.plotly.numberGreaterThan
-import space.kscience.plotly.scheme
 import kotlin.js.JsName
 
 

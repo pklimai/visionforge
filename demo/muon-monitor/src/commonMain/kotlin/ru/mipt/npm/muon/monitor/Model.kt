@@ -3,12 +3,11 @@ package ru.mipt.npm.muon.monitor
 import ru.mipt.npm.muon.monitor.Monitor.CENTRAL_LAYER_Z
 import ru.mipt.npm.muon.monitor.Monitor.LOWER_LAYER_Z
 import ru.mipt.npm.muon.monitor.Monitor.UPPER_LAYER_Z
-import space.kscience.dataforge.names.asName
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionManager
 import space.kscience.visionforge.setAsRoot
 import space.kscience.visionforge.solid.*
-import kotlin.collections.set
 import kotlin.math.PI
 
 class Model(val manager: VisionManager) {
@@ -61,7 +60,7 @@ class Model(val manager: VisionManager) {
             }
         }
 
-        setVision("tracks".asName(), tracks)
+        setVision("tracks", tracks)
     }
 
     private fun highlight(pixel: String) {
@@ -73,7 +72,7 @@ class Model(val manager: VisionManager) {
         map.values.forEach {
             it.properties[SolidMaterial.MATERIAL_COLOR_KEY] = null
         }
-        tracks.items.keys.forEach {
+        tracks.visions.keys.forEach {
             tracks.setVision(it, null)
         }
     }

@@ -50,7 +50,7 @@ public class ComposeVisionClient : AbstractPlugin(), VisionClient {
     override fun notifyPropertyChanged(visionName: Name, propertyName: Name, item: Meta?) {
         context.launch {
             mutex.withLock {
-                rootChangeCollector.propertyChanged(visionName, propertyName, item)
+                rootChangeCollector.getOrCreateChange(visionName).propertyChanged(propertyName, item)
             }
         }
     }

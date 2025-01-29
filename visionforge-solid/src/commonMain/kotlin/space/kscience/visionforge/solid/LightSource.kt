@@ -9,6 +9,7 @@ import space.kscience.dataforge.meta.descriptors.value
 import space.kscience.dataforge.meta.number
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.asName
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.visionforge.*
 
 @Serializable

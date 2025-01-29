@@ -5,7 +5,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.URLProtocol
 import io.ktor.http.path
 import io.ktor.server.application.Application
-import io.ktor.server.application.call
 import io.ktor.server.application.install
 import io.ktor.server.application.log
 import io.ktor.server.engine.ConnectorType
@@ -103,7 +102,7 @@ public fun Application.serveVisionData(
     configuration: VisionRoute,
     resolveVision: (Name) -> Vision?,
 ) {
-    require(WebSockets)
+    install(WebSockets)
     routing {
         route(configuration.route) {
             //TODO do more precise CORS policy
@@ -176,7 +175,7 @@ public fun Application.visionPage(
     connector: EngineConnectorConfig? = null,
     visionFragment: HtmlVisionFragment,
 ) {
-    require(WebSockets)
+    install(WebSockets)
 
     val cache: MutableMap<Name, VisionDisplay> = mutableMapOf()
 
@@ -209,6 +208,7 @@ public fun Application.visionPage(
                         embedData = configuration.dataMode == VisionRoute.Mode.EMBED,
                         fetchDataUrl = if (configuration.dataMode != VisionRoute.Mode.EMBED) {
                             url {
+                                this.protocol = if (schema == ConnectorType.HTTPS) URLProtocol.HTTPS else URLProtocol.HTTP
                                 this.host = host
                                 this.port = port
                                 path(route, "data")
@@ -216,7 +216,7 @@ public fun Application.visionPage(
                         } else null,
                         updatesUrl = if (configuration.dataMode == VisionRoute.Mode.UPDATE) {
                             url {
-                                protocol = if (schema == ConnectorType.HTTPS) URLProtocol.WSS else URLProtocol.WS
+                                this.protocol = if (schema == ConnectorType.HTTPS) URLProtocol.WSS else URLProtocol.WS
                                 this.host = host
                                 this.port = port
                                 path(route, "ws")

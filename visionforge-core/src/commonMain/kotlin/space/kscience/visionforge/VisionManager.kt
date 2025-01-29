@@ -42,8 +42,9 @@ public class VisionManager(meta: Meta) : AbstractPlugin(meta), Vision {
     public fun decodeFromString(string: String): Vision = jsonFormat.decodeFromString(visionSerializer, string)
 
     public fun encodeToString(vision: Vision): String = jsonFormat.encodeToString(visionSerializer, vision)
-    public fun encodeToString(change: VisionChange): String =
-        jsonFormat.encodeToString(VisionChange.serializer(), change)
+
+//    public fun encodeToString(change: VisionChange): String =
+//        jsonFormat.encodeToString(VisionChange.serializer(), change)
 
     public fun decodeFromJson(json: JsonElement): Vision = jsonFormat.decodeFromJsonElement(visionSerializer, json)
 
@@ -94,11 +95,14 @@ public class VisionManager(meta: Meta) : AbstractPlugin(meta), Vision {
             }
 
             polymorphic(VisionEvent::class) {
-                subclass(VisionChange.serializer())
+                subclass(VisionEventCollection.serializer())
+                subclass(VisionChildEvent.serializer())
+                subclass(SetVisionPropertiesEvent.serializer())
+                subclass(SetVisionChildEvent.serializer())
                 subclass(VisionMetaEvent.serializer())
-                subclass(VisionSubmitEvent.serializer())
-                subclass(VisionValueChangeEvent.serializer())
-                subclass(VisionInputEvent.serializer())
+                subclass(ControlSubmitEvent.serializer())
+                subclass(ControlValueChangeEvent.serializer())
+                subclass(ControlInputEvent.serializer())
             }
         }
 

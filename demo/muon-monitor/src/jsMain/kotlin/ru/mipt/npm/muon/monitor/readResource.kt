@@ -1,11 +1,9 @@
 package ru.mipt.npm.muon.monitor
 
-actual fun readResource(path: String): String {
-    return kotlinext.js.require(path) as String
-}
+actual fun readResource(path: String): String = js("require(path)")
 
 // TODO replace by resource
-internal actual fun readMonitorConfig(): String{
+internal actual fun readMonitorConfig(): String {
     return """
         --Place-|-SC16-|-TB-CHN-|-HB-CHN-|-X-coord-|-Y-coord-|-Z-coord-|-Theta-|-Phi
         ----------------------------------------------------------------------------

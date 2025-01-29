@@ -7,22 +7,19 @@ import space.kscience.dataforge.meta.ValueType
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.meta.descriptors.value
 import space.kscience.dataforge.names.Name
+import space.kscience.dataforge.names.NameToken
 import space.kscience.dataforge.names.asName
-import space.kscience.dataforge.names.parseAsName
 import space.kscience.dataforge.names.plus
 import space.kscience.visionforge.SimpleVisionGroup.Companion.updateProperties
 import space.kscience.visionforge.Vision.Companion.STYLE_KEY
 import space.kscience.visionforge.Vision.Companion.VISION_PROPERTY_TARGET
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
 
 
 public interface VisionGroup<out V : Vision> : Vision, VisionContainer<V> {
 
-    public val items: Map<Name, V>
+    public val visions: Map<NameToken, V>
 
-    override fun getVision(name: Name): V? = items[name]
+    override fun getVision(token: NameToken): V? = visions[token]
 
     override suspend fun receiveEvent(event: VisionEvent) {
         super.receiveEvent(event)
@@ -43,7 +40,7 @@ public interface VisionGroup<out V : Vision> : Vision, VisionContainer<V> {
 
     override fun content(target: String): Map<Name, Any> = when (target) {
         VISION_PROPERTY_TARGET -> readProperties().items.entries.associate { it.key.asName() to it.value }
-        VISION_CHILD_TARGET -> items
+        VISION_CHILD_TARGET -> visions.mapKeys { it.key.asName() }
         else -> emptyMap()
     }
 
@@ -51,14 +48,6 @@ public interface VisionGroup<out V : Vision> : Vision, VisionContainer<V> {
         public const val VISION_CHILD_TARGET: String = "vision"
     }
 }
-
-/**
- * An event that indicates that [VisionGroup] composition is invalidated (not necessarily changed
- */
-public data class VisionGroupCompositionChangedEvent(
-    public val source: VisionContainer<*>,
-    public val childName: Name
-) : VisionEvent
 
 ///**
 // * An event that indicates that child property value has been invalidated
@@ -78,26 +67,25 @@ public interface MutableVisionGroup<V : Vision> : VisionGroup<V>, MutableVision,
     public fun convertVisionOrNull(vision: Vision): V?
 
     override suspend fun receiveEvent(event: VisionEvent) {
+
         if (event is VisionChange) {
             event.properties?.let {
                 updateProperties(it, Name.EMPTY)
             }
-            event.children?.forEach { (name, change) ->
-                change.children?.forEach { (name, change) ->
-                    when {
-                        change.vision == NullVision -> setVision(name, null)
-                        change.vision != null -> setVision(
-                            name,
-                            convertVisionOrNull(change.vision) ?: error("Can't convert ${change.vision}")
-                        )
+            event.children?.forEach { (childName, change) ->
+                when {
+                    change.vision == NullVision -> setVision(childName, null)
 
-                        else -> getVision(name)?.receiveEvent(change)
-                    }
-                }
-                change.properties?.let {
-                    updateProperties(it, Name.EMPTY)
+                    change.vision != null -> setVision(
+                        childName,
+                        convertVisionOrNull(change.vision) ?: error("Can't convert ${change.vision}")
+                    )
+
+                    else -> getVision(childName)?.receiveEvent(change)
                 }
             }
+        } else {
+            super<MutableVision>.receiveEvent(event)
         }
     }
 }
@@ -111,20 +99,20 @@ public class SimpleVisionGroup : AbstractVision(), MutableVisionGroup<Vision> {
 
     @Serializable
     @SerialName("children")
-    private val _items = mutableMapOf<Name, Vision>()
+    private val _items = mutableMapOf<NameToken, Vision>()
 
-    override val items: Map<Name, Vision> get() = _items
+    override val visions: Map<NameToken, Vision> get() = _items
 
     override fun convertVisionOrNull(vision: Vision): Vision = vision
 
-    override fun setVision(name: Name, vision: Vision?) {
+    override fun setVision(token: NameToken, vision: Vision?) {
         if (vision == null) {
-            _items.remove(name)
+            _items.remove(token)
         } else {
-            _items[name] = vision
+            _items[token] = vision
             vision.parent = this
         }
-        emitEvent(VisionGroupCompositionChangedEvent(this, name))
+        emitEvent(VisionGroupCompositionChangedEvent(this, token))
     }
 
     public companion object {
@@ -146,20 +134,20 @@ public class SimpleVisionGroup : AbstractVision(), MutableVisionGroup<Vision> {
 
 @VisionBuilder
 public inline fun MutableVisionContainer<Vision>.group(
-    name: Name? = null,
+    name: NameToken? = null,
     builder: SimpleVisionGroup.() -> Unit = {},
 ): SimpleVisionGroup = SimpleVisionGroup().also {
-    setVision(name ?: MutableVisionContainer.generateID().asName(), it)
+    setVision(name ?: MutableVisionContainer.generateID(), it)
 }.apply(builder)
 
 /**
- * Define a group with given [name], attach it to this parent and return it.
+ * Define a group with given [token], attach it to this parent and return it.
  */
 @VisionBuilder
 public inline fun MutableVisionContainer<Vision>.group(
-    name: String,
+    token: String,
     builder: SimpleVisionGroup.() -> Unit = {},
-): SimpleVisionGroup = group(name.parseAsName(), builder)
+): SimpleVisionGroup = group(NameToken.parse(token), builder)
 
 public fun VisionGroup(
     parent: Vision? = null,

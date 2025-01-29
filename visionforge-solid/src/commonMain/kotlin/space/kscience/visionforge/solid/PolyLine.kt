@@ -3,7 +3,8 @@ package space.kscience.visionforge.solid
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import space.kscience.dataforge.meta.number
-import space.kscience.dataforge.names.parseAsName
+import space.kscience.dataforge.names.NameToken
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
 
@@ -25,5 +26,5 @@ public fun MutableVisionContainer<Solid>.polyline(
     name: String? = null,
     action: PolyLine.() -> Unit = {},
 ): PolyLine = PolyLine(points.toList()).apply(action).also { 
-    setVision(name?.parseAsName() ?: SolidGroup.staticNameFor(it), it) 
+    setVision(name?.let(NameToken::parse) ?: SolidGroup.staticNameFor(it), it)
 }

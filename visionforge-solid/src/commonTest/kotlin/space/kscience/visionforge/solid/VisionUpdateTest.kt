@@ -4,9 +4,9 @@ import kotlinx.coroutines.test.runTest
 import space.kscience.dataforge.context.Global
 import space.kscience.dataforge.context.request
 import space.kscience.dataforge.meta.Meta
-import space.kscience.dataforge.meta.asValue
 import space.kscience.dataforge.names.asName
 import space.kscience.visionforge.VisionChange
+import space.kscience.visionforge.getOrCreateChange
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -25,15 +25,22 @@ internal class VisionUpdateTest {
                 color(123)
                 box(100, 100, 100)
             }
-            propertyChanged("top".asName(), SolidMaterial.MATERIAL_COLOR_KEY, Meta("red".asValue()))
-            propertyChanged("origin".asName(), SolidMaterial.MATERIAL_COLOR_KEY, Meta("red".asValue()))
+
+            getOrCreateChange("top".asName()).propertyChanged(
+                SolidMaterial.MATERIAL_COLOR_KEY,
+                Meta("red")
+            )
+            getOrCreateChange("origin".asName()).propertyChanged(
+                SolidMaterial.MATERIAL_COLOR_KEY,
+                Meta("red")
+            )
         }
         targetVision.receiveEvent(dif)
-        assertTrue { targetVision.get("top") is SolidGroup }
-        assertEquals("red", (targetVision.get("origin") as Solid).color.string) // Should work
+        assertTrue { targetVision["top"] is SolidGroup }
+        assertEquals("red", (targetVision["origin"] as Solid).color.string) // Should work
         assertEquals(
             "#00007b",
-            (targetVision.get("top") as Solid).color.string
+            (targetVision["top"] as Solid).color.string
         ) // new item always takes precedence
     }
 
@@ -44,8 +51,14 @@ internal class VisionUpdateTest {
                 color(123)
                 box(100, 100, 100)
             }
-            propertyChanged("top".asName(), SolidMaterial.MATERIAL_COLOR_KEY, Meta("red".asValue()))
-            propertyChanged("origin".asName(), SolidMaterial.MATERIAL_COLOR_KEY, Meta("red".asValue()))
+            getOrCreateChange("top".asName()).propertyChanged(
+                SolidMaterial.MATERIAL_COLOR_KEY,
+                Meta("red")
+            )
+            getOrCreateChange("origin".asName()).propertyChanged(
+                SolidMaterial.MATERIAL_COLOR_KEY,
+                Meta("red")
+            )
         }
         val serialized = visionManager.jsonFormat.encodeToString(VisionChange.serializer(), change)
         println(serialized)

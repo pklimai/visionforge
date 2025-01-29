@@ -17,7 +17,7 @@ import space.kscience.visionforge.server.openInBrowser
 import space.kscience.visionforge.server.visionPage
 
 @Suppress("ExtractKtorModule")
-fun main() {
+suspend fun main() {
     val visionManager = Global.request(VisionManager)
 
     val server = embeddedServer(CIO) {

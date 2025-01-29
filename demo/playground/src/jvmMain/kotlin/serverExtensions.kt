@@ -6,9 +6,9 @@ import io.ktor.server.http.content.staticResources
 import io.ktor.server.routing.routing
 import space.kscience.dataforge.context.Context
 import space.kscience.dataforge.context.Global
+import space.kscience.plotly.PlotlyPlugin
 import space.kscience.visionforge.html.*
 import space.kscience.visionforge.markup.MarkupPlugin
-import space.kscience.visionforge.plotly.PlotlyPlugin
 import space.kscience.visionforge.server.close
 import space.kscience.visionforge.server.openInBrowser
 import space.kscience.visionforge.server.visionPage
@@ -19,7 +19,7 @@ import java.awt.Desktop
 import java.nio.file.Path
 
 
-public fun makeVisionFile(
+public suspend fun makeVisionFile(
     path: Path? = null,
     title: String = "VisionForge page",
     resourceLocation: ResourceLocation = ResourceLocation.SYSTEM,
@@ -39,7 +39,7 @@ public fun makeVisionFile(
     if (show) Desktop.getDesktop().browse(actualPath.toFile().toURI())
 }
 
-public fun serve(
+public suspend fun serve(
     title: String = "VisionForge page",
     show: Boolean = true,
     content: HtmlVisionFragment,

@@ -16,7 +16,7 @@ kscience {
         api(spclibs.kotlinx.html)
     }
     jsMain {
-        api("org.jetbrains.kotlin-wrappers:kotlin-extensions")
+        api("org.jetbrains.kotlin-wrappers:kotlin-js")
     }
     useSerialization {
         json()

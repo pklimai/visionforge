@@ -6,6 +6,8 @@ import space.kscience.dataforge.meta.MutableMeta
 import space.kscience.dataforge.names.Name
 import space.kscience.kmath.geometry.component1
 import space.kscience.kmath.geometry.component2
+import space.kscience.kmath.geometry.euclidean2d.Float32Vector2D
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
 

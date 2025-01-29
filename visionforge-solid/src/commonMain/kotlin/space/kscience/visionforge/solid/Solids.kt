@@ -11,7 +11,7 @@ import space.kscience.dataforge.context.Context
 import space.kscience.dataforge.context.PluginFactory
 import space.kscience.dataforge.context.PluginTag
 import space.kscience.dataforge.meta.Meta
-import space.kscience.dataforge.names.Name
+import space.kscience.dataforge.names.NameToken
 import space.kscience.visionforge.*
 import space.kscience.visionforge.html.VisionOutput
 import space.kscience.visionforge.solid.specifications.Canvas3DOptions
@@ -22,7 +22,7 @@ public class Solids(meta: Meta) : VisionPlugin(meta), MutableVisionContainer<Sol
 
     override val visionSerializersModule: SerializersModule get() = serializersModuleForSolids
 
-    override fun setVision(name: Name, vision: Solid?) {
+    override fun setVision(token: NameToken, vision: Solid?) {
         vision?.setAsRoot(visionManager)
     }
 
@@ -91,7 +91,7 @@ public inline fun VisionOutput.solid(options: Canvas3DOptions? = null, block: So
         meta = options.meta
     }
     return SolidGroup().apply(block).apply {
-        if (items.values.none { it is LightSource }) {
+        if (visions.values.none { it is LightSource }) {
             ambientLight()
         }
     }

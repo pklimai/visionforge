@@ -17,7 +17,6 @@ import space.kscience.visionforge.solid.*
 import space.kscience.visionforge.solid.specifications.Canvas3DOptions
 import space.kscience.visionforge.solid.three.compose.ThreeView
 import three.core.Object3D
-import kotlin.collections.set
 import kotlin.reflect.KClass
 import three.objects.Group as ThreeGroup
 
@@ -67,12 +66,12 @@ public class ThreePlugin : AbstractPlugin(), ComposeHtmlVisionRenderer {
         is SolidReference -> ThreeReferenceFactory.build(this, vision, observe)
         is SolidGroup -> {
             val group = ThreeGroup()
-            vision.items.forEach { (name, child) ->
+            vision.visions.forEach { (name, child) ->
                 if (child.ignore != true) {
                     try {
                         val object3D = buildObject3D(
                             child,
-                            if (name.first().body == SolidGroup.STATIC_TOKEN_BODY) false else observe
+                            if (name.body == SolidGroup.STATIC_TOKEN_BODY) false else observe
                         )
                         // disable tracking changes for statics
                         group[name] = object3D
@@ -103,7 +102,6 @@ public class ThreePlugin : AbstractPlugin(), ComposeHtmlVisionRenderer {
                             }
                             is VisionGroupCompositionChangedEvent -> {
                                 val childName = event.childName
-                                if (childName.isEmpty()) return@onEach
 
                                 val child = vision.get(childName)
 
@@ -260,10 +258,13 @@ internal operator fun Object3D.set(name: Name, obj: Object3D) {
     }
 }
 
+internal fun Object3D.findChild(token: NameToken): Object3D? =
+    children.find { it.name == token.toString() }
+
 internal fun Object3D.findChild(name: Name): Object3D? {
     return when {
         name.isEmpty() -> this
-        name.length == 1 -> this.children.find { it.name == name.tokens.first().toString() }
-        else -> findChild(name.tokens.first().asName())?.findChild(name.cutFirst())
+        name.length == 1 -> findChild(name.tokens.first())
+        else -> findChild(name.tokens.first())?.findChild(name.cutFirst())
     }
 }

@@ -722,7 +722,7 @@ public class Hoverlabel : Scheme() {
  */
 @Serializable
 public open class Trace(
-    @Transient internal val uid: Name = NameToken("trace", uuid4().leastSignificantBits.toString(16)).asName()
+    @Transient internal val uid: NameToken = NameToken("trace", uuid4().leastSignificantBits.toString(16))
 ) : AbstractVision(), MutableMetaProvider, MetaRepr {
 
     override fun get(name: Name): MutableMeta? = properties.get(name)
@@ -735,7 +735,7 @@ public open class Trace(
         properties.setValue(name, value)
     }
 
-    override fun toMeta(): Meta  = properties
+    override fun toMeta(): Meta = properties
 
 
     public fun axis(axisName: String): TraceValues = TraceValues(this, Name.parse(axisName))
@@ -1042,16 +1042,16 @@ public open class Trace(
     }
 }
 
-public inline fun Trace(block: Trace.()->Unit): Trace = Trace().apply(block)
+public inline fun Trace(block: Trace.() -> Unit): Trace = Trace().apply(block)
 
-//public operator fun <T : Trace> SchemeSpec<T>.invoke(
-//    xs: Any,
-//    ys: Any? = null,
-//    zs: Any? = null,
-//    block: Trace.() -> Unit,
-//): T = invoke {
-//    x.set(xs)
-//    if (ys != null) y.set(ys)
-//    if (zs != null) z.set(zs)
-//    block()
-//}
+public fun Trace(
+    xs: Any,
+    ys: Any? = null,
+    zs: Any? = null,
+    block: Trace.() -> Unit,
+): Trace = Trace {
+    x.set(xs)
+    if (ys != null) y.set(ys)
+    if (zs != null) z.set(zs)
+    block()
+}

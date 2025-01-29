@@ -16,7 +16,6 @@ import space.kscience.visionforge.*
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
 import kotlin.time.Duration.Companion.milliseconds
 
 
@@ -36,8 +35,8 @@ internal class VisionPropertyTest {
         vision.properties["fff"] = 2
         vision.properties["fff.ddd"] = false
 
-        assertEquals(2, vision.properties.getValue("fff")?.int)
-        assertEquals(false, vision.properties.getValue("fff.ddd")?.boolean)
+        assertEquals(2, vision.readProperty("fff")?.int)
+        assertEquals(false, vision.readProperty("fff.ddd")?.boolean)
     }
 
     @Test
@@ -46,8 +45,8 @@ internal class VisionPropertyTest {
         vision.writeProperty("fff.ddd".parseAsName()).apply {
             value = 2.asValue()
         }
-        assertEquals(2, vision.properties.getValue("fff.ddd")?.int)
-        assertNotEquals(true, vision.properties.getValue("fff.ddd")?.boolean)
+        assertEquals(2, vision.readProperty("fff.ddd")?.int)
+        assertEquals(true, vision.readProperty("fff.ddd")?.boolean)
     }
 
     @Test
@@ -56,7 +55,7 @@ internal class VisionPropertyTest {
         vision.writeProperty("fff".asName()).updateWith(TestScheme) {
             ddd = 2
         }
-        assertEquals(2, vision.properties.getValue("fff.ddd")?.int)
+        assertEquals(2, vision.readProperty("fff.ddd")?.int)
     }
 
     @Test
@@ -72,7 +71,7 @@ internal class VisionPropertyTest {
             }
         }
 
-        val child = group.items["child"] as MutableVision
+        val child = group.visions["child"] as MutableVision
 
         val deferred: CompletableDeferred<Value?> = CompletableDeferred()
 
@@ -111,7 +110,7 @@ internal class VisionPropertyTest {
 
         }
 
-        val child = group.items["child"] as MutableVision
+        val child = group.visions["child"] as MutableVision
 
         val semaphore = Semaphore(1, 1)
 

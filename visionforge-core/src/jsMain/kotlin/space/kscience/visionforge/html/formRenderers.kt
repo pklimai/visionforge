@@ -68,7 +68,7 @@ internal val formVisionRenderer: ElementVisionRenderer =
         form.onsubmit = { event ->
             event.preventDefault()
             val formData = FormData(form).toMeta()
-            vision.asyncControlEvent(VisionSubmitEvent(name = name, payload = formData))
+            vision.asyncControlEvent(ControlSubmitEvent(name = name, payload = formData))
             console.info("Sent form data: ${formData.toMap()}")
             false
         }
@@ -79,7 +79,7 @@ internal val buttonVisionRenderer: ElementVisionRenderer =
         button(type = ButtonType.button).also { button ->
             button.subscribeToVision(vision)
             button.onclick = {
-                vision.asyncControlEvent(VisionSubmitEvent(name = name))
+                vision.asyncControlEvent(ControlSubmitEvent(name = name))
             }
             vision.useProperty(VisionOfHtmlButton::label) {
                 button.innerHTML = it ?: ""

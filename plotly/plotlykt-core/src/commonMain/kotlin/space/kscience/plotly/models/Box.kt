@@ -1,10 +1,10 @@
 package space.kscience.plotly.models
 
-import space.kscience.dataforge.meta.Value
-import space.kscience.dataforge.meta.boolean
-import space.kscience.dataforge.meta.enum
-import space.kscience.dataforge.meta.numberList
-import space.kscience.plotly.*
+import space.kscience.dataforge.meta.*
+import space.kscience.plotly.Plot
+import space.kscience.plotly.doubleInRange
+import space.kscience.plotly.listOfValues
+import space.kscience.plotly.numberGreaterThan
 import kotlin.js.JsName
 
 public enum class BoxMean {

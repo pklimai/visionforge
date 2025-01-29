@@ -3,10 +3,10 @@ package space.kscience.plotly.models
 import space.kscience.dataforge.meta.enum
 import space.kscience.dataforge.meta.number
 import space.kscience.dataforge.meta.numberList
+import space.kscience.dataforge.meta.scheme
 import space.kscience.dataforge.names.asName
 import space.kscience.plotly.Plot
 import space.kscience.plotly.numberGreaterThan
-import space.kscience.plotly.scheme
 
 public class Bar : Trace(), SelectedPoints {
     init {

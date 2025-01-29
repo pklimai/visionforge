@@ -2,8 +2,8 @@ package ru.mipt.npm.muon.monitor
 
 import ru.mipt.npm.muon.monitor.Monitor.PIXEL_XY_SIZE
 import ru.mipt.npm.muon.monitor.Monitor.PIXEL_Z_SIZE
-import space.kscience.visionforge.solid.Float32Euclidean3DSpace
-import space.kscience.visionforge.solid.Float32Vector3D
+import space.kscience.kmath.geometry.euclidean3d.Float32Space3D
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 
 /**
  * A single pixel
@@ -111,7 +111,7 @@ class SC16(
             }
             val offset = Float32Vector3D(-y, x, 0)//rotateDetector(Point3D(x, y, 0.0));
             val pixelName = "${name}_${index}"
-            SC1(pixelName, with(Float32Euclidean3DSpace) { offset + center })
+            SC1(pixelName, with(Float32Space3D) { offset + center })
         }
     }
 }

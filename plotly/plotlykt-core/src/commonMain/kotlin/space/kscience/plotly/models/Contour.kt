@@ -2,9 +2,9 @@ package space.kscience.plotly.models
 
 import space.kscience.dataforge.meta.boolean
 import space.kscience.dataforge.meta.enum
+import space.kscience.dataforge.meta.scheme
 import space.kscience.plotly.Plot
 import space.kscience.plotly.intGreaterThan
-import space.kscience.plotly.scheme
 
 public class Contour : Trace(), HeatmapContour, ContourSpec {
     init {

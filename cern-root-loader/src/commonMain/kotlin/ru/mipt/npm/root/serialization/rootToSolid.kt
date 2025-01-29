@@ -3,6 +3,7 @@ package ru.mipt.npm.root.serialization
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.asName
 import space.kscience.dataforge.names.plus
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.solid.*
 import kotlin.math.PI

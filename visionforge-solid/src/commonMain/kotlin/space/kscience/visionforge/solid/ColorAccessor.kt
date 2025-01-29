@@ -9,11 +9,11 @@ import kotlin.properties.ReadOnlyProperty
 
 @VisionBuilder
 public class ColorAccessor(
-    private val provider: MutableValueProvider,
+    private val provider: MutableMeta,
     private val colorKey: Name,
 ) : MutableValueProvider {
     public var value: Value?
-        get() = provider.getValue(colorKey)
+        get() = provider[colorKey]?.value
         set(value) {
             provider.setValue(colorKey, value)
         }

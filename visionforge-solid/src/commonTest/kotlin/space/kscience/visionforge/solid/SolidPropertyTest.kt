@@ -6,6 +6,7 @@ import space.kscience.dataforge.meta.int
 import space.kscience.dataforge.meta.set
 import space.kscience.dataforge.meta.string
 import space.kscience.dataforge.names.asName
+import space.kscience.visionforge.readProperty
 import space.kscience.visionforge.styles
 import space.kscience.visionforge.updateStyle
 import space.kscience.visionforge.useStyle
@@ -62,7 +63,7 @@ class SolidPropertyTest {
                 }
             }
         }
-        assertEquals(22, box?.properties?.getValue("test")?.int)
+        assertEquals(22, box?.readProperty("test")?.int)
     }
 
     @Test

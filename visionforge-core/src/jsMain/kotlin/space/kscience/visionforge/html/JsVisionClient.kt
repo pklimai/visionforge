@@ -78,7 +78,7 @@ public class JsVisionClient : AbstractPlugin(), VisionClient {
     override fun notifyPropertyChanged(visionName: Name, propertyName: Name, item: Meta?) {
         context.launch {
             mutex.withLock {
-                rootChangeCollector.propertyChanged(visionName, propertyName, item)
+                rootChangeCollector.getOrCreateChange(visionName).propertyChanged(propertyName, item)
             }
         }
     }
@@ -150,7 +150,7 @@ public class JsVisionClient : AbstractPlugin(), VisionClient {
                         //aggregate atomic changes
                         while (isActive) {
                             delay(feedbackAggregationTime.milliseconds)
-                            val visionChangeCollector = rootChangeCollector[name]
+                            val visionChangeCollector = rootChangeCollector[visionName]
                             if (visionChangeCollector?.isEmpty() == false) {
                                 mutex.withLock {
                                     eventCollector.emit(visionName to visionChangeCollector.deepCopy(visionManager))
@@ -166,6 +166,7 @@ public class JsVisionClient : AbstractPlugin(), VisionClient {
                     feedbackJob?.cancel()
                     logger.info { "WebSocket feedback channel closed for output '$visionName'" }
                 }
+
                 onerror = {
                     feedbackJob?.cancel()
                     logger.error { "WebSocket feedback channel error for output '$visionName'" }
@@ -181,12 +182,12 @@ public class JsVisionClient : AbstractPlugin(), VisionClient {
             findRendererFor(vision) ?: error("Could not find renderer for ${vision::class}")
         //render vision
         renderer.render(element, name, vision, outputMeta)
-        //start vision update from backend model
+        //start vision update from a backend model
         startVisionUpdate(element, name, vision, outputMeta)
-        //subscribe to a backwards events propagation for control visions
-        if(vision is ControlVision){
+        //subscribe to backwards events propagation for control visions
+        if (vision is ControlVision) {
             vision.eventFlow.onEach {
-                sendEvent(name,it)
+                sendEvent(name, it)
             }.launchIn(context)
         }
 

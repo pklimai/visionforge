@@ -3,11 +3,12 @@ package space.kscience.visionforge.jupyter
 import io.ktor.http.URLProtocol
 import io.ktor.server.application.install
 import io.ktor.server.cio.CIO
-import io.ktor.server.engine.ApplicationEngine
+import io.ktor.server.engine.EmbeddedServer
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.util.url
 import io.ktor.server.websocket.WebSockets
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.runBlocking
 import kotlinx.html.*
 import kotlinx.html.stream.createHTML
 import org.jetbrains.kotlinx.jupyter.api.*
@@ -59,12 +60,12 @@ public class VisionForge(
 
     private var counter = 0
 
-    private var engine: ApplicationEngine? = null
+    private var server: EmbeddedServer<*,*>? = null
 
     override val coroutineContext: CoroutineContext get() = context.coroutineContext
 
 
-    public fun isServerRunning(): Boolean = engine != null
+    public fun isServerRunning(): Boolean = server != null
 
     public fun getProperty(name: String): TypedMeta<*>? = configuration[name] ?: context.properties[name]
 
@@ -73,7 +74,7 @@ public class VisionForge(
         host: String = getProperty("visionforge.host").string ?: "localhost",
         port: Int = getProperty("visionforge.port").int ?: VisionRoute.DEFAULT_PORT,
     ) {
-        engine?.let {
+        server?.let {
             kernel.displayHtml {
                 p {
                     style = "color: red;"
@@ -86,7 +87,7 @@ public class VisionForge(
         //val connector: EngineConnectorConfig = EngineConnectorConfig(host, port)
 
 
-        engine = context.embeddedServer(CIO, port, host) {
+        server = context.embeddedServer(CIO, port, host) {
             install(WebSockets)
         }.start(false)
 
@@ -99,10 +100,10 @@ public class VisionForge(
     }
 
     internal fun stopServer(kernel: KotlinKernelHost) {
-        engine?.apply {
+        server?.apply {
             logger.info { "Stopping VisionForge server" }
             stop(1000, 2000)
-            engine = null
+            server = null
         }
 
         kernel.displayHtml {
@@ -136,15 +137,19 @@ public class VisionForge(
             val id = "fragment[${fragment.hashCode()}/${Random.nextUInt()}]"
             div {
                 this.id = id
-                val engine = engine
-                if (engine != null) {
+                val server = this@VisionForge.server
+                if (server != null) {
                     //if server exist, serve dynamically
                     //server.serveVisionsFromFragment(consumer, "content-${counter++}", fragment)
                     val cellRoute = "content-${counter++}"
 
                     val cache: MutableMap<Name, VisionDisplay> = mutableMapOf()
 
-                    val url = engine.environment.connectors.first().let {
+                    val connector = runBlocking {
+                        server.engine.resolvedConnectors().first()
+                    }
+
+                    val url = connector.let {
                         url {
                             protocol = URLProtocol.WS
                             host = it.host
@@ -153,7 +158,7 @@ public class VisionForge(
                         }
                     }
 
-                    engine.application.serveVisionData(VisionRoute(cellRoute, visionManager), cache)
+                    server.application.serveVisionData(VisionRoute(cellRoute, visionManager), cache)
 
                     visionFragment(
                         visionManager,

@@ -4,7 +4,6 @@ import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.names.asName
 import space.kscience.plotly.Plot
 import space.kscience.plotly.numberGreaterThan
-import space.kscience.plotly.scheme
 
 /**
  * Scheme to define table cell colors.

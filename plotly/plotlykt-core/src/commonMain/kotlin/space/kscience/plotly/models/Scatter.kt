@@ -2,9 +2,9 @@ package space.kscience.plotly.models
 
 import space.kscience.dataforge.meta.enum
 import space.kscience.dataforge.meta.numberList
+import space.kscience.dataforge.meta.scheme
 import space.kscience.dataforge.meta.string
 import space.kscience.plotly.Plot
-import space.kscience.plotly.scheme
 import kotlin.js.JsName
 
 public enum class ScatterMode {

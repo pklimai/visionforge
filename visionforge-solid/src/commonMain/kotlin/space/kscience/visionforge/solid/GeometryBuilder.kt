@@ -1,6 +1,7 @@
 package space.kscience.visionforge.solid
 
 import space.kscience.dataforge.meta.Meta
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 
 /**
  * @param T the type of resulting geometry

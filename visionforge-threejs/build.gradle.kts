@@ -19,6 +19,10 @@ kscience {
 
     jsMain {
         api(projects.visionforgeComposeHtml)
+        api("org.jetbrains.kotlin-wrappers:kotlin-js")
+        api("io.github.vinceglb:filekit-core:0.8.8")
+//        api(npm("file-saver", "2.0.5"))
+//        api(npm("@types/file-saver", "2.0.7"))
         implementation(npm("three", "0.143.0"))
         implementation(npm("three-csg-ts", "3.1.13"))
         implementation(npm("three.meshline", "1.4.0"))

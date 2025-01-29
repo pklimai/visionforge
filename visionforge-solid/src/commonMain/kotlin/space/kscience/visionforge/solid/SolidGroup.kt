@@ -3,19 +3,8 @@ package space.kscience.visionforge.solid
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
-import space.kscience.dataforge.names.Name
-import space.kscience.dataforge.names.NameToken
-import space.kscience.dataforge.names.asName
-import space.kscience.dataforge.names.parseAsName
-import space.kscience.dataforge.provider.Path
-import space.kscience.dataforge.provider.length
-import space.kscience.dataforge.provider.provide
-import space.kscience.dataforge.provider.tail
+import space.kscience.dataforge.names.*
 import space.kscience.visionforge.*
-import kotlin.collections.LinkedHashMap
-import kotlin.collections.Map
-import kotlin.collections.first
-import kotlin.collections.set
 
 
 /**
@@ -34,6 +23,8 @@ public interface PrototypeHolder {
     public fun getPrototype(name: Name): Solid?
 }
 
+public fun PrototypeHolder.getPrototype(name: String): Solid? = getPrototype(Name.parse(name))
+
 public interface SolidContainer : VisionGroup<Solid>, Solid {
     override suspend fun receiveEvent(event: VisionEvent) {
         super<VisionGroup>.receiveEvent(event)
@@ -47,9 +38,9 @@ public interface SolidContainer : VisionGroup<Solid>, Solid {
 @SerialName("group.solid")
 public class SolidGroup : AbstractVision(), SolidContainer, PrototypeHolder, MutableVisionGroup<Solid> {
 
-    private val _solids = LinkedHashMap<Name, Solid>()
+    private val _solids = LinkedHashMap<NameToken, Solid>()
 
-    override val items: Map<Name, Solid> get() = _solids
+    override val visions: Map<NameToken, Solid> get() = _solids
 
     private var prototypes: SolidGroup? = null
 
@@ -65,8 +56,7 @@ public class SolidGroup : AbstractVision(), SolidContainer, PrototypeHolder, Mut
      * Get a prototype redirecting the request to the parent if prototype is not found.
      * If a prototype is a ref, then it is unfolded automatically.
      */
-    override fun getPrototype(name: Name): Solid? =
-        prototypes?.getVision(name)?.prototype ?: (parent as? PrototypeHolder)?.getPrototype(name)
+    override fun getPrototype(name: Name): Solid? = prototypes?.getVision(name)?.prototype ?: (parent as? PrototypeHolder)?.getPrototype(name)
 
     /**
      * Create or edit prototype node as a group
@@ -74,63 +64,69 @@ public class SolidGroup : AbstractVision(), SolidContainer, PrototypeHolder, Mut
     override fun prototypes(builder: SolidGroup.() -> Unit): Unit {
         (prototypes ?: SolidGroup().also {
             prototypes = it
-            parent = this
+            it.parent = this
         }).apply(builder)
     }
 
     override val defaultChainTarget: String get() = VisionGroup.VISION_CHILD_TARGET
 
-    override fun setVision(name: Name, vision: Solid?) {
+    override fun setVision(token: NameToken, vision: Solid?) {
         if (vision == null) {
-            _solids.remove(name)?.let {
+            _solids.remove(token)?.let {
                 it.parent = null
             }
         } else {
-            _solids[name] = vision
+            _solids[token] = vision
             vision.parent = this
         }
-        emitEvent(VisionGroupCompositionChangedEvent(this, name))
+        emitEvent(VisionGroupCompositionChangedEvent(this, token))
     }
 
     public companion object {
         public const val STATIC_TOKEN_BODY: String = "@static"
 
-        public fun staticNameFor(vision: Vision): Name =
-            NameToken(STATIC_TOKEN_BODY, vision.hashCode().toString(16)).asName()
+        public fun staticNameFor(vision: Vision): NameToken =
+            NameToken(STATIC_TOKEN_BODY, vision.hashCode().toString(16))
 
-        public fun inferNameFor(name: String?, vision: Vision): Name = name?.parseAsName() ?: staticNameFor(vision)
+        public fun inferNameFor(name: String?, vision: Vision): NameToken =
+            name?.let(NameToken::parse) ?: staticNameFor(vision)
     }
 }
 
-public operator fun SolidContainer.get(name: Name): Solid? = getVision(name)
+public fun SolidContainer.getVision(name: Name): Solid? = when (name.length) {
+    0 -> this
+    1 -> getVision(name.first())
+    else -> (getVision(name.first()) as? SolidContainer)?.getVision(name.cutFirst())
+}
 
-public operator fun SolidContainer.get(name: String): Solid? = get(name.parseAsName())
+public fun SolidContainer.getVision(name: String): Solid? = getVision(name.parseAsName())
 
-public operator fun SolidContainer.get(path: Path): Solid? =
-    provide(path, VisionGroup.VISION_CHILD_TARGET) as? Solid
+public operator fun SolidGroup.get(name: NameToken): Solid? = getVision(name)
 
-public operator fun SolidGroup.set(path: Path, vision: Solid?) {
-    when (path.length) {
+public operator fun SolidGroup.get(name: Name): Solid? = getVision(name)
+
+public operator fun SolidGroup.get(name: String): Solid? = getVision(name)
+
+
+public operator fun SolidGroup.set(name: NameToken, value: Solid?) = setVision(name, value)
+
+public operator fun SolidGroup.set(name: Name, vision: Solid?) {
+    when (name.length) {
         0 -> error("Can't set vision with empty path")
         1 -> {
-            val token = path.first()
-            check (token.target != null && token.target != VisionGroup.VISION_CHILD_TARGET) {
-                "Unsupported target: ${token.target}"
-            }
-            setVision(token.name, vision)
+            val token = name.first()
+            setVision(token, vision)
         }
 
         else -> {
-            val token = path.first()
-            check (token.target != null && token.target != VisionGroup.VISION_CHILD_TARGET) {
-                "Unsupported target: ${token.target}"
-            }
-            when (val existing = getVision(token.name)) {
+            val token = name.first()
+            when (val existing = getVision(token)) {
                 null -> SolidGroup().also { newGroup ->
-                    setVision(token.name, newGroup)
-                    newGroup[path.tail!!] = vision
+                    setVision(token, newGroup)
+                    newGroup[name.cutFirst()] = vision
                 }
-                is SolidGroup -> existing[path.tail!!] = vision
+
+                is SolidGroup -> existing[name.cutFirst()] = vision
 
                 else -> error("Can't set Solid by path because of existing non-group Solid at $token")
             }
@@ -147,21 +143,21 @@ public fun MutableVisionContainer<Solid>.static(solid: Solid) {
 
 @VisionBuilder
 public inline fun MutableVisionContainer<Solid>.solidGroup(
-    name: Name? = null,
+    token: NameToken? = null,
     builder: SolidGroup.() -> Unit = {},
 ): SolidGroup = SolidGroup().also {
-    setVision(name ?: SolidGroup.staticNameFor(it), it)
+    setVision(token ?: SolidGroup.staticNameFor(it), it)
 }.apply(builder)
 //root first, update later
 
 /**
- * Define a group with given [name], attach it to this parent and return it.
+ * Define a group with given [token], attach it to this parent and return it.
  */
 @VisionBuilder
 public inline fun MutableVisionContainer<Solid>.solidGroup(
-    name: String,
+    token: String,
     action: SolidGroup.() -> Unit = {},
-): SolidGroup = solidGroup(name.parseAsName(), action)
+): SolidGroup = solidGroup(NameToken.parse(token), action)
 
 /**
  * Create a [SolidGroup] using given configuration [block]

@@ -2,7 +2,9 @@ package space.kscience.visionforge.solid
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import space.kscience.dataforge.names.parseAsName
+import space.kscience.dataforge.names.NameToken
+import space.kscience.kmath.geometry.euclidean3d.Float32Space3D
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.visionforge.MutableVisionContainer
 
 /**
@@ -10,13 +12,15 @@ import space.kscience.visionforge.MutableVisionContainer
  */
 @Serializable
 @SerialName("solid.convex")
-public class Convex(public val points: List<Float32Vector3D>) : SolidBase<Convex>()
+public class Convex(
+    public val points: List<@Serializable(Float32Space3D.VectorSerializer::class) Float32Vector3D>
+) : SolidBase<Convex>()
 
 public inline fun MutableVisionContainer<Solid>.convex(
     name: String? = null,
     action: ConvexBuilder.() -> Unit = {},
 ): Convex =    ConvexBuilder().apply(action).build().also {
-    setVision(name?.parseAsName() ?: SolidGroup.staticNameFor(it), it)
+    setVision(name?.let(NameToken::parse) ?: SolidGroup.staticNameFor(it), it)
 }
 
 public class ConvexBuilder {
