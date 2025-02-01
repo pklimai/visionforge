@@ -1,5 +1,5 @@
 @file:JsModule("three.meshline")
-@file:JsNonModule
+
 
 package three.meshline
 

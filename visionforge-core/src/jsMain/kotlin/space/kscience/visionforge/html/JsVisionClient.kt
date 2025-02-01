@@ -70,7 +70,7 @@ public class JsVisionClient : AbstractPlugin(), VisionClient {
     private val mutex = Mutex()
 
 
-    private val rootChangeCollector = VisionChangeBuilder()
+    private val rootChangeCollector = VisionChangeCollector()
 
     /**
      * Communicate vision property changed from rendering engine to model
@@ -153,7 +153,7 @@ public class JsVisionClient : AbstractPlugin(), VisionClient {
                             val visionChangeCollector = rootChangeCollector[visionName]
                             if (visionChangeCollector?.isEmpty() == false) {
                                 mutex.withLock {
-                                    eventCollector.emit(visionName to visionChangeCollector.deepCopy(visionManager))
+                                    eventCollector.emit(visionName to visionChangeCollector.collect(visionManager))
                                     rootChangeCollector.reset()
                                 }
                             }
@@ -323,24 +323,6 @@ public fun JsVisionClient.renderAllVisions(): Unit = whenDocumentLoaded {
     renderAllVisionsIn(element)
 }
 
-public class VisionClientApplication(public val context: Context) : Application {
-    private val client = context.request(JsVisionClient)
-
-    override fun start(document: Document, state: Map<String, Any>) {
-        context.logger.info {
-            "Starting VisionClient with renderers: ${
-                client.renderers.joinToString(
-                    prefix = "\n\t",
-                    separator = "\n\t"
-                ) { it.toString() }
-            }"
-        }
-        val element = document.body ?: error("Document does not have a body")
-        client.renderAllVisionsIn(element)
-    }
-}
-
-
 /**
  * Create a vision client context and render all visions on the page.
  */
@@ -352,7 +334,18 @@ public fun runVisionClient(contextBuilder: ContextBuilder.() -> Unit) {
         contextBuilder()
     }
 
+    val client = context.request(JsVisionClient)
+
     startApplication {
-        VisionClientApplication(context)
+        context.logger.info {
+            "Starting VisionClient with renderers: ${
+                client.renderers.joinToString(
+                    prefix = "\n\t",
+                    separator = "\n\t"
+                ) { it.toString() }
+            }"
+        }
+        val element = document.body ?: error("Document does not have a body")
+        client.renderAllVisionsIn(element)
     }
 }

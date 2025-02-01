@@ -23,7 +23,7 @@
  */
 
 @file:JsModule("three")
-@file:JsNonModule
+
 
 package three.textures
 

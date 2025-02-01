@@ -23,7 +23,7 @@
  */
 
 @file:JsModule("three/examples/jsm/controls/FlyControls.js")
-@file:JsNonModule
+
 
 package three.external.controls
 

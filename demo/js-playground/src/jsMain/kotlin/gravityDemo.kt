@@ -15,7 +15,7 @@ import space.kscience.plotly.Plot
 import space.kscience.plotly.layout
 import space.kscience.plotly.models.Trace
 import space.kscience.visionforge.Colors
-import space.kscience.visionforge.html.Vision
+import space.kscience.visionforge.html.VisionDiv
 import space.kscience.visionforge.html.zIndex
 import space.kscience.visionforge.markup.VisionOfMarkup
 import space.kscience.visionforge.solid.*
@@ -28,7 +28,7 @@ fun Plot(
     meta: Meta = Meta.EMPTY,
     attrs: AttrBuilderContext<HTMLDivElement>? = null,
     block: Plot.() -> Unit,
-) = Vision(
+) = VisionDiv(
     context = context,
     attrs = attrs,
     meta = meta,
@@ -41,7 +41,7 @@ fun Markup(
     markup: VisionOfMarkup,
     meta: Meta = Meta.EMPTY,
     attrs: AttrBuilderContext<HTMLDivElement>? = null,
-) = Vision(
+) = VisionDiv(
     context = context,
     attrs = attrs,
     meta = meta,

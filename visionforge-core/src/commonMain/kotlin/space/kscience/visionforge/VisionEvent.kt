@@ -10,9 +10,10 @@ import space.kscience.dataforge.names.NameToken
 /**
  * An event propagated from client to a server or vise versa
  */
+@Serializable
 public sealed interface VisionEvent {
     public companion object {
-        public val CLICK_EVENT_KEY: Name get() = Name.of("events", "click", "payload")
+        //public val CLICK_EVENT_KEY: Name get() = Name.of("events", "click", "payload")
     }
 }
 
@@ -20,32 +21,37 @@ public sealed interface VisionEvent {
  * A list of [VisionEvent] that are delivered at the same time
  */
 @Serializable
-public class VisionEventCollection(public val events: List<VisionEvent>): VisionEvent
+@SerialName("pack")
+public class VisionEventPack(public val events: List<VisionEvent>) : VisionEvent
 
 /**
  * An event that should be forwarded to a [Vision] child
  */
 @Serializable
-public class VisionChildEvent(public val childName: Name, public val event: VisionEvent): VisionEvent
+@SerialName("forChild")
+public class VisionEventForChild(public val childName: Name, public val event: VisionEvent) : VisionEvent
 
 
-
-public sealed interface VisionChangedEvent: VisionEvent
+public sealed interface VisionChangedEvent : VisionEvent
 
 /**
  * An event that designates that property value is invalidated (not necessarily changed)
  */
+@Serializable
+@SerialName("propertyChanged")
 public data class VisionPropertyChangedEvent(
-    public val source: Vision,
-    public val propertyName: Name
-): VisionChangedEvent
+    public val propertyName: Name,
+    public val propertyValue: Meta?
+) : VisionChangedEvent
 
 /**
  * An event that indicates that [VisionGroup] composition is invalidated (not necessarily changed)
  */
+@Serializable
+@SerialName("compositionChanged")
 public data class VisionGroupCompositionChangedEvent(
-    public val source: VisionContainer<*>,
-    public val childName: NameToken
+    public val childName: NameToken,
+    public val childVision: Vision?
 ) : VisionChangedEvent
 
 /**

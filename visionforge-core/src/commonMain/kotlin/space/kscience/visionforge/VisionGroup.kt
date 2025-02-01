@@ -94,12 +94,17 @@ public interface MutableVisionGroup<V : Vision> : VisionGroup<V>, MutableVision,
  * A simple vision group that just holds children. Nothing else.
  */
 @Serializable
-@SerialName("vision.group")
+@SerialName("group")
 public class SimpleVisionGroup : AbstractVision(), MutableVisionGroup<Vision> {
 
     @Serializable
     @SerialName("children")
     private val _items = mutableMapOf<NameToken, Vision>()
+
+    // ensure proper children links after deserialization
+    init {
+        _items.forEach { it.value.parent = this }
+    }
 
     override val visions: Map<NameToken, Vision> get() = _items
 
@@ -112,7 +117,7 @@ public class SimpleVisionGroup : AbstractVision(), MutableVisionGroup<Vision> {
             _items[token] = vision
             vision.parent = this
         }
-        emitEvent(VisionGroupCompositionChangedEvent(this, token))
+        emitEvent(VisionGroupCompositionChangedEvent(token, vision))
     }
 
     public companion object {

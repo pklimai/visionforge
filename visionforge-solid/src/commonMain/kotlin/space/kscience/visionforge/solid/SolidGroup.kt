@@ -38,9 +38,15 @@ public interface SolidContainer : VisionGroup<Solid>, Solid {
 @SerialName("group.solid")
 public class SolidGroup : AbstractVision(), SolidContainer, PrototypeHolder, MutableVisionGroup<Solid> {
 
-    private val _solids = LinkedHashMap<NameToken, Solid>()
+    private val solids = LinkedHashMap<NameToken, Solid>()
 
-    override val visions: Map<NameToken, Solid> get() = _solids
+    // ensure proper children links after deserialization
+    init {
+        solids.forEach { it.value.parent = this }
+    }
+
+
+    override val visions: Map<NameToken, Solid> get() = solids
 
     private var prototypes: SolidGroup? = null
 
@@ -56,7 +62,8 @@ public class SolidGroup : AbstractVision(), SolidContainer, PrototypeHolder, Mut
      * Get a prototype redirecting the request to the parent if prototype is not found.
      * If a prototype is a ref, then it is unfolded automatically.
      */
-    override fun getPrototype(name: Name): Solid? = prototypes?.getVision(name)?.prototype ?: (parent as? PrototypeHolder)?.getPrototype(name)
+    override fun getPrototype(name: Name): Solid? =
+        prototypes?.getVision(name)?.prototype ?: (parent as? PrototypeHolder)?.getPrototype(name)
 
     /**
      * Create or edit prototype node as a group
@@ -72,14 +79,14 @@ public class SolidGroup : AbstractVision(), SolidContainer, PrototypeHolder, Mut
 
     override fun setVision(token: NameToken, vision: Solid?) {
         if (vision == null) {
-            _solids.remove(token)?.let {
+            solids.remove(token)?.let {
                 it.parent = null
             }
         } else {
-            _solids[token] = vision
+            solids[token] = vision
             vision.parent = this
         }
-        emitEvent(VisionGroupCompositionChangedEvent(this, token))
+        emitEvent(VisionGroupCompositionChangedEvent(token, vision))
     }
 
     public companion object {
@@ -133,6 +140,8 @@ public operator fun SolidGroup.set(name: Name, vision: Solid?) {
         }
     }
 }
+
+public operator fun SolidGroup.set(name: String, vision: Solid?) = set(name.parseAsName(), vision)
 
 /**
  * Add anonymous (auto-assigned name) child to a SolidGroup

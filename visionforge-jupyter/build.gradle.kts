@@ -5,7 +5,6 @@ plugins {
 description = "Common visionforge jupyter module"
 
 kscience {
-    useKtor()
     jvm()
     js()
     jupyterLibrary()

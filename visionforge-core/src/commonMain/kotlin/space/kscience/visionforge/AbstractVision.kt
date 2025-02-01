@@ -39,8 +39,8 @@ public abstract class AbstractVision(
     }
 
     init {
-        properties.onChange(_eventFlow) {
-            emitEvent(VisionPropertyChangedEvent(this@AbstractVision, it))
+        properties.onChange(_eventFlow) { name ->
+            emitEvent(VisionPropertyChangedEvent(name, properties[name]))
         }
 
         _eventFlow.onCompletion {

@@ -16,6 +16,8 @@ import space.kscience.dataforge.provider.Provider
 import space.kscience.visionforge.SimpleVisionGroup.Companion.updateProperties
 import space.kscience.visionforge.Vision.Companion.STYLESHEET_KEY
 import space.kscience.visionforge.Vision.Companion.TYPE
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * A root type for display hierarchy
@@ -84,6 +86,9 @@ public interface Vision : Described, Provider {
         public const val STYLE_TARGET: String = "style"
 
         public val VISIBLE_KEY: Name = "visible".asName()
+
+        @OptIn(ExperimentalUuidApi::class)
+        public fun randomId(): String = Uuid.random().toHexString()
     }
 }
 

@@ -1,5 +1,5 @@
 @file:JsModule("three")
-@file:JsNonModule
+
 package three.helpers
 
 import three.math.Color

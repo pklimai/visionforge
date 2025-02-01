@@ -218,9 +218,8 @@ private class SolidReferenceChild(
         get() = owner.eventFlow.filterIsInstance<VisionPropertyChangedEvent>().filter {
             it.propertyName.startsWith(childToken)
         }.map {
-            VisionPropertyChangedEvent(this@SolidReferenceChild, it.propertyName.cutFirst())
+            VisionPropertyChangedEvent(it.propertyName.cutFirst(), it.propertyValue)
         }
-
 
     override val properties: MutableMeta = MutableMetaProxy(owner.properties, childToken.asName())
 

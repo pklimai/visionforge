@@ -1,9 +1,12 @@
 package space.kscience.visionforge.solid.three.compose
 
 import androidx.compose.runtime.Composable
-import bootstrap.Button
-import bootstrap.Color
-import bootstrap.Column
+import app.softwork.bootstrapcompose.Button
+import app.softwork.bootstrapcompose.Color
+import app.softwork.bootstrapcompose.Column
+import app.softwork.bootstrapcompose.Layout
+import app.softwork.bootstrapcompose.Layout.Height
+import app.softwork.bootstrapcompose.Layout.Width
 import io.github.vinceglb.filekit.core.FileKit
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.dom.Hr
@@ -23,7 +26,7 @@ internal fun CanvasControls(
 ) {
     Column {
         vision?.let { vision ->
-            Button("Export", color = Color.Info, styling = { Layout.width = bootstrap.Layout.Width.Full }) {
+            Button("Export", color = Color.Info, styling = { Layout.width = Width.Full }) {
                 val json = vision.encodeToString()
 
                 Global.launch {
@@ -62,7 +65,7 @@ public fun ThreeControls(
 ) {
     Tabs(
         styling = {
-            Layout.height = bootstrap.Layout.Height.Full
+            Layout.height = Height.Full
         }
     ) {
         vision?.let { vision ->

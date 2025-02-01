@@ -15,7 +15,7 @@ kotlin{
 kscience {
     fullStack(bundleName = "js/plotly-kt.js")
     native()
-    wasm()
+//    wasm()
     useSerialization()
 
     commonMain {

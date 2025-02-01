@@ -23,7 +23,7 @@
  */
 
 @file:JsModule("three/examples/jsm/loaders/STLLoader.js")
-@file:JsNonModule
+
 
 package three.external.loaders
 

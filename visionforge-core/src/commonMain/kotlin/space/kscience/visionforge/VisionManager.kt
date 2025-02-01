@@ -95,10 +95,9 @@ public class VisionManager(meta: Meta) : AbstractPlugin(meta), Vision {
             }
 
             polymorphic(VisionEvent::class) {
-                subclass(VisionEventCollection.serializer())
-                subclass(VisionChildEvent.serializer())
-                subclass(SetVisionPropertiesEvent.serializer())
-                subclass(SetVisionChildEvent.serializer())
+                subclass(VisionEventPack.serializer())
+                subclass(VisionEventForChild.serializer())
+                subclass(VisionChange.serializer())
                 subclass(VisionMetaEvent.serializer())
                 subclass(ControlSubmitEvent.serializer())
                 subclass(ControlValueChangeEvent.serializer())
@@ -115,7 +114,7 @@ public class VisionManager(meta: Meta) : AbstractPlugin(meta), Vision {
             explicitNulls = false
         }
 
-        internal val visionSerializer: PolymorphicSerializer<Vision> = PolymorphicSerializer(Vision::class)
+        private val visionSerializer: PolymorphicSerializer<Vision> = PolymorphicSerializer(Vision::class)
     }
 }
 

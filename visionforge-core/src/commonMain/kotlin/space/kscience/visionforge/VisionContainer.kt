@@ -1,8 +1,9 @@
 package space.kscience.visionforge
 
-import com.benasher44.uuid.uuid4
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.NameToken
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 @DslMarker
 public annotation class VisionBuilder
@@ -25,6 +26,7 @@ public interface MutableVisionContainer<in V : Vision> {
     public fun setVision(token: NameToken, vision: V?)
 
     public companion object {
-        public fun generateID(): NameToken = NameToken("@vision",uuid4().leastSignificantBits.toString(16))
+        @OptIn(ExperimentalUuidApi::class)
+        public fun generateID(): NameToken = NameToken("@vision", Uuid.random().toHexString())
     }
 }

@@ -1,1 +1,0 @@
-This implementation is based on https://github.com/hfhbd/bootstrap-compose, which is distributed under Apache 2.0 license.

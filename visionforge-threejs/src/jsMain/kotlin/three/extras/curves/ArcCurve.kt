@@ -1,5 +1,5 @@
 @file:JsModule("three")
-@file:JsNonModule
+
 
 package three.extras.curves
 

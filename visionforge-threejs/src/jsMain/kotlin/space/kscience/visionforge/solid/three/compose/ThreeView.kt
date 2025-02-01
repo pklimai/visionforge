@@ -1,9 +1,10 @@
 package space.kscience.visionforge.solid.three.compose
 
 import androidx.compose.runtime.*
-import bootstrap.Card
-import bootstrap.Column
-import bootstrap.Row
+import app.softwork.bootstrapcompose.Card
+import app.softwork.bootstrapcompose.Column
+import app.softwork.bootstrapcompose.Layout
+import app.softwork.bootstrapcompose.Row
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.dom.clear
@@ -84,15 +85,15 @@ public fun ThreeView(
         Row(
             styling = {
                 Layout {
-                    width = bootstrap.Layout.Width.Full
-                    height = bootstrap.Layout.Height.Full
+                    width = Layout.Width.Full
+                    height = Layout.Height.Full
                 }
             }
         ) {
             Column(
                 styling = {
                     Layout {
-                        height = bootstrap.Layout.Height.Full
+                        height = Layout.Height.Full
                     }
                 },
                 attrs = {
@@ -169,7 +170,7 @@ public fun ThreeView(
                 auto = true,
                 styling = {
                     Layout {
-                        height = bootstrap.Layout.Height.Full
+                        height = Layout.Height.Full
                     }
                 },
                 attrs = {

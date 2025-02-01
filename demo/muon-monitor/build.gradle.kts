@@ -3,7 +3,6 @@ plugins {
     alias(spclibs.plugins.compose.compiler)
     alias(spclibs.plugins.compose.jb)
 //    alias(spclibs.plugins.ktor)
-    application
 }
 
 group = "ru.mipt.npm"
@@ -12,7 +11,14 @@ group = "ru.mipt.npm"
 kscience {
     fullStack(
         "muon-monitor.js",
-        jvmConfig = {withJava()},
+        development = true,
+        jvmConfig = {
+            binaries {
+                executable {
+                    mainClass.set("ru.mipt.npm.muon.monitor.MMServerKt")
+                }
+            }
+        },
         browserConfig = {
             commonWebpackConfig {
                 cssSupport {
@@ -27,7 +33,6 @@ kscience {
 
     useCoroutines()
     useSerialization()
-    useKtor()
 
     commonMain {
         implementation(projects.visionforgeSolid)
@@ -50,6 +55,6 @@ kotlin {
 }
 
 
-application {
-    mainClass.set("ru.mipt.npm.muon.monitor.MMServerKt")
-}
+//application {
+//    mainClass.set("ru.mipt.npm.muon.monitor.MMServerKt")
+//}

@@ -1,5 +1,5 @@
 @file:JsModule("three/examples/jsm/controls/TrackballControls.js")
-@file:JsNonModule
+
 
 package three.external.controls
 

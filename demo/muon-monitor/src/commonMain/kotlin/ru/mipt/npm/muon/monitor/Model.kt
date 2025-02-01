@@ -60,7 +60,7 @@ class Model(val manager: VisionManager) {
             }
         }
 
-        setVision("tracks", tracks)
+        set("tracks", tracks)
     }
 
     private fun highlight(pixel: String) {

@@ -42,7 +42,7 @@ public class ComposeVisionClient : AbstractPlugin(), VisionClient {
     private val mutex = Mutex()
 
 
-    private val rootChangeCollector = VisionChangeBuilder()
+    private val rootChangeCollector = VisionChangeCollector()
 
     /**
      * Communicate vision property changed from rendering engine to model

@@ -41,7 +41,7 @@ public class Plot : AbstractVision(), VisionGroup<Trace> {
 
     public fun addTrace(trace: Trace) {
         _data.add(trace)
-        emitEvent(VisionGroupCompositionChangedEvent(this, trace.uid))
+        emitEvent(VisionGroupCompositionChangedEvent(trace.uid, trace))
     }
 
     /**
