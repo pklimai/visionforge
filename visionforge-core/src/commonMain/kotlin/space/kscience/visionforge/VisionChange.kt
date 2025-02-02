@@ -62,21 +62,6 @@ public data class VisionChange(
 
 public fun VisionChange.isEmpty(): Boolean = vision == null && properties == null && children == null
 
-//@Serializable
-//public sealed interface ChangeVisionEvent : VisionEvent
-//
-//@Serializable
-//@SerialName("sepProperties")
-//public data class SetVisionPropertiesEvent(val properties: Meta) : ChangeVisionEvent
-//
-//@Serializable
-//@SerialName("setChild")
-//public data class SetVisionChildEvent(val nameToken: NameToken, val vision: Vision?) : ChangeVisionEvent
-//
-//@Serializable
-//@SerialName("setRoot")
-//public data class SetRootVisionEvent(val vision: Vision) : ChangeVisionEvent
-
 
 /**
  * An update for a [Vision]
@@ -159,31 +144,9 @@ public class VisionChangeCollector : MutableVisionContainer<Vision> {
 
     public fun collect(visionManager: VisionManager): VisionChange = VisionChange(
         vision = vision?.deepCopy(visionManager),
-        properties = properties,
-        children = children.mapValues { it.value.collect(visionManager) }
+        properties = properties.takeIf { !it.isEmpty() },
+        children = children.takeIf { !it.isEmpty() }?.mapValues { it.value.collect(visionManager) }
     )
-
-//    private fun build(visionManager: VisionManager): VisionChange = VisionChange(
-//        vision,
-//        if (propertyChange.isEmpty()) null else propertyChange,
-//        if (children.isEmpty()) null else children.mapValues { it.value.build(visionManager) }
-//    )
-//
-//    /**
-//     * Isolate collected changes by creating detached copies of given visions
-//     */
-//    public fun deepCopy(visionManager: VisionManager): VisionChange = VisionChange(
-//        vision?.deepCopy(visionManager),
-//        if (propertyChange.isEmpty()) null else propertyChange.seal(),
-//        if (children.isEmpty()) null else children.mapValues { it.value.deepCopy(visionManager) }
-//    )
-//
-//    /**
-//     * Transform current change directly to Json string without protective copy
-//     */
-//    public fun toJsonString(visionManager: VisionManager): String = visionManager.encodeToString(
-//        build(visionManager)
-//    )
 }
 
 public operator fun VisionChangeCollector.get(name: Name): VisionChangeCollector? = when (name.length) {
@@ -214,9 +177,20 @@ public fun Vision.flowChanges(
     coroutineScope {
         val collector = VisionChangeCollector()
         val mutex = Mutex()
-        eventFlow.onEach {
-            collector.consumeEvent(it)
-        }.launchIn(this)
+
+        fun collectVisionEvents(vision: Vision, prefix: Name) {
+            vision.eventFlow.onEach {
+                val event = if (prefix.isEmpty()) it else VisionEventForChild(prefix, it)
+                collector.consumeEvent(event)
+            }.launchIn(this)
+            if (vision is VisionGroup<*>) {
+                vision.visions.forEach { (token, child) ->
+                    collectVisionEvents(child, prefix + token)
+                }
+            }
+        }
+
+        collectVisionEvents(this@flowChanges, Name.EMPTY)
 
         if (sendInitial) {
             //Send initial vision state

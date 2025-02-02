@@ -1,7 +1,7 @@
 package space.kscience.visionforge.plotly
 
 import io.ktor.server.cio.CIO
-import io.ktor.server.engine.ApplicationEngine
+import io.ktor.server.engine.EmbeddedServer
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.http.content.staticResources
 import io.ktor.server.routing.routing
@@ -27,7 +27,7 @@ public fun Plotly.servePage(
     title: String = "VisionForge Plotly page",
     port: Int = 7777,
     visionPage: HtmlVisionFragment
-): ApplicationEngine = embeddedServer(CIO, port = port) {
+): EmbeddedServer<*, *> = embeddedServer(CIO, port = port) {
     routing {
         staticResources("js", "js", null)
     }
@@ -51,7 +51,7 @@ public fun Plotly.serve(
     port: Int = 7777,
     config: PlotlyConfig = PlotlyConfig(),
     makePlot: suspend Plot.() -> Unit,
-): ApplicationEngine = embeddedServer(CIO, port = port) {
+): EmbeddedServer<*, *> = embeddedServer(CIO, port = port) {
     routing {
         staticResources("js", "js", null)
     }

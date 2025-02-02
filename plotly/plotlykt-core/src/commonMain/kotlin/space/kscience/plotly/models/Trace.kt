@@ -2,7 +2,6 @@
 
 package space.kscience.plotly.models
 
-import com.benasher44.uuid.uuid4
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import space.kscience.dataforge.meta.*
@@ -13,6 +12,7 @@ import space.kscience.dataforge.names.NameToken
 import space.kscience.dataforge.names.asName
 import space.kscience.plotly.*
 import space.kscience.visionforge.AbstractVision
+import space.kscience.visionforge.Vision
 import kotlin.js.JsName
 import kotlin.properties.ReadOnlyProperty
 
@@ -718,11 +718,11 @@ public class Hoverlabel : Scheme() {
 /**
  * A base class for Plotly traces
  *
- * @param uid an unique identifier for this trace
+ * @param uid a unique identifier for this trace
  */
 @Serializable
 public open class Trace(
-    @Transient internal val uid: NameToken = NameToken("trace", uuid4().leastSignificantBits.toString(16))
+    @Transient internal val uid: NameToken = NameToken("trace", Vision.randomId())
 ) : AbstractVision(), MutableMetaProvider, MetaRepr {
 
     override fun get(name: Name): MutableMeta? = properties.get(name)

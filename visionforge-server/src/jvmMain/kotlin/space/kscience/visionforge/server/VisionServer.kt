@@ -7,6 +7,7 @@ import io.ktor.http.path
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.application.log
+import io.ktor.server.application.pluginOrNull
 import io.ktor.server.engine.ConnectorType
 import io.ktor.server.engine.EngineConnectorConfig
 import io.ktor.server.html.respondHtml
@@ -102,7 +103,9 @@ public fun Application.serveVisionData(
     configuration: VisionRoute,
     resolveVision: (Name) -> Vision?,
 ) {
-    install(WebSockets)
+    if (pluginOrNull(WebSockets) == null) {
+        install(WebSockets)
+    }
     routing {
         route(configuration.route) {
             //TODO do more precise CORS policy
@@ -208,7 +211,8 @@ public fun Application.visionPage(
                         embedData = configuration.dataMode == VisionRoute.Mode.EMBED,
                         fetchDataUrl = if (configuration.dataMode != VisionRoute.Mode.EMBED) {
                             url {
-                                this.protocol = if (schema == ConnectorType.HTTPS) URLProtocol.HTTPS else URLProtocol.HTTP
+                                this.protocol =
+                                    if (schema == ConnectorType.HTTPS) URLProtocol.HTTPS else URLProtocol.HTTP
                                 this.host = host
                                 this.port = port
                                 path(route, "data")

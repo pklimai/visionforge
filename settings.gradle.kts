@@ -62,7 +62,7 @@ include(
     ":visionforge-jupyter:visionforge-jupyter-common",
     ":plotly",
     ":plotly:plotlykt-core",
-    ":plotly:plotly-kt-server",
+    ":plotly:plotlykt-server",
     ":plotly:plotlykt-script",
     ":plotly:examples",
 //    ":plotly:examples:fx-demo",

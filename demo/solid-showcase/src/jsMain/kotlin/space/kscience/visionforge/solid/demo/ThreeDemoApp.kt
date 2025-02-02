@@ -1,19 +1,17 @@
 package space.kscience.visionforge.solid.demo
 
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import org.w3c.dom.Document
-import space.kscience.visionforge.html.Application
 import space.kscience.visionforge.html.startApplication
 import space.kscience.visionforge.solid.x
 import space.kscience.visionforge.solid.y
 import kotlin.random.Random
 
-private class ThreeDemoApp : Application {
 
-    override fun start(document: Document, state: Map<String, Any>) {
-
+fun main() {
+    startApplication { document ->
         val element = document.getElementById("demo") ?: error("Element with id 'demo' not found on page")
 
         ThreeDemoGrid(element).run {
@@ -30,7 +28,7 @@ private class ThreeDemoApp : Application {
                     }
                 }
 
-                launch {
+                GlobalScope.launch {
                     while (isActive) {
                         delay(500)
                         boxes.forEach { box ->
@@ -41,8 +39,4 @@ private class ThreeDemoApp : Application {
             }
         }
     }
-}
-
-fun main() {
-    startApplication(::ThreeDemoApp)
 }

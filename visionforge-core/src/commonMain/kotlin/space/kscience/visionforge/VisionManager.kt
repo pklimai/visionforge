@@ -112,6 +112,7 @@ public class VisionManager(meta: Meta) : AbstractPlugin(meta), Vision {
             useArrayPolymorphism = false
             ignoreUnknownKeys = true
             explicitNulls = false
+            encodeDefaults = false
         }
 
         private val visionSerializer: PolymorphicSerializer<Vision> = PolymorphicSerializer(Vision::class)

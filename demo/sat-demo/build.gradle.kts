@@ -3,17 +3,22 @@ import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 
 plugins {
     id("space.kscience.gradle.mpp")
-    alias(spclibs.plugins.ktor)
-    application
+//    alias(spclibs.plugins.ktor)
 }
 
+
+group = "center.sciprog"
 
 kscience {
 //    useSerialization {
 //        json()
 //    }
     jvm{
-        withJava()
+        binaries {
+            executable {
+                mainClass.set("ru.mipt.npm.sat.SatServerKt")
+            }
+        }
     }
     jvmMain{
         implementation("io.ktor:ktor-server-cio")
@@ -22,10 +27,4 @@ kscience {
     }
 }
 
-group = "center.sciprog"
-
 kotlin.explicitApi = ExplicitApiMode.Disabled
-
-application {
-    mainClass.set("ru.mipt.npm.sat.SatServerKt")
-}

@@ -19,7 +19,7 @@ import java.awt.Desktop
 import java.nio.file.Path
 
 
-public suspend fun makeVisionFile(
+public fun makeVisionFile(
     path: Path? = null,
     title: String = "VisionForge page",
     resourceLocation: ResourceLocation = ResourceLocation.SYSTEM,

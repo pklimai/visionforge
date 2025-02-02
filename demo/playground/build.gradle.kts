@@ -54,7 +54,7 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(projects.visionforgeThreejs)
-                compileOnly(npm("webpack-bundle-analyzer","4.5.0"))
+//                compileOnly(npm("webpack-bundle-analyzer","4.5.0"))
             }
         }
 

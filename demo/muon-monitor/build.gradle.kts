@@ -47,7 +47,6 @@ kscience {
     }
     jsMain {
         implementation(projects.visionforgeThreejs)
-        //implementation(devNpm("webpack-bundle-analyzer", "4.4.0"))
     }
 }
 kotlin {

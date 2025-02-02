@@ -33,6 +33,6 @@ kscience {
 
     jsMain {
         api(projects.visionforgeThreejs)
-        compileOnly(npm("webpack-bundle-analyzer", "4.5.0"))
+//        compileOnly(npm("webpack-bundle-analyzer", "4.5.0"))
     }
 }
