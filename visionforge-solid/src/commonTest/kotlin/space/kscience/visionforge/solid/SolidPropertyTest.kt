@@ -72,6 +72,7 @@ class SolidPropertyTest {
         val group = SolidGroup().apply {
             updateStyle("testStyle") {
                 SolidMaterial.MATERIAL_COLOR_KEY put "#555555"
+                SolidMaterial.MATERIAL_OPACITY_KEY put 0.3
             }
             solidGroup {
                 box = box(100, 100, 100) {
@@ -80,6 +81,7 @@ class SolidPropertyTest {
             }
         }
         assertEquals("#555555", box?.color?.string)
+        assertEquals(0.3, box?.opacity)
     }
 
     @Test
@@ -88,6 +90,7 @@ class SolidPropertyTest {
         val group = testSolids.solidGroup {
             updateStyle("testStyle") {
                 SolidMaterial.MATERIAL_COLOR_KEY put "#555555"
+                SolidMaterial.MATERIAL_OPACITY_KEY put 0.3
             }
             prototypes {
                 box(100, 100, 100, name = "box") {
@@ -99,5 +102,6 @@ class SolidPropertyTest {
             }
         }
         assertEquals("#555555", box!!.color.string)
+        assertEquals(0.3, box.opacity)
     }
 }

@@ -42,7 +42,7 @@ internal class VisionPropertyTest {
     @Test
     fun testPropertyEdit() {
         val vision = SimpleVisionGroup()
-        vision.writeProperty("fff.ddd".parseAsName()).apply {
+        vision.mutableProperty("fff.ddd".parseAsName()).apply {
             value = 2.asValue()
         }
         assertEquals(2, vision.readProperty("fff.ddd")?.int)
@@ -52,7 +52,7 @@ internal class VisionPropertyTest {
     @Test
     fun testPropertyUpdate() {
         val vision = SimpleVisionGroup()
-        vision.writeProperty("fff".asName()).updateWith(TestScheme) {
+        vision.mutableProperty("fff".asName()).updateWith(TestScheme) {
             ddd = 2
         }
         assertEquals(2, vision.readProperty("fff.ddd")?.int)

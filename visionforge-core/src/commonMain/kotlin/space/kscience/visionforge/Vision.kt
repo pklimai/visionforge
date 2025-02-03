@@ -92,10 +92,10 @@ public interface Vision : Described, Provider {
     }
 }
 
-internal fun Vision.isInheritedProperty(name: Name): Boolean = descriptor?.get(name)?.inherited ?: false
-internal fun Vision.isInheritedProperty(name: String): Boolean = descriptor?.get(name)?.inherited ?: false
-internal fun Vision.isStyledProperty(name: Name): Boolean = descriptor?.get(name)?.usesStyles ?: true
-internal fun Vision.isStyledProperty(name: String): Boolean = descriptor?.get(name)?.usesStyles ?: true
+internal fun Vision.isInheritedProperty(name: Name): Boolean = descriptor?.get(name)?.inherited == true
+internal fun Vision.isInheritedProperty(name: String): Boolean = descriptor?.get(name)?.inherited == true
+internal fun Vision.isStyledProperty(name: Name): Boolean = descriptor?.get(name)?.usesStyles != false
+internal fun Vision.isStyledProperty(name: String): Boolean = descriptor?.get(name)?.usesStyles != false
 
 public fun Vision.readProperty(
     name: String,
@@ -126,7 +126,7 @@ public interface MutableVision : Vision {
         } else super.receiveEvent(event)
     }
 
-    public fun writeProperty(
+    public fun mutableProperty(
         name: Name,
         inherited: Boolean = isInheritedProperty(name),
         useStyles: Boolean = isStyledProperty(name),
@@ -137,7 +137,9 @@ public interface MutableVision : Vision {
         val defaultMeta = descriptor?.defaultNode?.get(name)
         val listOfMeta = listOf(styleMeta, inheritMeta, defaultMeta)
 
-        return properties.getOrCreate(name).withDefault(Laminate(listOfMeta))
+        return properties.getOrCreate(name).withDefault{
+            listOfMeta.firstNotNullOfOrNull { it[name] }
+        }
     }
 }
 
@@ -148,7 +150,7 @@ public fun MutableVision.properties(block: MutableMeta.() -> Unit) {
 public fun MutableVision.writeProperties(
     inherited: Boolean = false,
     useStyles: Boolean = true,
-): MutableMeta = writeProperty(Name.EMPTY, inherited, useStyles)
+): MutableMeta = mutableProperty(Name.EMPTY, inherited, useStyles)
 
 /**
  * Control visibility of the element
@@ -177,14 +179,14 @@ public var MutableVision.styles: List<String>
     }
 
 public fun MutableVision.setStyle(styleName: String, style: Meta) {
-    properties[Vision.STYLESHEET_KEY + styleName] = style
+    properties[STYLESHEET_KEY + styleName] = style
 }
 
 /**
  * Define or modify a style with given [styleName]. The style is not used immediately. Call [useStyle] to enable it for this vision
  */
 public fun MutableVision.updateStyle(styleName: String, block: MutableMeta.() -> Unit) {
-    properties.getOrCreate(Vision.STYLESHEET_KEY + styleName).block()
+    properties.getOrCreate(STYLESHEET_KEY + styleName).block()
 }
 
 /**
@@ -201,7 +203,8 @@ public fun MutableVision.useStyle(styleName: String) {
  * Resolve a style with given name for given [Vision]. The style is not necessarily applied to this [Vision].
  */
 public fun Vision.getStyle(name: String): Meta? =
-    properties[STYLESHEET_KEY + name] ?: parent?.getStyle(name)
+    readProperty(STYLESHEET_KEY + name, inherited = true, useStyles = false)
+    //properties[STYLESHEET_KEY + name] ?: parent?.getStyle(name)
 
 /**
  * Resolve a property from all styles

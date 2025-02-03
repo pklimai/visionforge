@@ -3,13 +3,14 @@ package space.kscience.visionforge.solid
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import space.kscience.dataforge.meta.MutableMeta
-import space.kscience.dataforge.names.Name
+import space.kscience.dataforge.meta.update
 import space.kscience.kmath.geometry.component1
 import space.kscience.kmath.geometry.component2
 import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.kmath.structures.Float32
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
+import space.kscience.visionforge.properties
 
 
 private inline fun <T> Iterable<T>.sumOf(selector: (T) -> Float32): Float32 {
@@ -155,7 +156,9 @@ public class Surface(
         }
 
         internal fun build(): Surface = Surface(layers).apply {
-            properties[Name.EMPTY] = this@Builder.properties
+            properties {
+                update(this@Builder.properties)
+            }
         }
     }
 

@@ -49,7 +49,7 @@ public object ThreeReferenceFactory : ThreeFactory<SolidReference> {
         //TODO apply child properties
 
         if (observe) {
-            vision.onPropertyChange(three.context) { name ->
+            vision.onPropertyChange(three.context) { name, _ ->
                 if (name.firstOrNull()?.body == REFERENCE_CHILD_PROPERTY_PREFIX) {
                     val childName = name.firstOrNull()?.index?.let(Name::parse)
                         ?: error("Wrong syntax for reference child property: '$name'")

@@ -33,6 +33,6 @@ class GDMLVisionTest {
         val child = cubes[Name.of("composite-000","segment-0")]
         assertNotNull(child)
         child.properties.setValue(SolidMaterial.MATERIAL_COLOR_KEY, "red".asValue())
-        assertEquals("red", child.properties[SolidMaterial.MATERIAL_COLOR_KEY].string)
+        assertEquals("red", child.readProperty(SolidMaterial.MATERIAL_COLOR_KEY).string)
     }
 }

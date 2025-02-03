@@ -32,7 +32,7 @@ public object ThreeMeshLineFactory : ThreeFactory<PolyLine> {
             //layers.enable(obj.layer)
             //add listener to object properties
             if (observe) {
-                vision.onPropertyChange(three.context) { propertyName ->
+                vision.onPropertyChange(three.context) { propertyName, _ ->
                     updateProperty(vision, propertyName)
                 }
             }

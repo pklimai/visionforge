@@ -21,7 +21,7 @@ public object ThreeAmbientLightFactory : ThreeFactory<AmbientLightSource> {
         }
 
         if (observe) {
-            vision.onPropertyChange(three.context) { propertyName: Name ->
+            vision.onPropertyChange(three.context) { propertyName: Name, _ ->
                 when (propertyName) {
                     Vision.VISIBLE_KEY -> res.visible = vision.visible ?: true
                     SolidMaterial.COLOR_KEY -> res.color = vision.color.threeColor() ?: Color(0x404040)

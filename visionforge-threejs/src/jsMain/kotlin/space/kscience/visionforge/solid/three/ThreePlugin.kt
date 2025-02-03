@@ -71,7 +71,7 @@ public class ThreePlugin : AbstractPlugin(), ComposeHtmlVisionRenderer {
                     try {
                         val object3D = buildObject3D(
                             child,
-                            if (name.body == SolidGroup.STATIC_TOKEN_BODY) false else observe
+//                            if (name.body == SolidGroup.STATIC_TOKEN_BODY) false else observe
                         )
                         // disable tracking changes for statics
                         group[name] = object3D
@@ -89,6 +89,7 @@ public class ThreePlugin : AbstractPlugin(), ComposeHtmlVisionRenderer {
                         when (event) {
                             is VisionPropertyChangedEvent -> {
                                 val propertyName = event.propertyName
+                                console.log("$vision updated $propertyName with ${vision.readProperty(propertyName, inherited = true)}")
                                 if (
                                     propertyName.startsWith(Solid.POSITION_KEY) ||
                                     propertyName.startsWith(Solid.ROTATION_KEY) ||
@@ -97,13 +98,13 @@ public class ThreePlugin : AbstractPlugin(), ComposeHtmlVisionRenderer {
                                     //update position of mesh using this object
                                     updatePosition(vision)
                                 } else if (propertyName == Vision.VISIBLE_KEY) {
-                                    visible = vision.visible ?: true
+                                    visible = vision.visible != false
                                 }
                             }
                             is VisionGroupCompositionChangedEvent -> {
                                 val childName = event.childName
 
-                                val child = vision.get(childName)
+                                val child = vision[childName]
 
                                 logger.debug { "Changing vision $childName to $child" }
 

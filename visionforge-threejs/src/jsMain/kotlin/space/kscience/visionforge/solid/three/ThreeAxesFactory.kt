@@ -12,7 +12,7 @@ public object ThreeAxesFactory : ThreeFactory<AxesSolid> {
         val res = AxesHelper(vision.size.toInt())
 
         if (observe) {
-            vision.onPropertyChange(three.context) { propertyName ->
+            vision.onPropertyChange(three.context) { propertyName, _ ->
                 res.updateProperty(vision, propertyName)
             }
         }

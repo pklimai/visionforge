@@ -4,7 +4,6 @@ import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.meta.descriptors.ValueRestriction
 import space.kscience.dataforge.meta.descriptors.value
-import space.kscience.dataforge.meta.set
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.asName
 import space.kscience.dataforge.names.plus
@@ -114,12 +113,12 @@ public val Solid.color: ColorAccessor
     get() = ColorAccessor(writeProperties(inherited = true), MATERIAL_COLOR_KEY)
 
 public var Solid.material: SolidMaterial?
-    get() = properties[MATERIAL_KEY]?.let { SolidMaterial.read(it)}
+    get() = readProperty(MATERIAL_KEY)?.let { SolidMaterial.read(it)}
     set(value) = properties.set(MATERIAL_KEY, value?.meta)
 
 @VisionBuilder
 public fun Solid.material(builder: SolidMaterial.() -> Unit) {
-    writeProperty(MATERIAL_KEY, inherited = false, useStyles = false).updateWith(SolidMaterial, builder)
+    mutableProperty(MATERIAL_KEY, inherited = false, useStyles = false).updateWith(SolidMaterial, builder)
 }
 
 public var Solid.opacity: Number?
@@ -132,5 +131,5 @@ public var Solid.opacity: Number?
 @VisionBuilder
 public fun Solid.edges(enabled: Boolean = true, block: SolidMaterial.() -> Unit = {}) {
     properties[SolidMaterial.EDGES_ENABLED_KEY] = enabled
-    SolidMaterial.write(writeProperty(SolidMaterial.EDGES_MATERIAL_KEY)).apply(block)
+    SolidMaterial.write(mutableProperty(SolidMaterial.EDGES_MATERIAL_KEY)).apply(block)
 }

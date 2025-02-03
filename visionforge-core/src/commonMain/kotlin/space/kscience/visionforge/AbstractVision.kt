@@ -4,6 +4,7 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.launch
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
@@ -22,20 +23,19 @@ public abstract class AbstractVision(
 
     @Transient
     private val _eventFlow =
-        MutableSharedFlow<VisionEvent>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+        MutableSharedFlow<VisionEvent>(extraBufferCapacity = 100, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     override val eventFlow: SharedFlow<VisionEvent> get() = _eventFlow
 
     protected fun emitEvent(event: VisionEvent) {
-        _eventFlow.tryEmit(event)
-//        val context = manager?.context
-//        if (context == null) {
-//            _eventFlow.tryEmit(event)
-//        } else {
-//            context.launch {
-//                _eventFlow.emit(event)
-//            }
-//        }
+        val context = manager?.context
+        if (context == null) {
+            _eventFlow.tryEmit(event)
+        } else {
+            context.launch {
+                _eventFlow.emit(event)
+            }
+        }
     }
 
     init {

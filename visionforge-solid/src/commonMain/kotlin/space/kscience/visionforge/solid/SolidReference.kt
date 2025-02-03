@@ -109,7 +109,7 @@ public class SolidReference(
         return if (listOfMeta.all { it == null }) null else Laminate(listOfMeta)
     }
 
-    override fun writeProperty(
+    override fun mutableProperty(
         name: Name,
         inherited: Boolean,
         useStyles: Boolean
@@ -172,7 +172,7 @@ private class SolidReferenceChild(
 
     override val properties: MutableMeta = owner.properties.view(childToken.asName())
 
-    override fun writeProperty(
+    override fun mutableProperty(
         name: Name,
         inherited: Boolean,
         useStyles: Boolean

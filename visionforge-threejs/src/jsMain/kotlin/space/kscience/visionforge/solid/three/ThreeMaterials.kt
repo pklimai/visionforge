@@ -6,7 +6,6 @@ import space.kscience.dataforge.names.asName
 import space.kscience.dataforge.names.plus
 import space.kscience.visionforge.Colors
 import space.kscience.visionforge.Vision
-import space.kscience.visionforge.getStyleNodes
 import space.kscience.visionforge.solid.ColorAccessor
 import space.kscience.visionforge.solid.SolidMaterial
 import space.kscience.visionforge.solid.SolidReference
@@ -92,7 +91,7 @@ public object ThreeMaterials {
     private val visionMaterialCache = HashMap<Vision, Material>()
 
     internal fun cacheMaterial(vision: Vision): Material = visionMaterialCache.getOrPut(vision) {
-        buildMaterial(vision.properties[SolidMaterial.MATERIAL_KEY] ?: Meta.EMPTY).apply {
+        buildMaterial(vision.readProperty(SolidMaterial.MATERIAL_KEY) ?: Meta.EMPTY).apply {
             cached = true
         }
     }
@@ -133,8 +132,8 @@ internal var Material.cached: Boolean
 
 public fun Mesh.setMaterial(vision: Vision) {
     if (
-        vision.properties[SolidMaterial.MATERIAL_KEY] == null
-        && vision.getStyleNodes(SolidMaterial.MATERIAL_KEY).isEmpty()
+        vision.readProperty(SolidMaterial.MATERIAL_KEY) == null
+//        && vision.getStyleNodes(SolidMaterial.MATERIAL_KEY).isEmpty()
     ) {
         //if this is a reference, use material of the prototype
         if (vision is SolidReference) {
@@ -146,7 +145,7 @@ public fun Mesh.setMaterial(vision: Vision) {
             } ?: ThreeMaterials.cacheMaterial(vision)
         }
     } else {
-        material = ThreeMaterials.buildMaterial(vision.properties[SolidMaterial.MATERIAL_KEY] ?: Meta.EMPTY)
+        material = ThreeMaterials.buildMaterial(vision.readProperty(SolidMaterial.MATERIAL_KEY) ?: Meta.EMPTY)
     }
 }
 
@@ -162,20 +161,20 @@ public fun Mesh.updateMaterialProperty(vision: Vision, propertyName: Name) {
         when (propertyName) {
             SolidMaterial.MATERIAL_COLOR_KEY -> {
                 material.asDynamic().color =
-                    vision.properties[SolidMaterial.MATERIAL_COLOR_KEY]
+                    vision.readProperty(SolidMaterial.MATERIAL_COLOR_KEY)
                         ?.threeColor()
                         ?: ThreeMaterials.DEFAULT_COLOR
             }
 
             SolidMaterial.SPECULAR_COLOR_KEY -> {
                 material.asDynamic().specular =
-                    vision.properties[SolidMaterial.SPECULAR_COLOR_KEY]
+                    vision.readProperty(SolidMaterial.SPECULAR_COLOR_KEY)
                         ?.threeColor()
                         ?: ThreeMaterials.DEFAULT_COLOR
             }
 
             SolidMaterial.MATERIAL_EMISSIVE_COLOR_KEY -> {
-                material.asDynamic().emissive = vision.properties[SolidMaterial.MATERIAL_EMISSIVE_COLOR_KEY]
+                material.asDynamic().emissive = vision.readProperty(SolidMaterial.MATERIAL_EMISSIVE_COLOR_KEY)
                     ?.threeColor()
                     ?: ThreeMaterials.BLACK_COLOR
             }

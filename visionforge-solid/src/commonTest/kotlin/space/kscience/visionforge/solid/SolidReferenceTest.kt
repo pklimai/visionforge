@@ -31,6 +31,6 @@ class SolidReferenceTest {
         val serialized = Solids.jsonForSolids.encodeToJsonElement(groupWithReference)
         val deserialized = Solids.jsonForSolids.decodeFromJsonElement(SolidGroup.serializer(), serialized)
         assertEquals(groupWithReference.visions["test"]?.color?.string, deserialized.visions["test"]?.color?.string)
-        assertEquals("blue", (deserialized.get("test") as Solid).color.string)
+        assertEquals("blue", (deserialized["test"] as Solid).color.string)
     }
 }

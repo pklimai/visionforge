@@ -11,8 +11,18 @@ import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.parseAsName
 import kotlin.reflect.KProperty1
 
+private fun Vision.withAncestors(): List<Vision> = buildList {
+    add(this@withAncestors)
+    var parent = parent
+    while (parent != null) {
+        add(parent)
+        parent = parent.parent
+    }
+}
+
 public fun Vision.inheritedEventFlow(): Flow<VisionEvent> =
-    parent?.let { parent -> merge(eventFlow, parent.inheritedEventFlow()) } ?: eventFlow
+    parent?.let { withAncestors().map { it.eventFlow }.merge() } ?: eventFlow
+
 
 /**
  * Create a flow of a specific property
@@ -69,31 +79,28 @@ public fun Vision.useProperty(
     inherited: Boolean = isInheritedProperty(propertyName),
     useStyles: Boolean = isStyledProperty(propertyName),
     scope: CoroutineScope = manager?.context ?: error("Orphan Vision can't observe properties. Use explicit scope."),
-    callback: suspend (Meta) -> Unit,
+    callback: suspend (Meta?) -> Unit,
 ): Job = scope.launch {
     //Pass initial value synchronously
+    callback(readProperty(propertyName, inherited, useStyles))
 
-    readProperty(propertyName, inherited, useStyles)?.let { callback(it) }
-
-    val combinedFlow = if (inherited) {
+    if (inherited) {
         inheritedEventFlow()
     } else {
         eventFlow
-    }
-
-    combinedFlow.filterIsInstance<VisionPropertyChangedEvent>().onEach { event ->
+    }.filterIsInstance<VisionPropertyChangedEvent>().onEach { event ->
         if (event.propertyName == propertyName || (useStyles && event.propertyName == Vision.STYLE_KEY)) {
-            readProperty(event.propertyName, inherited, useStyles)?.let { callback(it) }
+            callback(readProperty(event.propertyName, inherited, useStyles))
         }
     }.collect()
 }
 
 public fun Vision.useProperty(
     propertyName: String,
-    inherited: Boolean = descriptor?.get(propertyName)?.inherited ?: false,
-    useStyles: Boolean = descriptor?.get(propertyName)?.usesStyles ?: true,
+    inherited: Boolean = descriptor?.get(propertyName)?.inherited == true,
+    useStyles: Boolean = descriptor?.get(propertyName)?.usesStyles != false,
     scope: CoroutineScope = manager?.context ?: error("Orphan Vision can't observe properties. Use explicit scope."),
-    callback: suspend (Meta) -> Unit,
+    callback: suspend (Meta?) -> Unit,
 ): Job = useProperty(propertyName.parseAsName(), inherited, useStyles, scope, callback)
 
 public fun <V : Vision, T> V.useProperty(
@@ -109,9 +116,14 @@ public fun <V : Vision, T> V.useProperty(
  */
 public fun Vision.onPropertyChange(
     scope: CoroutineScope = manager?.context ?: error("Orphan Vision can't observe properties. Use explicit scope."),
-    callback: suspend (Name) -> Unit,
-): Job = inheritedEventFlow().filterIsInstance<VisionPropertyChangedEvent>().onEach {
-    callback(it.propertyName)
+    inherited: Boolean = true,
+    callback: suspend (name: Name, value: Meta?) -> Unit,
+): Job = if (inherited) {
+    inheritedEventFlow()
+} else {
+    eventFlow
+}.filterIsInstance<VisionPropertyChangedEvent>().onEach {
+    callback(it.propertyName, it.propertyValue)
 }.launchIn(scope)
 
 /**

@@ -1,9 +1,9 @@
 package space.kscience.visionforge.solid.transform
 
+import space.kscience.dataforge.meta.update
 import space.kscience.dataforge.misc.DFExperimental
-import space.kscience.dataforge.names.Name
 import space.kscience.kmath.complex.QuaternionAlgebra
-
+import space.kscience.visionforge.properties
 import space.kscience.visionforge.solid.*
 
 private operator fun Number.plus(other: Number) = toFloat() + other.toFloat()
@@ -18,7 +18,9 @@ internal fun Solid.updateFrom(other: Solid): Solid {
     scaleX *= other.scaleX
     scaleY *= other.scaleY
     scaleZ *= other.scaleZ
-    properties[Name.EMPTY] = other.properties
+    properties {
+        update(other.properties)
+    }
     return this
 }
 
