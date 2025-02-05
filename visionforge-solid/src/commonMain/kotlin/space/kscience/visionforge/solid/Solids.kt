@@ -12,6 +12,8 @@ import space.kscience.dataforge.context.PluginFactory
 import space.kscience.dataforge.context.PluginTag
 import space.kscience.dataforge.meta.Meta
 import space.kscience.dataforge.names.NameToken
+import space.kscience.kmath.geometry.euclidean3d.Float32Space3D
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.visionforge.*
 import space.kscience.visionforge.html.VisionOutput
 import space.kscience.visionforge.solid.specifications.Canvas3DOptions
@@ -65,6 +67,11 @@ public class Solids(meta: Meta) : VisionPlugin(meta), MutableVisionContainer<Sol
                 defaultDeserializer { SolidBase.serializer(serializer<Solid>()) }
                 solids()
             }
+
+
+            polymorphic(Float32Vector3D::class, Float32Space3D.VectorSerializer)
+
+//            polymorphic(Float64Vector3D::class, Float64Space3D.VectorSerializer)
         }
 
         internal val jsonForSolids: Json = Json(VisionManager.defaultJson) {

@@ -7,10 +7,13 @@ import space.kscience.dataforge.meta.descriptors.value
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.asName
 import space.kscience.dataforge.names.plus
-import space.kscience.visionforge.*
+import space.kscience.visionforge.VisionBuilder
+import space.kscience.visionforge.hide
+import space.kscience.visionforge.inherited
 import space.kscience.visionforge.solid.SolidMaterial.Companion.MATERIAL_COLOR_KEY
 import space.kscience.visionforge.solid.SolidMaterial.Companion.MATERIAL_KEY
 import space.kscience.visionforge.solid.SolidMaterial.Companion.MATERIAL_OPACITY_KEY
+import space.kscience.visionforge.widgetType
 
 /**
  * A scheme for vision material
@@ -23,14 +26,14 @@ public class SolidMaterial : Scheme() {
     /**
      * Primary web-color for the material
      */
-    public val color: ColorAccessor = ColorAccessor(meta, COLOR_KEY)
+    public val color: ColorAccessor = ColorAccessor(meta.view(COLOR_KEY))
 
     /**
      * Specular color for phong material
      */
-    public val specularColor: ColorAccessor = ColorAccessor(meta, SPECULAR_COLOR_KEY)
+    public val specularColor: ColorAccessor = ColorAccessor(meta.view(SPECULAR_COLOR_KEY))
 
-    public val emissiveColor: ColorAccessor = ColorAccessor(meta, EMISSIVE_COLOR_KEY)
+    public val emissiveColor: ColorAccessor = ColorAccessor(meta.view(EMISSIVE_COLOR_KEY))
 
     /**
      * Opacity
@@ -110,7 +113,7 @@ public class SolidMaterial : Scheme() {
 }
 
 public val Solid.color: ColorAccessor
-    get() = ColorAccessor(writeProperties(inherited = true), MATERIAL_COLOR_KEY)
+    get() = ColorAccessor(mutableProperty(MATERIAL_COLOR_KEY, inherited = true))
 
 public var Solid.material: SolidMaterial?
     get() = readProperty(MATERIAL_KEY)?.let { SolidMaterial.read(it)}

@@ -80,6 +80,7 @@ class SolidPropertyTest {
                 }
             }
         }
+        assertEquals("#555555", box?.readProperty(SolidMaterial.MATERIAL_COLOR_KEY)?.string)
         assertEquals("#555555", box?.color?.string)
         assertEquals(0.3, box?.opacity)
     }
@@ -101,6 +102,7 @@ class SolidPropertyTest {
                 box = ref("box".asName())
             }
         }
+        assertEquals("#555555", box?.readProperty(SolidMaterial.MATERIAL_COLOR_KEY)?.string)
         assertEquals("#555555", box!!.color.string)
         assertEquals(0.3, box.opacity)
     }

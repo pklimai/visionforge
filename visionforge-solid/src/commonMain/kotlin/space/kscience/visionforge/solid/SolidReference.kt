@@ -118,28 +118,27 @@ public class SolidReference(
     ): MutableMeta {
         val mutable = properties.getOrCreate(name)
 
-        val default = buildList {
+        return mutable.withDefault { suffix ->
+            val propertyName = name + suffix
+
             //2. Resolve prototype own properties
-            add(prototype.properties[name])
+            prototype.properties[propertyName]?.let { return@withDefault it }
 
             if (useStyles) {
                 //3. own styles
-                add(getStyleProperty(name))
+                getStyleProperty(propertyName)?.let { return@withDefault it }
                 //4. prototype styles
-                add(prototype.getStyleProperty(name))
+                prototype.getStyleProperty(propertyName)?.let { return@withDefault it }
             }
 
             if (inherited) {
                 //5. own inheritance
-                add(parent?.readProperty(name, inherited, useStyles))
+                parent?.readProperty(propertyName, inherited, useStyles)?.let { return@withDefault it }
                 //6. prototype inheritance
-                add(prototype.parent?.readProperty(name, inherited, useStyles))
+                prototype.parent?.readProperty(propertyName, inherited, useStyles)?.let { return@withDefault it }
             }
 
-            add(descriptor.defaultNode[name])
-        }
-        return mutable.withDefault { name ->
-            default.firstNotNullOfOrNull { it[name] }
+            descriptor.defaultNode[name]
         }
     }
 
@@ -180,28 +179,27 @@ private class SolidReferenceChild(
         useStyles: Boolean
     ): MutableMeta {
         val mutable = properties.getOrCreate(name)
-        val default = buildList {
+        return mutable.withDefault { suffix ->
+            val propertyName = name + suffix
+
             //2. Resolve prototype own properties
-            add(prototype.properties[name])
+            prototype.properties[propertyName]?.let { return@withDefault it }
 
             if (useStyles) {
                 //3. own styles
-                add(getStyleProperty(name))
+                getStyleProperty(propertyName)?.let { return@withDefault it }
                 //4. prototype styles
-                add(prototype.getStyleProperty(name))
+                prototype.getStyleProperty(propertyName)?.let { return@withDefault it }
             }
 
             if (inherited) {
                 //5. own inheritance
-                add(parent?.readProperty(name, inherited, useStyles))
+                parent?.readProperty(propertyName, inherited, useStyles)?.let { return@withDefault it }
                 //6. prototype inheritance
-                add(prototype.parent?.readProperty(name, inherited, useStyles))
+                prototype.parent?.readProperty(propertyName, inherited, useStyles)?.let { return@withDefault it }
             }
 
-            add(descriptor.defaultNode[name])
-        }
-        return mutable.withDefault { name ->
-            default.firstNotNullOfOrNull { it[name] }
+            descriptor.defaultNode[name]
         }
     }
 

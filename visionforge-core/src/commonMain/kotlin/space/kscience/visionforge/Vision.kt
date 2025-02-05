@@ -130,16 +130,12 @@ public interface MutableVision : Vision {
         name: Name,
         inherited: Boolean = isInheritedProperty(name),
         useStyles: Boolean = isStyledProperty(name),
-    ): MutableMeta {
+    ): MutableMeta = properties.getOrCreate(name).withDefault { suffix->
+        val propertyName = name + suffix
+        if (useStyles) getStyleProperty(propertyName)?.let { return@withDefault it }
+        if (inherited) parent?.readProperty(propertyName, inherited, useStyles)?.let { return@withDefault it }
 
-        val styleMeta = if (useStyles) getStyleProperty(name) else null
-        val inheritMeta = if (inherited) parent?.readProperty(name, inherited, useStyles) else null
-        val defaultMeta = descriptor?.defaultNode?.get(name)
-        val listOfMeta = listOf(styleMeta, inheritMeta, defaultMeta)
-
-        return properties.getOrCreate(name).withDefault{
-            listOfMeta.firstNotNullOfOrNull { it[name] }
-        }
+        descriptor?.defaultNode?.get(propertyName)
     }
 }
 
@@ -204,7 +200,7 @@ public fun MutableVision.useStyle(styleName: String) {
  */
 public fun Vision.getStyle(name: String): Meta? =
     readProperty(STYLESHEET_KEY + name, inherited = true, useStyles = false)
-    //properties[STYLESHEET_KEY + name] ?: parent?.getStyle(name)
+//properties[STYLESHEET_KEY + name] ?: parent?.getStyle(name)
 
 /**
  * Resolve a property from all styles

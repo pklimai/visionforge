@@ -3,32 +3,33 @@ package space.kscience.visionforge.solid
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.asName
-import space.kscience.dataforge.names.plus
-import space.kscience.visionforge.*
+import space.kscience.visionforge.Colors
+import space.kscience.visionforge.MutableVision
+import space.kscience.visionforge.Vision
+import space.kscience.visionforge.VisionBuilder
 import kotlin.properties.ReadOnlyProperty
 
 @VisionBuilder
 public class ColorAccessor(
     private val provider: MutableMeta,
-    private val colorKey: Name,
 ) : MutableValueProvider {
     public var value: Value?
-        get() = provider[colorKey]?.value
+        get() = provider.value
         set(value) {
-            provider.setValue(colorKey, value)
+            provider.value = value
         }
 
-    override fun getValue(name: Name): Value? = provider.getValue(colorKey + name)
+    override fun getValue(name: Name): Value? = provider.getValue(name)
 
     override fun setValue(name: Name, value: Value?) {
-        provider.setValue(colorKey + name, value)
+        provider.setValue(name, value)
     }
 }
 
 public fun MutableVision.colorProperty(
     propertyName: Name? = null,
 ): ReadOnlyProperty<Vision, ColorAccessor> = ReadOnlyProperty { _, property ->
-    ColorAccessor(writeProperties(inherited = true), propertyName ?: property.name.asName())
+    ColorAccessor(mutableProperty(propertyName ?: property.name.asName(), inherited = true))
 }
 
 public var ColorAccessor.string: String?
