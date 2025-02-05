@@ -23,6 +23,7 @@ import space.kscience.visionforge.solid.specifications.Canvas3DOptions
 import space.kscience.visionforge.solid.three.ThreeCanvas
 import space.kscience.visionforge.solid.three.ThreePlugin
 import space.kscience.visionforge.styles
+import space.kscience.visionforge.writeProperties
 
 @Composable
 private fun SimpleThreeView(
@@ -137,7 +138,7 @@ public fun ThreeView(
                             NameCrumbs(selected) { selected = it }
                             Hr()
                             PropertyEditor(
-                                rootMeta = vision.properties,
+                                rootMeta = vision.writeProperties(),
                                 getPropertyState = { name ->
                                     if (vision.properties[name] != null) {
                                         EditorPropertyState.Defined

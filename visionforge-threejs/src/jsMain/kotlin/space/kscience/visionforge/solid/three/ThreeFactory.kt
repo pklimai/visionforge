@@ -65,7 +65,7 @@ public fun Object3D.updatePosition(vision: Vision) {
  * Update non-position non-geometry property
  */
 public fun Object3D.updateProperty(source: Solid, propertyName: Name) {
-    //console.log("${source::class} updated $propertyName with ${source.readProperty(propertyName, inherited = true)}")
+//    console.log("${source::class} updated $propertyName with ${source.readProperty(propertyName, inherited = true)}")
     if (isMesh(this) && propertyName.startsWith(MATERIAL_KEY)) {
         updateMaterialProperty(source, propertyName)
     } else if (

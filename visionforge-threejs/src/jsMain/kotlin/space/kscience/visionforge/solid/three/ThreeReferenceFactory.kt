@@ -12,37 +12,48 @@ import three.core.Object3D
 import three.objects.Mesh
 import kotlin.reflect.KClass
 
+private fun Object3D.lockMaterial(){
+    if(this is Mesh){
+        material.cached = true
+    }
+    children.forEach {
+        it.lockMaterial()
+    }
+}
+
 public object ThreeReferenceFactory : ThreeFactory<SolidReference> {
     private val cache = HashMap<Solid, Object3D>()
 
     override val type: KClass<SolidReference> = SolidReference::class
 
-    private fun Object3D.replicate(): Object3D = when {
-        isMesh(this) -> Mesh(geometry, material).also {
-            //clone geometry
-            it.material.cached = true
-            it.applyMatrix4(matrix)
-        }
+//    private fun Object3D.replicate(): Object3D = when {
+//        isMesh(this) -> Mesh(geometry, material).also {
+//            //clone geometry
+//            it.material.cached = true
+//            it.applyMatrix4(matrix)
+//        }
+//
+//        else -> clone(false)
+//    }.also { obj: Object3D ->
+//        obj.name = this.name
+//        children.forEach { child: Object3D ->
+//            obj.add(child.replicate())
+//        }
+//    }
 
-        else -> clone(false)
-    }.also { obj: Object3D ->
-        obj.name = this.name
-        children.forEach { child: Object3D ->
-            obj.add(child.replicate())
-        }
-    }
 
     override suspend fun build(three: ThreePlugin, vision: SolidReference, observe: Boolean): Object3D {
         val template = vision.prototype
         val cachedObject = cache.getOrPut(template) {
-            three.buildObject3D(template)
+            three.buildObject3D(template).apply {
+                lockMaterial()
+            }
         }
 
-        val object3D: Object3D = cachedObject.replicate()
+        val object3D: Object3D = cachedObject.clone(true)
         object3D.updatePosition(vision)
 
         if (isMesh(object3D)) {
-            //object3D.material = ThreeMaterials.buildMaterial(obj.getProperty(SolidMaterial.MATERIAL_KEY).node!!)
             object3D.applyProperties(vision)
         }
 

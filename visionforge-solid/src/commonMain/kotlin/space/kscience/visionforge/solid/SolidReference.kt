@@ -27,8 +27,8 @@ import space.kscience.visionforge.solid.SolidReference.Companion.REFERENCE_CHILD
 @Suppress("RecursivePropertyAccessor")
 public val Vision.prototype: Solid
     get() = when (this) {
-        is SolidReference -> prototype.prototype
-        is SolidReferenceChild -> prototype.prototype
+        is SolidReference -> prototype
+        is SolidReferenceChild -> prototype
         is Solid -> this
         else -> error("This Vision is neither Solid nor SolidReference")
     }
@@ -75,7 +75,9 @@ public class SolidReference(
         } ?: emptyMap()
 
 
-    override fun getVision(token: NameToken): Solid? = (prototype as? SolidContainer)?.getVision(token)
+    override fun getVision(token: NameToken): Solid? = (prototype as? SolidContainer)?.getVision(token)?.let {
+        SolidReferenceChild(this@SolidReference, it, token.asName())
+    }
 
 
     override fun readProperty(
@@ -208,6 +210,7 @@ private class SolidReferenceChild(
         inherited: Boolean,
         useStyles: Boolean
     ): Meta? {
+        println("read reference property")
         val listOfMeta = buildList {
             //1. resolve own properties
             add(properties[name])
@@ -238,6 +241,10 @@ private class SolidReferenceChild(
         get() = (prototype as? SolidContainer)?.visions?.mapValues { (key, _) ->
             SolidReferenceChild(owner, this, childName + key)
         } ?: emptyMap()
+
+    override fun getVision(token: NameToken): Solid? = (prototype as? SolidContainer)?.getVision(token)?.let {
+        SolidReferenceChild(owner, it, childName + token)
+    }
 
     companion object {
 

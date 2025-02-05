@@ -37,6 +37,7 @@ public class ThreePlugin : AbstractPlugin(), ComposeHtmlVisionRenderer {
 
     init {
         //Add specialized factories here
+        objectFactories[SolidReference::class] = ThreeReferenceFactory
         objectFactories[Box::class] = ThreeBoxFactory
         objectFactories[Convex::class] = ThreeConvexFactory
         objectFactories[Sphere::class] = ThreeSphereFactory
@@ -63,7 +64,6 @@ public class ThreePlugin : AbstractPlugin(), ComposeHtmlVisionRenderer {
      */
     public suspend fun buildObject3D(vision: Solid, observe: Boolean = true): Object3D = when (vision) {
         is ThreeJsVision -> vision.render(this)
-        is SolidReference -> ThreeReferenceFactory.build(this, vision, observe)
         is SolidGroup -> {
             val group = ThreeGroup()
             vision.visions.forEach { (name, child) ->

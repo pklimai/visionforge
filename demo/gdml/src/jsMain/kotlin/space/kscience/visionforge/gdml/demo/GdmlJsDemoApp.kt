@@ -9,9 +9,11 @@ import space.kscience.visionforge.Colors
 import space.kscience.visionforge.gdml.toVision
 import space.kscience.visionforge.html.VisionForgeStyles
 import space.kscience.visionforge.html.startApplication
+import space.kscience.visionforge.setAsRoot
 import space.kscience.visionforge.solid.ambientLight
 import space.kscience.visionforge.solid.invoke
 import space.kscience.visionforge.solid.three.ThreePlugin
+import space.kscience.visionforge.visionManager
 
 
 fun main() = startApplication { document ->
@@ -26,6 +28,7 @@ fun main() = startApplication { document ->
         ambientLight {
             color(Colors.white)
         }
+        setAsRoot(context.visionManager)
     }
 
     renderComposable(element) {

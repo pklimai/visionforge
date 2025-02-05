@@ -78,7 +78,7 @@ internal class VisionPropertyTest {
         var callCounter = 0
 
         val subscription = child.useProperty("test", inherited = true) {
-            deferred.complete(it.value)
+            deferred.complete(it?.value)
             callCounter++
         }
 

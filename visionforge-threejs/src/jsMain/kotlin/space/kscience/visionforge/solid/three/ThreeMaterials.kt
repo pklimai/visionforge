@@ -6,6 +6,7 @@ import space.kscience.dataforge.names.asName
 import space.kscience.dataforge.names.plus
 import space.kscience.visionforge.Colors
 import space.kscience.visionforge.Vision
+import space.kscience.visionforge.getStyleNodes
 import space.kscience.visionforge.solid.ColorAccessor
 import space.kscience.visionforge.solid.SolidMaterial
 import space.kscience.visionforge.solid.SolidReference
@@ -132,8 +133,8 @@ internal var Material.cached: Boolean
 
 public fun Mesh.setMaterial(vision: Vision) {
     if (
-        vision.readProperty(SolidMaterial.MATERIAL_KEY) == null
-//        && vision.getStyleNodes(SolidMaterial.MATERIAL_KEY).isEmpty()
+        vision.properties[SolidMaterial.MATERIAL_KEY] == null
+        && vision.getStyleNodes(SolidMaterial.MATERIAL_KEY).isEmpty()
     ) {
         //if this is a reference, use material of the prototype
         if (vision is SolidReference) {
@@ -141,7 +142,7 @@ public fun Mesh.setMaterial(vision: Vision) {
         } else {
             material = vision.parent?.let { parent ->
                 //TODO cache parent material
-                ThreeMaterials.buildMaterial(parent.properties[SolidMaterial.MATERIAL_KEY] ?: Meta.EMPTY)
+                ThreeMaterials.buildMaterial(parent.readProperty(SolidMaterial.MATERIAL_KEY) ?: Meta.EMPTY)
             } ?: ThreeMaterials.cacheMaterial(vision)
         }
     } else {
@@ -168,8 +169,7 @@ public fun Mesh.updateMaterialProperty(vision: Vision, propertyName: Name) {
 
             SolidMaterial.SPECULAR_COLOR_KEY -> {
                 material.asDynamic().specular =
-                    vision.readProperty(SolidMaterial.SPECULAR_COLOR_KEY)
-                        ?.threeColor()
+                    vision.readProperty(SolidMaterial.SPECULAR_COLOR_KEY)?.threeColor()
                         ?: ThreeMaterials.DEFAULT_COLOR
             }
 
@@ -192,11 +192,12 @@ public fun Mesh.updateMaterialProperty(vision: Vision, propertyName: Name) {
                 material.asDynamic().wireframe = vision.readProperty(
                     SolidMaterial.MATERIAL_WIREFRAME_KEY,
                     inherited = true,
-                )?.boolean ?: false
+                )?.boolean == true
             }
 
             else -> console.warn("Unrecognized material property: $propertyName")
         }
+
         material.needsUpdate = true
     }
 }
