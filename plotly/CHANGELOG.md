@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Moved plotly implementation on top of VisionForge framework.
+- `Plot` and `Trace` now inherit `Vision`.
+- `Trace` no longer inherit `Scheme`. It requires `Trace.Factory` and import of `space.kscience.plotly.models.invoke` to be automatically created.
+- `makeFile` -> `show`
+- `PlotlyFragment` -> `HtmlVisionFragment`, `PlotlyPage` -> `HtmlVisionPage`
+- Explicitly passing renderer in fragments is no longer necessary
+- `Plotly.serve` is replaced by `embeddedServer(...){ plotlyPage(...) }`
+- KTor 3.x
 
 ### Deprecated
 

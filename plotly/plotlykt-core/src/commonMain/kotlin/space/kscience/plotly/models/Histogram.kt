@@ -210,7 +210,9 @@ public open class Histogram : Trace() {
         ybins = Bins(block)
     }
 
-    public companion object
+    public companion object : Factory<Histogram> {
+        override fun build(): Histogram = Histogram()
+    }
 }
 
 public inline fun Plot.histogram(block: Histogram.() -> Unit): Histogram {
@@ -276,7 +278,9 @@ public class Histogram2DContour : Histogram(), ContourSpec {
         contours = Contours(block)
     }
 
-    public companion object
+    public companion object : Factory<Histogram2DContour> {
+        override fun build(): Histogram2DContour = Histogram2DContour()
+    }
 }
 
 public inline fun Plot.histogram2dcontour(block: Histogram2DContour.() -> Unit): Histogram2DContour {

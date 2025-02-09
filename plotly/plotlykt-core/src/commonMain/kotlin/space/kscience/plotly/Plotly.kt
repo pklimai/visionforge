@@ -1,5 +1,6 @@
 package space.kscience.plotly
 
+import kotlinx.html.TagConsumer
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.buildJsonArray
 import space.kscience.dataforge.context.Context
@@ -10,10 +11,7 @@ import space.kscience.dataforge.names.Name
 import space.kscience.plotly.models.Trace
 import space.kscience.visionforge.VisionBuilder
 import space.kscience.visionforge.VisionManager
-import space.kscience.visionforge.html.HtmlFragment
-import space.kscience.visionforge.html.HtmlVisionFragment
-import space.kscience.visionforge.html.VisionOutput
-import space.kscience.visionforge.html.VisionPage
+import space.kscience.visionforge.html.*
 import kotlin.js.JsName
 
 /**
@@ -21,7 +19,7 @@ import kotlin.js.JsName
  */
 @JsName("PlotlyKt")
 public object Plotly : ContextAware {
-    public const val VERSION: String = "2.24.1"
+    public const val VERSION: String = "2.35.3"
 
     public const val PLOTLY_CDN: String = "https://cdn.plot.ly/plotly-${VERSION}.min.js"
     //"https://cdnjs.cloudflare.com/ajax/libs/plotly.js/${VERSION}/plotly.min.js"
@@ -96,4 +94,27 @@ public inline fun VisionOutput.plotly(
 public fun Plotly.page(
     pageHeaders: Map<String, HtmlFragment> = emptyMap(),
     content: HtmlVisionFragment,
-): VisionPage = VisionPage(context.request(VisionManager), pageHeaders, content)
+): VisionPage = VisionPage(
+    visionManager = context.request(VisionManager),
+    pageHeaders = mapOf("plotly" to cdnPlotlyHeader) + pageHeaders,
+    content = content
+)
+
+public fun Plotly.page(
+    vararg pageHeaders: HtmlFragment,
+    content: HtmlVisionFragment,
+): VisionPage = VisionPage(
+    visionManager = context.request(VisionManager),
+    pageHeaders = mapOf("plotly" to cdnPlotlyHeader) + pageHeaders.associateBy { it.toString() },
+    content = content
+)
+
+context(rootConsumer: VisionTagConsumer<*>)
+public fun TagConsumer<*>.plot(
+    config: PlotlyConfig = PlotlyConfig(),
+    block: Plot.() -> Unit,
+): Unit = with(rootConsumer) {
+    vision {
+        plotly(config, block)
+    }
+}

@@ -3,14 +3,15 @@ package scatter
 import space.kscience.dataforge.meta.Value
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.Scatter
 import space.kscience.plotly.models.ScatterMode
+import space.kscience.plotly.models.invoke
+import space.kscience.plotly.openInBrowser
 
 
 /**
  * - Scatter plot only with markers
- * - Use numbers as color list
+ * - Use numbers as a color list
  */
 fun main() {
     val scatter = Scatter {
@@ -29,5 +30,5 @@ fun main() {
             title = "Scatter plot with color dimension"
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

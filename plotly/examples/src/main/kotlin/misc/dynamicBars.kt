@@ -1,13 +1,16 @@
 import kotlinx.coroutines.*
-import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
+import space.kscience.plotly.layout
 import space.kscience.plotly.models.Bar
-import space.kscience.plotly.server.*
+import space.kscience.plotly.models.invoke
+import space.kscience.plotly.plot
+import space.kscience.visionforge.plotly.serveSinglePage
+import space.kscience.visionforge.server.openInBrowser
 import kotlin.random.Random
 
 
 @OptIn(DelicateCoroutinesApi::class)
-fun main() {
+suspend fun main() {
     val initialValue = (1..10).toList()
 
     val traces = (0..2).associate { i ->
@@ -21,8 +24,7 @@ fun main() {
         }
     }
 
-    val server = Plotly.serve(port = 3872) {
-        pushUpdates(200)
+    val server = Plotly.serveSinglePage ( port = 3872) {
         //root level plots go to default page
         plot {
             traces(traces.values)
@@ -34,7 +36,7 @@ fun main() {
         }
     }
 
-    server.show()
+    server.openInBrowser()
 
     //Start pushing updates
     GlobalScope.launch {
@@ -59,5 +61,5 @@ fun main() {
     println("Press Enter to close server")
     readLine()
 
-    server.close()
+    server.stop()
 }

@@ -2,7 +2,6 @@ plugins {
     id("space.kscience.gradle.mpp")
     alias(spclibs.plugins.compose.compiler)
     alias(spclibs.plugins.compose.jb)
-//    alias(spclibs.plugins.ktor)
 }
 
 group = "ru.mipt.npm"
@@ -11,7 +10,7 @@ group = "ru.mipt.npm"
 kscience {
     fullStack(
         "muon-monitor.js",
-        development = true,
+        development = false,
         jvmConfig = {
             binaries {
                 executable {
@@ -49,11 +48,7 @@ kscience {
         implementation(projects.visionforgeThreejs)
     }
 }
+
 kotlin {
     explicitApi = null
 }
-
-
-//application {
-//    mainClass.set("ru.mipt.npm.muon.monitor.MMServerKt")
-//}

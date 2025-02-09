@@ -2,9 +2,10 @@ package scatter
 
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.layout
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.AxisType
 import space.kscience.plotly.models.Scatter
+import space.kscience.plotly.models.invoke
+import space.kscience.plotly.openInBrowser
 
 
 /**
@@ -36,5 +37,5 @@ fun main() {
             }
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

@@ -2,9 +2,10 @@ package box
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.Box
 import space.kscience.plotly.models.BoxPoints
+import space.kscience.plotly.models.invoke
+import space.kscience.plotly.openInBrowser
 
 fun main() {
     val y1 = listOf<Number>(0.75, 5.25, 5.5, 6, 6.2, 6.6, 6.80, 7.0, 7.2, 7.5, 7.5, 7.75, 8.15, 8.15,
@@ -62,5 +63,5 @@ fun main() {
             title = "Box Plot Styling Outliers"
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

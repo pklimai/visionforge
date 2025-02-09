@@ -2,9 +2,10 @@ package bar
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.Bar
 import space.kscience.plotly.models.Orientation
+import space.kscience.plotly.models.invoke
+import space.kscience.plotly.openInBrowser
 import kotlin.random.Random
 
 
@@ -57,5 +58,5 @@ fun main() {
             }
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

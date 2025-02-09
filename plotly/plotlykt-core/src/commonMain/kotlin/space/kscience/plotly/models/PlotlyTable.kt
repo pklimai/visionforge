@@ -168,7 +168,7 @@ public class Cells : Scheme() {
  *
  * For docs, see: [Plotly JS Table Reference](https://plotly.com/javascript/reference/table/#table)
  * */
-public class Table : Trace() {
+public class PlotlyTable : Trace() {
     init {
         type = TraceType.table
     }
@@ -212,11 +212,14 @@ public class Table : Trace() {
         cells = Cells(block)
     }
 
-    public companion object
+    public companion object : Factory<PlotlyTable> {
+        override fun build(): PlotlyTable = PlotlyTable()
+
+    }
 }
 
-public inline fun Plot.table(block: Table.() -> Unit): Table {
-    val trace = Table().apply(block)
+public inline fun Plot.table(block: PlotlyTable.() -> Unit): PlotlyTable {
+    val trace = PlotlyTable().apply(block)
     traces(trace)
     return trace
 }

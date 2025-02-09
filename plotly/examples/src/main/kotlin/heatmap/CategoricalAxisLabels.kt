@@ -2,8 +2,8 @@ package heatmap
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.heatmap
-import space.kscience.plotly.makeFile
+import space.kscience.plotly.models.heatmap
+import space.kscience.plotly.openInBrowser
 
 
 /**
@@ -15,9 +15,10 @@ fun main() {
     val x1 = listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
     val y1 = listOf("Morning", "Afternoon", "Evening")
     val z1 = listOf(
-            listOf<Number?>(1, null, 30, 50, 1),
-            listOf<Number>(20, 1, 60, 80, 30),
-            listOf<Number>(30, 60, 1, -10, 20))
+        listOf<Number?>(1, null, 30, 50, 1),
+        listOf<Number>(20, 1, 60, 80, 30),
+        listOf<Number>(30, 60, 1, -10, 20)
+    )
 
     val plot = Plotly.plot {
         heatmap {
@@ -45,5 +46,5 @@ fun main() {
         }
     }
 
-    plot.makeFile()
+    plot.openInBrowser()
 }

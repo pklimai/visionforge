@@ -3,18 +3,16 @@
 package space.kscience.plotly.models
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.meta.descriptors.Described
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.names.Name
-import space.kscience.dataforge.names.NameToken
 import space.kscience.dataforge.names.asName
 import space.kscience.plotly.*
 import space.kscience.visionforge.AbstractVision
-import space.kscience.visionforge.Vision
 import kotlin.js.JsName
 import kotlin.properties.ReadOnlyProperty
+import kotlin.properties.ReadWriteProperty
 
 
 public enum class TraceType {
@@ -714,6 +712,11 @@ public class Hoverlabel : Scheme() {
     public companion object : SchemeSpec<Hoverlabel>(::Hoverlabel)
 }
 
+public fun <T : Scheme> Trace.scheme(
+    spec: SchemeSpec<T>,
+    key: Name? = null,
+): ReadWriteProperty<Any?, T> = properties.scheme(spec, key)
+
 
 /**
  * A base class for Plotly traces
@@ -721,9 +724,7 @@ public class Hoverlabel : Scheme() {
  * @param uid a unique identifier for this trace
  */
 @Serializable
-public open class Trace(
-    @Transient internal val uid: NameToken = NameToken("trace", Vision.randomId())
-) : AbstractVision(), MutableMetaProvider, MetaRepr {
+public open class Trace : AbstractVision(), MutableMetaProvider, MetaRepr {
 
     override fun get(name: Name): MutableMeta? = properties.get(name)
 
@@ -982,7 +983,7 @@ public open class Trace(
      */
     public var ycalendar: Calendar by enum(Calendar.gregorian)
 
-    public var domain: Domain by scheme(Domain)
+    public var domain: Domain? by properties.schemeOrNull(Domain)
 
     public var hoverlabel: Hoverlabel by scheme(Hoverlabel)
 
@@ -1026,7 +1027,11 @@ public open class Trace(
         hoverlabel = Hoverlabel(block)
     }
 
-    public companion object : Described {
+    public interface Factory<T : Trace> {
+        public fun build(): T
+    }
+
+    public companion object : Described, Factory<Trace> {
         public const val X_AXIS: String = "x"
         public const val Y_AXIS: String = "y"
         public const val Z_AXIS: String = "z"
@@ -1039,17 +1044,19 @@ public open class Trace(
 
         //FIXME implement trace descriptor
         override val descriptor: MetaDescriptor? = null
+
+        override fun build(): Trace = Trace()
     }
 }
 
-public inline fun Trace(block: Trace.() -> Unit): Trace = Trace().apply(block)
+public inline operator fun <T : Trace> Trace.Factory<T>.invoke(block: T.() -> Unit): T = build().also(block)
 
-public fun Trace(
+public operator fun <T : Trace> Trace.Factory<T>.invoke(
     xs: Any,
     ys: Any? = null,
     zs: Any? = null,
     block: Trace.() -> Unit,
-): Trace = Trace {
+): T = invoke {
     x.set(xs)
     if (ys != null) y.set(ys)
     if (zs != null) z.set(zs)

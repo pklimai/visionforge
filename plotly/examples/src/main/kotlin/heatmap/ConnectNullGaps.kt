@@ -1,7 +1,12 @@
 package heatmap
 
-import space.kscience.plotly.*
+import space.kscience.plotly.Plotly
+import space.kscience.plotly.layout
 import space.kscience.plotly.models.Heatmap
+import space.kscience.plotly.models.invoke
+import space.kscience.plotly.page
+import space.kscience.plotly.plot
+import space.kscience.visionforge.html.openInBrowser
 
 
 /**
@@ -14,13 +19,14 @@ fun main() {
     val y2 = (0..6)
 
     val z1 = listOf(
-            listOf<Number?>(null, null, null, 12, 13, 14, 15, 16),
-            listOf<Number?>(null, 1, null, 11, null, null, null, 17),
-            listOf<Number?>(null, 2, 6, 7, null, null, null, 18),
-            listOf<Number?>(null, 3, null, 8, null, null, null, 19),
-            listOf<Number?>(5, 4, 10, 9, null, null, null, 20),
-            listOf<Number?>(null, null, null, 27, null, null, null, 21),
-            listOf<Number?>(null, null, null, 26, 25, 24, 23, 22))
+        listOf<Number?>(null, null, null, 12, 13, 14, 15, 16),
+        listOf<Number?>(null, 1, null, 11, null, null, null, 17),
+        listOf<Number?>(null, 2, 6, 7, null, null, null, 18),
+        listOf<Number?>(null, 3, null, 8, null, null, null, 19),
+        listOf<Number?>(5, 4, 10, 9, null, null, null, 20),
+        listOf<Number?>(null, null, null, 27, null, null, null, 21),
+        listOf<Number?>(null, null, null, 26, 25, 24, 23, 22)
+    )
 
     val heatmap1 = Heatmap {
         x.set(x1)
@@ -37,7 +43,7 @@ fun main() {
         connectgaps = true
     }
 
-    Plotly.fragment {
+    Plotly.page {
         plot {
             traces(heatmap1)
             layout {
@@ -55,5 +61,5 @@ fun main() {
                 title = "Connected Gaps"
             }
         }
-    }.makeFile()
+    }.openInBrowser()
 }

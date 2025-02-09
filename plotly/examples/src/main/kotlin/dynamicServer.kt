@@ -1,22 +1,21 @@
+import io.ktor.server.cio.CIO
+import io.ktor.server.engine.embeddedServer
 import kotlinx.coroutines.*
 import kotlinx.html.a
 import kotlinx.html.h1
-import space.kscience.dataforge.meta.invoke
-import space.kscience.plotly.Plotly
+import space.kscience.plotly.layout
 import space.kscience.plotly.models.Trace
 import space.kscience.plotly.models.invoke
-import space.kscience.plotly.plotly
-import space.kscience.plotly.server.close
-import space.kscience.plotly.server.pushUpdates
-import space.kscience.plotly.server.serve
-import space.kscience.plotly.server.show
+import space.kscience.plotly.plot
+import space.kscience.visionforge.plotly.plotlyPage
+import space.kscience.visionforge.server.openInBrowser
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
 
 @OptIn(DelicateCoroutinesApi::class)
-fun main() {
+suspend fun main() {
 
     val freq = 1.0 / 1000
     val oscillationFreq = 1.0 / 10000
@@ -28,14 +27,13 @@ fun main() {
     val sinTrace = Trace(x, sinY) { name = "sin" }
     val cosTrace = Trace(x, cosY) { name = "cos" }
 
-    val server = Plotly.serve(port = 7878) {
-        embedData = true
+    val server = embeddedServer(CIO, port = 7878) {
 
         //root level plots go to default page
-        page { plotly ->
+        plotlyPage {
             h1 { +"This is the plot page" }
             a("/other") { +"The other page" }
-            plotly(renderer = plotly) {
+            plot {
                 traces(sinTrace, cosTrace)
                 layout {
                     title = "Other dynamic plot"
@@ -45,10 +43,10 @@ fun main() {
             }
         }
 
-        page("other") { plotly ->
+        plotlyPage("other") {
             h1 { +"This is the other plot page" }
             a("/") { +"Back to the main page" }
-            plotly(renderer = plotly) {
+            plot {
                 traces(sinTrace)
                 layout {
                     title = "Dynamic plot"
@@ -57,10 +55,9 @@ fun main() {
                 }
             }
         }
-        pushUpdates(50)       // start sending updates via websocket to the front-end
-    }
+    }.start(false)
 
-    server.show()
+    server.openInBrowser()
 
     //Start pushing updates
     GlobalScope.launch {
@@ -76,9 +73,9 @@ fun main() {
     }
 
     println("Press Enter to close server")
-    while (readLine()?.trim() != "exit"){
+    while (readLine()?.trim() != "exit") {
         //wait
     }
 
-    server.close()
+    server.stop()
 }

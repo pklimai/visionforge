@@ -5,7 +5,7 @@ import kotlinx.cli.ArgType
 import kotlinx.cli.optional
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.UnstablePlotlyAPI
-import space.kscience.plotly.makeFile
+import space.kscience.visionforge.html.makeFile
 import java.io.File
 import java.nio.file.Path
 

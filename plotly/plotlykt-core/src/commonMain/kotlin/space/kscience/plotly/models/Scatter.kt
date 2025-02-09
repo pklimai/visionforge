@@ -2,7 +2,6 @@ package space.kscience.plotly.models
 
 import space.kscience.dataforge.meta.enum
 import space.kscience.dataforge.meta.numberList
-import space.kscience.dataforge.meta.scheme
 import space.kscience.dataforge.meta.string
 import space.kscience.plotly.Plot
 import kotlin.js.JsName
@@ -150,7 +149,9 @@ public open class Scatter : Trace(), SelectedPoints {
         unselected = SelectPoints(block)
     }
 
-    public companion object
+    public companion object : Factory<Scatter> {
+        override fun build(): Scatter = Scatter()
+    }
 }
 
 public inline fun Plot.scatter(block: Scatter.() -> Unit): Scatter {

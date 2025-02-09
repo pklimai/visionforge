@@ -1,7 +1,11 @@
 package annotation
 
-import space.kscience.plotly.*
+import space.kscience.plotly.Plotly
+import space.kscience.plotly.layout
 import space.kscience.plotly.models.ScatterMode
+import space.kscience.plotly.models.scatter
+import space.kscience.plotly.openInBrowser
+import space.kscience.plotly.text
 
 fun main() {
     val plot = Plotly.plot {
@@ -26,5 +30,5 @@ fun main() {
         }
     }
 
-    plot.makeFile()
+    plot.openInBrowser()
 }

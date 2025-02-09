@@ -2,8 +2,8 @@ package bar
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.bar
-import space.kscience.plotly.makeFile
+import space.kscience.plotly.models.bar
+import space.kscience.plotly.openInBrowser
 
 
 /**
@@ -16,8 +16,10 @@ fun main() {
         bar {
             x("Liam", "Sophie", "Jacob", "Mia", "William", "Olivia")
             y(8.0, 8.0, 12.0, 12.0, 13.0, 20.0)
-            text("4.17 below the mean", "4.17 below the mean", "0.17 below the mean",
-                    "0.17 below the mean", "0.83 above the mean", "7.83 above the mean")
+            text(
+                "4.17 below the mean", "4.17 below the mean", "0.17 below the mean",
+                "0.17 below the mean", "0.83 above the mean", "7.83 above the mean"
+            )
             marker {
                 color("rgb(142, 124, 195)")
             }
@@ -41,5 +43,5 @@ fun main() {
             bargap = 0.05
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

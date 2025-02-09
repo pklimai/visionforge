@@ -1,9 +1,13 @@
 import kotlinx.html.div
 import kotlinx.html.h1
 import kotlinx.html.hr
-import space.kscience.plotly.*
+import space.kscience.plotly.Plotly
+import space.kscience.plotly.layout
 import space.kscience.plotly.models.Trace
 import space.kscience.plotly.models.invoke
+import space.kscience.plotly.page
+import space.kscience.plotly.staticPlot
+import space.kscience.visionforge.html.openInBrowser
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -17,8 +21,8 @@ fun main() {
     val trace1 = Trace(x1, y1) { name = "sin" }
     val trace2 = Trace(x1, y2) { name = "cos" }
 
-    Plotly.page { container ->
-        plot(renderer = container) {
+    Plotly.page {
+        staticPlot{
             traces(trace1, trace2)
             layout {
                 title = "The plot above"
@@ -30,7 +34,7 @@ fun main() {
         h1 { +"A custom separator" }
         hr()
         div {
-            plot {
+            staticPlot {
                 traces(trace1, trace2)
                 layout {
                     title = "The plot below"
@@ -39,5 +43,5 @@ fun main() {
                 }
             }
         }
-    }.makeFile()
+    }.openInBrowser()
 }

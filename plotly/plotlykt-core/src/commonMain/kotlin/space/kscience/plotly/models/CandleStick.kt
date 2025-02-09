@@ -7,17 +7,18 @@ import space.kscience.plotly.Plot
 import space.kscience.plotly.doubleInRange
 
 
-public enum class XPeriodAlignment{
+public enum class XPeriodAlignment {
     start,
     middle,
     end
 }
 
-public class CandleStickLine: Scheme(){
+public class CandleStickLine : Scheme() {
     public val fillcolor: Color by color()
     public val lineColor: Color by color(Name.parse("line.color"))
     public var lineWidth: Double by double(2.0, key = Name.parse("line.width"))
-    public companion object: SchemeSpec<CandleStickLine>(::CandleStickLine)
+
+    public companion object : SchemeSpec<CandleStickLine>(::CandleStickLine)
 }
 
 public class CandleStick : Trace() {
@@ -81,7 +82,9 @@ public class CandleStick : Trace() {
      */
     public var whiskerwidth: Double by doubleInRange(0.0..1.0)
 
-    public companion object
+    public companion object : Factory<CandleStick> {
+        override fun build(): CandleStick = CandleStick()
+    }
 }
 
 public inline fun Plot.candlestick(block: CandleStick.() -> Unit): CandleStick {

@@ -1,8 +1,8 @@
 package misc
 
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.bar
-import space.kscience.plotly.makeFile
+import space.kscience.plotly.models.bar
+import space.kscience.plotly.openInBrowser
 
 fun main() {
     val plot = Plotly.plot {
@@ -11,5 +11,5 @@ fun main() {
             y(20)
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

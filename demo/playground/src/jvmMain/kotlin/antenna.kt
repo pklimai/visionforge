@@ -5,15 +5,21 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import space.kscience.dataforge.meta.configure
 import space.kscience.kmath.complex.Quaternion
-import space.kscience.kmath.complex.QuaternionField
+import space.kscience.kmath.complex.QuaternionAlgebra
 import space.kscience.kmath.complex.conjugate
-import space.kscience.kmath.geometry.*
+import space.kscience.kmath.geometry.Angle
+import space.kscience.kmath.geometry.degrees
+import space.kscience.kmath.geometry.euclidean3d.Float64Space3D
+import space.kscience.kmath.geometry.euclidean3d.RotationOrder
+import space.kscience.kmath.geometry.euclidean3d.fromEuler
+import space.kscience.kmath.geometry.euclidean3d.fromRotation
+import space.kscience.visionforge.Colors
 import space.kscience.visionforge.solid.*
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-fun main() = serve {
+suspend fun main() = serve {
 
 //    val azimuth = 60.degrees
 //    val inclination = 15.degrees
@@ -37,7 +43,9 @@ fun main() = serve {
             rotationX = -PI / 2
             rotationZ = PI
             //axes(200)
-            ambientLight()
+            ambientLight {
+                color(Colors.white)
+            }
             val platform = solidGroup("platform") {
                 cylinder(50, 5, name = "base")
                 solidGroup("frame") {
@@ -72,20 +80,20 @@ fun main() = serve {
             val xPeriod = 5000 //ms
             val yPeriod = 7000 //ms
 
-            val incRot = Quaternion.fromRotation(30.degrees, Euclidean3DSpace.zAxis)
+            val incRot = Quaternion.fromRotation(30.degrees, Float64Space3D.zAxis)
 
 
             context.launch {
                 var time: Long = 0L
                 while (isActive) {
-                    with(QuaternionField) {
+                    with(QuaternionAlgebra) {
                         delay(200)
                         platform.quaternion = Quaternion.fromRotation(
                             15.degrees * sin(time.toDouble() * 2 * PI / xPeriod),
-                            Euclidean3DSpace.xAxis
+                            Float64Space3D.xAxis
                         ) * Quaternion.fromRotation(
                             15.degrees * cos(time * 2 * PI / yPeriod),
-                            Euclidean3DSpace.yAxis
+                            Float64Space3D.yAxis
                         )
 
                         val qi = platform.quaternion * incRot

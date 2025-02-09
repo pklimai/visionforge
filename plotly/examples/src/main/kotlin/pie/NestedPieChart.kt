@@ -3,8 +3,9 @@ package pie
 import space.kscience.dataforge.meta.Value
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.Pie
+import space.kscience.plotly.models.invoke
+import space.kscience.plotly.openInBrowser
 import space.kscience.plotly.palettes.Xkcd
 
 
@@ -74,5 +75,5 @@ fun main() {
             }
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

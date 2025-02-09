@@ -3,8 +3,9 @@ package contour
 import space.kscience.dataforge.meta.Value
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.Contour
+import space.kscience.plotly.models.invoke
+import space.kscience.plotly.openInBrowser
 import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
@@ -55,5 +56,5 @@ fun main() {
         }
     }
 
-    plot.makeFile()
+    plot.openInBrowser()
 }

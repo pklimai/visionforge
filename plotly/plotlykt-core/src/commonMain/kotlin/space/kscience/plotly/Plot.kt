@@ -11,10 +11,7 @@ import space.kscience.dataforge.misc.DFBuilder
 import space.kscience.dataforge.names.NameToken
 import space.kscience.plotly.models.Layout
 import space.kscience.plotly.models.Trace
-import space.kscience.visionforge.AbstractVision
-import space.kscience.visionforge.VisionEvent
-import space.kscience.visionforge.VisionGroup
-import space.kscience.visionforge.VisionGroupCompositionChangedEvent
+import space.kscience.visionforge.*
 
 /**
  * The main plot class.
@@ -22,16 +19,33 @@ import space.kscience.visionforge.VisionGroupCompositionChangedEvent
  */
 @DFBuilder
 @Serializable
-public class Plot : AbstractVision(), VisionGroup<Trace> {
+public class Plot : AbstractVision(), MutableVisionGroup<Trace> {
 
     private val _data = mutableListOf<Trace>()
     public val data: List<Trace> get() = _data
 
     override val visions: Map<NameToken, Trace>
-        get() = data.associateBy { it.uid }
+        get() = data.mapIndexed { index, value -> NameToken("trace", index.toString()) to value }.toMap()
 
-    override suspend fun receiveEvent(event: VisionEvent) {
-        super<VisionGroup>.receiveEvent(event)
+    override fun convertVisionOrNull(vision: Vision): Trace? = vision as? Trace
+
+    @JvmSynchronized
+    override fun setVision(
+        token: NameToken,
+        vision: Trace?
+    ) {
+        val index = if (token.body == "trace") token.index?.toIntOrNull() ?: -1 else -1
+        if (index != -1) {
+            if (vision == null) {
+                _data.removeAt(index)
+            } else {
+                _data[index] = vision
+            }
+        } else {
+            if (vision != null) {
+                _data.add(vision)
+            }
+        }
     }
 
     /**
@@ -39,9 +53,10 @@ public class Plot : AbstractVision(), VisionGroup<Trace> {
      */
     public val layout: Layout by properties.scheme(Layout)
 
+    @JvmSynchronized
     public fun addTrace(trace: Trace) {
         _data.add(trace)
-        emitEvent(VisionGroupCompositionChangedEvent(trace.uid, trace))
+        emitEvent(VisionGroupCompositionChangedEvent(NameToken("trace", _data.size.toString()), trace))
     }
 
     /**
@@ -62,6 +77,7 @@ public class Plot : AbstractVision(), VisionGroup<Trace> {
      * Remove a trace with a given [index] from the plot
      */
     @UnstablePlotlyAPI
+    @JvmSynchronized
     internal fun removeTrace(index: Int) {
         _data.removeAt(index)
     }

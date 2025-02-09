@@ -1,24 +1,22 @@
 package candlestick
 
+import io.ktor.server.cio.CIO
+import io.ktor.server.engine.embeddedServer
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import space.kscience.plotly.Plotly
+import space.kscience.plotly.Plotly.plot
 import space.kscience.plotly.layout
 import space.kscience.plotly.models.AxisType
 import space.kscience.plotly.models.DragMode
-import space.kscience.plotly.plotly
-import space.kscience.plotly.server.close
-import space.kscience.plotly.server.pushUpdates
-import space.kscience.plotly.server.serve
-import space.kscience.plotly.server.show
+import space.kscience.visionforge.plotly.plotlyPage
+import space.kscience.visionforge.server.openInBrowser
 import kotlin.random.Random
 
-fun main() {
-    val server = Plotly.serve {
-        pushUpdates(50)
-        page { plotly ->
-            plotly(renderer = plotly) {
+suspend fun main() {
+    val server = embeddedServer(CIO, 7777) {
+        plotlyPage {
+            plot {
                 traces(candleStickTrace)
                 layout {
                     dragmode = DragMode.zoom
@@ -43,17 +41,18 @@ fun main() {
                 launch {
                     while (isActive) {
                         delay(400)
-                        candleStickTrace.open.numbers = candleStickTrace.open.doubles.map { it + Random.nextDouble() - 0.5 }
+                        candleStickTrace.open.numbers =
+                            candleStickTrace.open.doubles.map { it + Random.nextDouble() - 0.5 }
                     }
                 }
             }
         }
     }
-    server.show()
+    server.openInBrowser()
     println("Enter 'exit' to close server")
     while (readLine()?.trim() != "exit") {
         //wait
     }
 
-    server.close()
+    server.stop()
 }

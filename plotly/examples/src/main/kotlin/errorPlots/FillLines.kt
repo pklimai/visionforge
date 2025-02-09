@@ -2,11 +2,8 @@ package errorPlots
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
-import space.kscience.plotly.models.FillType
-import space.kscience.plotly.models.Scatter
-import space.kscience.plotly.models.ScatterMode
-import space.kscience.plotly.models.Ticks
+import space.kscience.plotly.models.*
+import space.kscience.plotly.openInBrowser
 
 
 /**
@@ -108,5 +105,5 @@ fun main() {
             }
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

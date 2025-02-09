@@ -7,8 +7,8 @@ val dataforgeVersion: String by rootProject.extra
 kscience {
     jvm()
     js()
-    native()
-    wasm()
+    native {}
+//    wasm()
     useCoroutines()
     commonMain {
         api("space.kscience:dataforge-context:$dataforgeVersion")

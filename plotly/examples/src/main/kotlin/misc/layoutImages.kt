@@ -2,10 +2,10 @@ package misc
 
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.layout
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.ImageXAnchor
 import space.kscience.plotly.models.ImageYAnchor
-import space.kscience.plotly.scatter
+import space.kscience.plotly.models.scatter
+import space.kscience.plotly.openInBrowser
 
 fun main() {
     Plotly.plot {
@@ -35,5 +35,5 @@ fun main() {
                 yanchor = ImageYAnchor.bottom
             }
         }
-    }.makeFile()
+    }.openInBrowser()
 }

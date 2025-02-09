@@ -2,12 +2,8 @@ package errorPlots
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
-import space.kscience.plotly.models.ErrorType
-import space.kscience.plotly.models.TraceOrder
-import space.kscience.plotly.models.XAnchor
-import space.kscience.plotly.models.YAnchor
-import space.kscience.plotly.scatter
+import space.kscience.plotly.models.*
+import space.kscience.plotly.openInBrowser
 
 /**
  * - asymmetric error bars
@@ -70,5 +66,5 @@ fun main() {
         }
     }
 
-    plot.makeFile()
+    plot.openInBrowser()
 }

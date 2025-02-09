@@ -16,13 +16,14 @@ kotlin {
     sourceSets {
         jvmMain {
             dependencies {
-                implementation(projects.plotly.plotlyktCore)
+                implementation(projects.plotly.plotlyktServer)
+                api("io.ktor:ktor-server-cio")
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
                 implementation(compose.desktop.currentOs)
-                implementation("io.github.kevinnzou:compose-webview-multiplatform:1.9.8")
+                implementation("io.github.kevinnzou:compose-webview-multiplatform:1.9.40")
                 implementation(spclibs.logback.classic)
             }
         }

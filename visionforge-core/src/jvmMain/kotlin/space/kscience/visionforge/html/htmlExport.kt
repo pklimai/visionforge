@@ -5,7 +5,6 @@ import kotlinx.html.head
 import kotlinx.html.meta
 import kotlinx.html.stream.createHTML
 import space.kscience.dataforge.context.Global
-import space.kscience.dataforge.misc.DFExperimental
 import space.kscience.visionforge.visionManager
 import java.awt.Desktop
 import java.nio.file.Files
@@ -37,16 +36,16 @@ public fun VisionPage.makeFile(
     path: Path?,
     fileHeaders: ((Path) -> Map<String, HtmlFragment>) = { emptyMap() },
 ): Path {
-    val actualFile = path ?: Files.createTempFile("tempPlot", ".html")
+    val actualFile = path ?: Files.createTempFile("vfPage", ".html")
 
     val htmlString = makeString(fileHeaders(actualFile))
 
     Files.writeString(actualFile, htmlString)
+
     return actualFile
 }
 
-@DFExperimental
-public fun VisionPage.show(path: Path? = null) {
+public fun VisionPage.openInBrowser(path: Path? = null) {
     val actualPath = makeFile(path)
     Desktop.getDesktop().browse(actualPath.toFile().toURI())
 }

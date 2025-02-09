@@ -2,8 +2,8 @@ package plots3d
 
 import space.kscience.dataforge.meta.asValue
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.TraceType
+import space.kscience.plotly.openInBrowser
 import space.kscience.plotly.trace
 
 private fun l(vararg numbers: Number) = numbers.map { it.asValue() }.asValue()
@@ -31,5 +31,5 @@ fun main() {
             type = TraceType.surface
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

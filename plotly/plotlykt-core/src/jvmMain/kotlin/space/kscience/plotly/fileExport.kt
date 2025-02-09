@@ -1,5 +1,6 @@
 package space.kscience.plotly
 
+import space.kscience.visionforge.html.HtmlFragment
 import java.awt.Desktop
 import java.nio.file.Files
 import java.nio.file.Path
@@ -38,21 +39,26 @@ public enum class ResourceLocation {
  * Create a standalone html with the plot
  * @param path the reference to html file. If null, create a temporary file
  * @param resourceLocation specifies where to store resources for page display
- * @param show if true, start the browser after file is created
  * @param config represents plotly frame configuration
  */
 public fun Plot.makeFile(
-    path: Path? = null,
-    show: Boolean = true,
+    path: Path,
+    vararg headers: HtmlFragment = emptyArray(),
     resourceLocation: ResourceLocation = ResourceLocation.LOCAL,
     config: PlotlyConfig = PlotlyConfig(),
 ) {
-    val actualFile = path ?: Files.createTempFile("tempPlot", ".html")
-    Files.createDirectories(actualFile.parent)
-    Files.writeString(actualFile, toHTMLPage(inferPlotlyHeader(path, resourceLocation), config = config))
-    if (show) {
-        Desktop.getDesktop().browse(actualFile.toFile().toURI())
-    }
+    Files.createDirectories(path.parent)
+    Files.writeString(path, toHTMLPage(inferPlotlyHeader(path, resourceLocation), *headers, config = config))
+}
+
+public fun Plot.openInBrowser(
+    vararg headers: HtmlFragment = emptyArray(),
+    path: Path = Files.createTempFile("vfPlot", ".html"),
+    resourceLocation: ResourceLocation = ResourceLocation.LOCAL,
+    config: PlotlyConfig = PlotlyConfig(),
+) {
+    makeFile(path, *headers, resourceLocation = resourceLocation, config = config)
+    Desktop.getDesktop().browse(path.toFile().toURI())
 }
 
 ///**

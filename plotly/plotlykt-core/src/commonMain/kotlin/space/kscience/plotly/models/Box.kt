@@ -1,6 +1,9 @@
 package space.kscience.plotly.models
 
-import space.kscience.dataforge.meta.*
+import space.kscience.dataforge.meta.Value
+import space.kscience.dataforge.meta.boolean
+import space.kscience.dataforge.meta.enum
+import space.kscience.dataforge.meta.numberList
 import space.kscience.plotly.Plot
 import space.kscience.plotly.doubleInRange
 import space.kscience.plotly.listOfValues
@@ -221,7 +224,10 @@ public class Box : Trace(), SelectedPoints {
         unselected = SelectPoints(block)
     }
 
-    public companion object
+    public companion object: Factory<Box>{
+        override fun build(): Box = Box()
+
+    }
 }
 
 public inline fun Plot.box(block: Box.() -> Unit): Box {

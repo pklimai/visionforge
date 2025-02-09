@@ -3,8 +3,11 @@ package space.kscience.plotly.script
 import kotlinx.html.FlowContent
 import mu.KLogger
 import mu.KotlinLogging
-import space.kscience.plotly.*
+import space.kscience.plotly.Plotly
+import space.kscience.plotly.UnstablePlotlyAPI
+import space.kscience.plotly.cdnPlotlyHeader
 import space.kscience.visionforge.html.HtmlFragment
+import space.kscience.visionforge.html.VisionPage
 import java.io.File
 import kotlin.script.experimental.api.*
 import kotlin.script.experimental.host.toScriptSource
@@ -17,9 +20,9 @@ import kotlin.script.experimental.jvmhost.BasicJvmScriptingHost
 public fun Plotly.page(
     source: SourceCode,
     title: String = "Plotly.kt",
-    headers: Array<HtmlFragment> = arrayOf(cdnPlotlyHeader),
+    headers: Map<String, HtmlFragment> = mapOf("plotly" to cdnPlotlyHeader),
     logger: KLogger = KotlinLogging.logger("scripting")
-): PlotlyPage {
+): VisionPage {
 
     val workspaceScriptConfiguration = ScriptCompilationConfiguration {
         baseClass(PlotlyScript::class)
@@ -38,7 +41,7 @@ public fun Plotly.page(
         hostConfiguration(defaultJvmScriptingHostConfiguration)
     }
 
-    return page(title = title, headers = headers) {
+    return VisionPage(plugin.visionManager, pageHeaders = headers + ("title" to VisionPage.title(title))) {
         val flow = this
         val evaluationConfiguration = ScriptEvaluationConfiguration {
             implicitReceivers(flow)
@@ -63,15 +66,15 @@ public fun Plotly.page(
 public fun Plotly.page(
     file: File,
     title: String = "Plotly.kt",
-    headers: Array<HtmlFragment> = arrayOf(cdnPlotlyHeader),
+    headers: Map<String, HtmlFragment> = mapOf("plotly" to cdnPlotlyHeader),
     logger: KLogger = KotlinLogging.logger("scripting")
-): PlotlyPage = page(file.toScriptSource(), title, headers, logger)
+): VisionPage = page(file.toScriptSource(), title, headers, logger)
 
 
 @OptIn(UnstablePlotlyAPI::class)
 public fun Plotly.page(
     string: String,
     title: String = "Plotly.kt",
-    headers: Array<HtmlFragment> = arrayOf(cdnPlotlyHeader),
+    headers: Map<String, HtmlFragment> = mapOf("plotly" to cdnPlotlyHeader),
     logger: KLogger = KotlinLogging.logger("scripting")
-): PlotlyPage = page(string.toScriptSource(), title, headers, logger)
+): VisionPage = page(string.toScriptSource(), title, headers, logger)

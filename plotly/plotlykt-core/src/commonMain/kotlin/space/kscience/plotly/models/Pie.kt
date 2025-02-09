@@ -114,7 +114,10 @@ public class Pie : Trace() {
      */
     public var textinfo: TextInfo by enum(TextInfo.percent)
 
-    public companion object
+    public companion object: Factory<Pie>{
+        override fun build(): Pie = Pie()
+
+    }
 }
 
 public inline fun Plot.pie(block: Pie.() -> Unit): Pie {

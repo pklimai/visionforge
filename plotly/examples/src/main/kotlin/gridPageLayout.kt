@@ -3,6 +3,8 @@ import space.kscience.plotly.*
 import space.kscience.plotly.models.Trace
 import space.kscience.plotly.models.invoke
 import space.kscience.plotly.palettes.T10
+import space.kscience.visionforge.html.VisionPage
+import space.kscience.visionforge.html.openInBrowser
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -60,15 +62,15 @@ private class PlotGrid {
 }
 
 
-private fun Plotly.grid(block: PlotGrid.() -> Unit): PlotlyPage {
+private fun Plotly.grid(block: PlotGrid.() -> Unit): VisionPage {
     val grid = PlotGrid().apply(block)
-    return page(cdnBootstrap, cdnPlotlyHeader) { container ->
+    return page(cdnBootstrap, cdnPlotlyHeader) {
         div("col") {
             grid.grid.forEach { row ->
                 div("row") {
                     row.forEach { cell ->
                         div("col-${cell.width}") {
-                            plotly(cell.plot, cell.id, renderer = container)
+                            staticPlot(cell.plot, plotId = cell.id)
                         }
                     }
                 }
@@ -125,5 +127,5 @@ fun main() {
         }
     }
 
-    plot.makeFile()
+    plot.openInBrowser()
 }

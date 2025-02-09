@@ -3,10 +3,10 @@ package heatmap
 import space.kscience.dataforge.meta.Value
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.heatmap
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.Font
 import space.kscience.plotly.models.Text
+import space.kscience.plotly.models.heatmap
+import space.kscience.plotly.openInBrowser
 
 /**
  * - Simple heatmap with annotations
@@ -17,10 +17,11 @@ fun main() {
     val x1 = listOf("Monday", "Wednesday", "Friday", "Sunday")
     val y1 = listOf("June", "July", "August")
     val z1 = listOf(
-            listOf<Number>(.1, .3, .5, .7),
-            listOf<Number>(1.0, .8, .6, .4),
-            listOf<Number>(.6, .4, .2, 0.0),
-            listOf<Number>(.9, .7, .5, .3))
+        listOf<Number>(.1, .3, .5, .7),
+        listOf<Number>(1.0, .8, .6, .4),
+        listOf<Number>(.6, .4, .2, 0.0),
+        listOf<Number>(.9, .7, .5, .3)
+    )
     val customColorscale = listOf(listOf(0, "navy"), listOf(1, "plum"))
 
     val annotationsList = mutableListOf<Text>()
@@ -67,5 +68,5 @@ fun main() {
         }
     }
 
-    plot.makeFile()
+    plot.openInBrowser()
 }

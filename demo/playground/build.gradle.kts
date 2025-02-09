@@ -12,7 +12,7 @@ repositories {
 }
 
 kotlin {
-    jvmToolchain(11)
+    jvmToolchain(17)
     js(IR) {
         browser {
             webpackTask {
@@ -31,7 +31,7 @@ kotlin {
     jvm {
 //        withJava()
         compilerOptions {
-            freeCompilerArgs.addAll("-Xjvm-default=all", "-Xopt-in=kotlin.RequiresOptIn", "-Xlambdas=indy", "-Xcontext-receivers")
+            freeCompilerArgs.addAll("-Xjvm-default=all", "-Xcontext-parameters")
 
         }
         testRuns["test"].executionTask.configure {

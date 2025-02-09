@@ -6,9 +6,10 @@ import org.jetbrains.kotlinx.dataframe.api.column
 import org.jetbrains.kotlinx.dataframe.api.filter
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.Violin
 import space.kscience.plotly.models.ViolinMode
+import space.kscience.plotly.models.invoke
+import space.kscience.plotly.openInBrowser
 
 
 /**
@@ -55,5 +56,5 @@ fun main() {
             violinmode = ViolinMode.group
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

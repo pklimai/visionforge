@@ -2,7 +2,7 @@ package errorPlots
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
+import space.kscience.plotly.openInBrowser
 import space.kscience.plotly.palettes.Xkcd
 import space.kscience.plotly.trace
 import java.util.*
@@ -34,5 +34,5 @@ fun main() {
         }
     }
 
-    plot.makeFile()
+    plot.openInBrowser()
 }

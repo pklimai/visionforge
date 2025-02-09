@@ -1,9 +1,10 @@
 package table
 
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.HorizontalAlign
-import space.kscience.plotly.models.Table
+import space.kscience.plotly.models.PlotlyTable
+import space.kscience.plotly.models.invoke
+import space.kscience.plotly.openInBrowser
 
 /**
  * - basic table trace with customization.
@@ -18,10 +19,10 @@ fun main() {
     )
 
     val labels = listOf(
-            listOf("<b>EXPENSES</b>"), listOf("<b>Q1</b>"), listOf("<b>Q2</b>"), listOf("<b>Q3</b>"), listOf("<b>Q4</b>")
+        listOf("<b>EXPENSES</b>"), listOf("<b>Q1</b>"), listOf("<b>Q2</b>"), listOf("<b>Q3</b>"), listOf("<b>Q4</b>")
     )
 
-    val table = Table {
+    val table = PlotlyTable {
         columnorder(0, 1, 2, 4, 3)
         columnwidth(10, 10, 30, 30, 20)
         header {
@@ -59,5 +60,5 @@ fun main() {
         }
     }
 
-    Plotly.plot { traces(table) }.makeFile()
+    Plotly.plot { traces(table) }.openInBrowser()
 }

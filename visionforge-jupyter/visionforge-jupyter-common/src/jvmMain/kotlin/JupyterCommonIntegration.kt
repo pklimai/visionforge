@@ -1,21 +1,13 @@
 package space.kscience.visionforge.jupyter
 
-import kotlinx.html.div
-import kotlinx.html.p
 import org.jetbrains.kotlinx.jupyter.api.libraries.resources
 import space.kscience.dataforge.context.Context
 import space.kscience.gdml.Gdml
 import space.kscience.plotly.Plot
-import space.kscience.plotly.PlotlyPage
-import space.kscience.plotly.StaticPlotlyRenderer
+import space.kscience.plotly.PlotlyPlugin
 import space.kscience.tables.Table
 import space.kscience.visionforge.gdml.toVision
-import space.kscience.visionforge.html.HtmlFragment
-import space.kscience.visionforge.html.VisionPage
-import space.kscience.visionforge.html.appendTo
 import space.kscience.visionforge.markup.MarkupPlugin
-import space.kscience.visionforge.plotly.PlotlyPlugin
-import space.kscience.visionforge.plotly.asVision
 import space.kscience.visionforge.solid.Solids
 import space.kscience.visionforge.tables.TableVisionPlugin
 import space.kscience.visionforge.tables.toVision
@@ -56,27 +48,10 @@ public class JupyterCommonIntegration : VisionForgeIntegration(CONTEXT.visionMan
 
         render<Plot> { plot ->
             vf.produceHtml {
-                vision { plot.asVision() }
+                vision { plot }
             }
         }
 
-
-        render<PlotlyPage> { plotlyPage ->
-            val headers = plotlyPage.headers.associate { plotlyFragment ->
-                plotlyFragment.hashCode().toString(16) to HtmlFragment {
-                    plotlyFragment.appendTo(this)
-                }
-
-            }
-            VisionPage(visionManager, headers) {
-                div{
-                    p { +"Plotly page renderer is not recommended in VisionForge, use `vf.page{}`" }
-                }
-                div {
-                    plotlyPage.fragment.render.invoke(this, StaticPlotlyRenderer)
-                }
-            }
-        }
     }
 
     public companion object {

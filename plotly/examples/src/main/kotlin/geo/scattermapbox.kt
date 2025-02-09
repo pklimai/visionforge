@@ -6,11 +6,11 @@ import org.jetbrains.kotlinx.dataframe.io.readCSV
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.layout
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.DragMode
 import space.kscience.plotly.models.geo.mapbox
 import space.kscience.plotly.models.geo.scattermapbox
 import space.kscience.plotly.models.geo.useOpenStreetMap
+import space.kscience.plotly.openInBrowser
 
 private val df = DataFrame.readCSV(
     "https://raw.githubusercontent.com/plotly/datasets/master/2015_06_30_precipitation.csv"
@@ -43,5 +43,5 @@ fun main() {
             }
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

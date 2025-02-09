@@ -3,7 +3,7 @@ import space.kscience.plotly.*
 import space.kscience.plotly.models.Trace
 import space.kscience.plotly.models.invoke
 import space.kscience.plotly.palettes.T10
-import space.kscience.visionforge.html.HtmlFragment
+import space.kscience.visionforge.html.*
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -12,7 +12,7 @@ public val cdnBootstrap: HtmlFragment = HtmlFragment {
     script {
         src = "https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity = "sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        attributes["crossorigin"] =  "anonymous"
+        attributes["crossorigin"] = "anonymous"
     }
     script {
         src = "https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
@@ -28,22 +28,21 @@ public val cdnBootstrap: HtmlFragment = HtmlFragment {
 }
 
 
-
 public class PlotTabs {
-    public data class Tab(val title: String, val id: String, val content: PlotlyFragment)
+    public data class Tab(val title: String, val id: String, val content: HtmlVisionFragment)
 
     private val _tabs = ArrayList<Tab>()
     public val tabs: List<Tab> get() = _tabs
 
-    public fun tab(title: String, id: String = title, block: FlowContent.(renderer: PlotlyRenderer) -> Unit) {
-        _tabs.add(Tab(title, id, PlotlyFragment(block)))
+    public fun tab(title: String, id: String = title, fragment: HtmlVisionFragment) {
+        _tabs.add(Tab(title, id, fragment))
     }
 }
 
-public fun Plotly.tabs(tabsID: String = "tabs", block: PlotTabs.() -> Unit): PlotlyPage {
+public fun Plotly.tabs(tabsID: String = "tabs", block: PlotTabs.() -> Unit): VisionPage {
     val grid = PlotTabs().apply(block)
 
-    return page(cdnBootstrap, cdnPlotlyHeader) { container ->
+    return page(cdnBootstrap, cdnPlotlyHeader) {
         ul("nav nav-tabs") {
             role = "tablist"
             id = tabsID
@@ -74,7 +73,7 @@ public fun Plotly.tabs(tabsID: String = "tabs", block: PlotTabs.() -> Unit): Plo
                     id = tab.id
                     role = "tabpanel"
                     attributes["aria-labelledby"] = "${tab.id}-tab"
-                    tab.content.render(this, container)
+                    visionFragment(visionManager, fragment = tab.content)
                 }
             }
         }
@@ -109,7 +108,7 @@ fun main() {
     val plot = Plotly.tabs {
 
         tab("First") {
-            plotly(config = responsive) {
+            plot(config = responsive) {
                 traces(trace1)
                 layout {
                     title = "First graph"
@@ -119,7 +118,7 @@ fun main() {
             }
         }
         tab("Second") {
-            plotly(config = responsive) {
+            plot(config = responsive) {
                 traces(trace2)
                 layout {
                     title = "Second graph"
@@ -130,5 +129,5 @@ fun main() {
         }
     }
 
-    plot.makeFile()
+    plot.openInBrowser()
 }

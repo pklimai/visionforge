@@ -4,6 +4,8 @@ import kotlinx.html.*
 import kotlinx.html.stream.createHTML
 import space.kscience.visionforge.html.HtmlFragment
 import space.kscience.visionforge.html.appendTo
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 
 public val cdnPlotlyHeader: HtmlFragment = HtmlFragment {
@@ -13,7 +15,7 @@ public val cdnPlotlyHeader: HtmlFragment = HtmlFragment {
     }
 }
 
-public fun FlowContent.plotly(
+public fun TagConsumer<*>.staticPlot(
     plot: Plot,
     config: PlotlyConfig = PlotlyConfig(),
     plotId: String = "plotly[${plot.hashCode().toUInt().toString(16)}]",
@@ -27,7 +29,7 @@ public fun FlowContent.plotly(
                 //language=JavaScript
                 +"""
                         Plotly.react(
-                            $plotId,
+                            '$plotId',
                             $tracesString,
                             $layoutString,
                             $config
@@ -37,6 +39,13 @@ public fun FlowContent.plotly(
         }
     }
 }
+
+@OptIn(ExperimentalUuidApi::class)
+public fun TagConsumer<*>.staticPlot(
+    config: PlotlyConfig = PlotlyConfig(),
+    plotId: String = "plotly[${Uuid.random()}]",
+    plot: Plot.() -> Unit
+) = staticPlot(Plotly.plot(plot), config, plotId)
 
 /**
  * Create an html (including headers) string from plot
@@ -55,7 +64,7 @@ public fun Plot.toHTMLPage(
         }
     }
     body {
-        plotly(this@toHTMLPage, config)
+        consumer.staticPlot(this@toHTMLPage, config)
     }
 }
 

@@ -2,8 +2,8 @@ package histogram
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.*
+import space.kscience.plotly.openInBrowser
 import java.util.*
 
 /**
@@ -33,7 +33,7 @@ fun main() {
 
     val trace2 = Histogram {
         x.numbers = k.map { it * 10 }
-        y.numbers = k.map { it*2 }
+        y.numbers = k.map { it * 2 }
         name = "experimental"
         marker {
             color(0, 100, 255, 0.7)
@@ -71,5 +71,5 @@ fun main() {
         }
     }
 
-    plot.makeFile()
+    plot.openInBrowser()
 }

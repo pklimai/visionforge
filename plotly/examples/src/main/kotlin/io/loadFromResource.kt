@@ -2,9 +2,9 @@ package io
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.ScatterMode
-import space.kscience.plotly.scatter
+import space.kscience.plotly.models.scatter
+import space.kscience.plotly.openInBrowser
 
 
 fun main() {
@@ -26,5 +26,5 @@ fun main() {
         }
     }
 
-    plot.makeFile()
+    plot.openInBrowser()
 }

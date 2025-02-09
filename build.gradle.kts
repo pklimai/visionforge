@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import space.kscience.gradle.useApache2Licence
 import space.kscience.gradle.useSPCTeam
 
@@ -6,7 +7,8 @@ plugins {
     alias(spclibs.plugins.kotlinx.kover)
 }
 
-val dataforgeVersion by extra("0.10.0")
+val dataforgeVersion by extra("0.10.1-dev-1")
+val plotlyVersion by extra("0.8.0")
 
 allprojects {
     group = "space.kscience"
@@ -24,9 +26,9 @@ subprojects {
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    tasks.withType<KotlinCompile> {
         compilerOptions {
-            freeCompilerArgs.addAll("-Xcontext-receivers")
+            freeCompilerArgs.addAll("-Xcontext-parameters")
         }
     }
 
@@ -43,7 +45,7 @@ ksciencePublish {
         useApache2Licence()
         useSPCTeam()
     }
-    repository("spc","https://maven.sciprog.center/kscience")
+    repository("spc", "https://maven.sciprog.center/kscience")
     central()
 }
 

@@ -4,6 +4,7 @@ import space.kscience.plotly.UnstablePlotlyAPI
 import space.kscience.plotly.export
 import space.kscience.plotly.models.Scatter
 import space.kscience.plotly.models.ScatterMode
+import space.kscience.plotly.models.invoke
 import space.kscience.plotly.selectFile
 import javax.swing.filechooser.FileNameExtensionFilter
 
@@ -84,5 +85,5 @@ fun main() {
         }
     }
 
-    plot.export(Plotly.selectFile(FileNameExtensionFilter("SVG","svg")) ?: error("File not selected"))
+    plot.export(Plotly.selectFile(FileNameExtensionFilter("SVG", "svg")) ?: error("File not selected"))
 }

@@ -27,7 +27,7 @@ suspend fun main() {
         }
 
         val form = VisionOfHtmlForm("form").apply {
-            onPropertyChange(visionManager.context) {
+            onPropertyChange(visionManager.context) { _, _ ->
                 println(values)
             }
         }

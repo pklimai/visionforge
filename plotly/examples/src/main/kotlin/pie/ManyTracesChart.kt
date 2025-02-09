@@ -3,9 +3,10 @@ package pie
 import space.kscience.dataforge.meta.Value
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.Pie
 import space.kscience.plotly.models.TextInfo
+import space.kscience.plotly.models.invoke
+import space.kscience.plotly.openInBrowser
 
 
 /**
@@ -16,15 +17,17 @@ import space.kscience.plotly.models.TextInfo
 fun main() {
     val allLabels = listOf("1st", "2nd", "3rd", "4th", "5th")
     val allValues = listOf(
-            listOf<Number>(38, 27, 18, 10, 7),
-            listOf<Number>(28, 26, 21, 15, 10),
-            listOf<Number>(38, 19, 16, 14, 13),
-            listOf<Number>(31, 24, 19, 18, 8))
+        listOf<Number>(38, 27, 18, 10, 7),
+        listOf<Number>(28, 26, 21, 15, 10),
+        listOf<Number>(38, 19, 16, 14, 13),
+        listOf<Number>(31, 24, 19, 18, 8)
+    )
     val ultimateColors = listOf(
-            listOf("rgb(56, 75, 126)", "rgb(18, 36, 37)", "rgb(34, 53, 101)", "rgb(36, 55, 57)", "rgb(6, 4, 4)"),
-            listOf("rgb(177, 127, 38)", "rgb(205, 152, 36)", "rgb(99, 79, 37)", "rgb(129, 180, 179)", "rgb(124, 103, 37)"),
-            listOf("rgb(33, 75, 99)", "rgb(79, 129, 102)", "rgb(151, 179, 100)", "rgb(175, 49, 35)", "rgb(36, 73, 147)"),
-            listOf("rgb(146, 123, 21)", "rgb(177, 180, 34)", "rgb(206, 206, 40)", "rgb(175, 51, 21)", "rgb(35, 36, 21)"))
+        listOf("rgb(56, 75, 126)", "rgb(18, 36, 37)", "rgb(34, 53, 101)", "rgb(36, 55, 57)", "rgb(6, 4, 4)"),
+        listOf("rgb(177, 127, 38)", "rgb(205, 152, 36)", "rgb(99, 79, 37)", "rgb(129, 180, 179)", "rgb(124, 103, 37)"),
+        listOf("rgb(33, 75, 99)", "rgb(79, 129, 102)", "rgb(151, 179, 100)", "rgb(175, 49, 35)", "rgb(36, 73, 147)"),
+        listOf("rgb(146, 123, 21)", "rgb(177, 180, 34)", "rgb(206, 206, 40)", "rgb(175, 51, 21)", "rgb(35, 36, 21)")
+    )
 
     val pie1 = Pie {
         values = allValues[0].map { Value.of(it) }
@@ -85,5 +88,5 @@ fun main() {
             showlegend = false
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

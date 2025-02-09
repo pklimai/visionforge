@@ -3,8 +3,8 @@ package heatmap
 import space.kscience.dataforge.meta.Value
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.heatmap
-import space.kscience.plotly.makeFile
+import space.kscience.plotly.models.heatmap
+import space.kscience.plotly.openInBrowser
 
 
 /**
@@ -30,5 +30,5 @@ fun main() {
         }
     }
 
-    plot.makeFile()
+    plot.openInBrowser()
 }

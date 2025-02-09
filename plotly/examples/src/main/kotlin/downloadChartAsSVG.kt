@@ -1,5 +1,7 @@
 import space.kscience.plotly.*
 import space.kscience.plotly.models.ScatterMode
+import space.kscience.plotly.models.scatter
+import space.kscience.visionforge.html.openInBrowser
 
 
 /**
@@ -7,7 +9,7 @@ import space.kscience.plotly.models.ScatterMode
  * - Download plot as SVG using configuration button
  */
 fun main() {
-    val fragment = Plotly.fragment {
+    val fragment = Plotly.page {
         val plotConfig = PlotlyConfig{
             saveAsSvg()
         }
@@ -32,5 +34,5 @@ fun main() {
             }
         }
     }
-    fragment.makeFile()
+    fragment.openInBrowser()
 }

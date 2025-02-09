@@ -12,13 +12,13 @@ import space.kscience.plotly.models.geo.choroplethMapBox
 import space.kscience.plotly.models.geo.json.GeoJsonFeatureCollection
 import space.kscience.plotly.models.geo.json.combine
 import space.kscience.plotly.models.geo.openStreetMap
-import space.kscience.plotly.server.close
-import space.kscience.plotly.server.plot
-import space.kscience.plotly.server.serve
+import space.kscience.plotly.plot
+import space.kscience.visionforge.plotly.serveSinglePage
+import space.kscience.visionforge.server.openInBrowser
 import java.net.URL
 import kotlin.random.Random
 
-fun main() {
+suspend fun main() {
 
     //downloading GeoJson
     val geoJsonString =
@@ -30,7 +30,7 @@ fun main() {
         it.getString("NAME_1") == "Sachsen"
     }.combine()
 
-    val server = Plotly.serve {
+    val server = Plotly.serveSinglePage {
         plot {
             choroplethMapBox {
                 geoJsonFeatures(features)
@@ -50,7 +50,7 @@ fun main() {
                 locations.numbers = features.map { it.id!!.int }
                 // Set random values to locations
                 z.numbers = features.map { Random.nextDouble(1.0, 10.0) }
-                launch {
+                context.launch {
                     while (isActive) {
                         delay(300)
                         z.numbers = features.map { Random.nextDouble(1.0, 10.0) }
@@ -62,15 +62,17 @@ fun main() {
                 title = "Geojson demo"
                 height = 800
             }
-            embedData = true
+//            embedData = true
+
         }
     }
 
+    server.openInBrowser()
 
     println("Press Enter to close server")
     while (readLine()?.trim() != "exit") {
         //wait
     }
 
-    server.close()
+    server.stop()
 }

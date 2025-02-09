@@ -1,34 +1,35 @@
 import space.kscience.plotly.*
+import space.kscience.plotly.models.scatter
 
 fun main() {
-    Plotly.page(mathJaxHeader, cdnPlotlyHeader) {
-        plot {
-            scatter {
-                x(2, 3, 4, 5)
-                y(10, 15, 13, 17)
-            }
+    Plotly.plot {
 
-            text {
-                position(2, 10)
-                font {
-                    size = 18
-                }
-                text = "\$\\alpha\$"
-            }
+        scatter {
+            x(2, 3, 4, 5)
+            y(10, 15, 13, 17)
+        }
 
-            text {
-                position(5, 17)
-                font {
-                    size = 18
-                }
-                text = "\$\\Omega\$"
+        text {
+            position(2, 10)
+            font {
+                size = 18
             }
+            text = "\$\\alpha\$"
+        }
 
-            layout {
-                title {
-                    text = "Plot with annotations \$\\alpha~and~\\Omega\$"
-                }
+        text {
+            position(5, 17)
+            font {
+                size = 18
+            }
+            text = "\$\\Omega\$"
+        }
+
+        layout {
+            title {
+                text = "Plot with annotations \$\\alpha~and~\\Omega\$"
             }
         }
-    }.makeFile()
+
+    }.openInBrowser(mathJaxHeader, cdnPlotlyHeader)
 }

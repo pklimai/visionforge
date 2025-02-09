@@ -3,10 +3,11 @@ package candlestick
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.layout
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.AxisType
 import space.kscience.plotly.models.CandleStick
 import space.kscience.plotly.models.DragMode
+import space.kscience.plotly.models.invoke
+import space.kscience.plotly.openInBrowser
 
 internal val candleStickTrace = CandleStick {
     x.strings = listOf(
@@ -211,5 +212,5 @@ fun main() {
                 type = AxisType.linear
             }
         }
-    }.makeFile()
+    }.openInBrowser()
 }

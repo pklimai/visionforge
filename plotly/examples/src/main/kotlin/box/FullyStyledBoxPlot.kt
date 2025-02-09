@@ -2,10 +2,11 @@ package box
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.Box
 import space.kscience.plotly.models.BoxPoints
 import space.kscience.plotly.models.Trace
+import space.kscience.plotly.models.invoke
+import space.kscience.plotly.openInBrowser
 import kotlin.random.Random
 
 
@@ -84,5 +85,5 @@ fun main() {
             plot_bgcolor("rgb(243, 243, 243)")
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

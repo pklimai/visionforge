@@ -8,23 +8,23 @@ repositories {
 }
 
 dependencies {
-    implementation(projects.plotly.plotlyktCore)
+    implementation(projects.plotly.plotlyktServer)
     implementation(projects.plotly.plotlyktScript)
     implementation(kotlin("script-runtime"))
     implementation("org.jetbrains.kotlinx:dataframe:0.13.1")
 }
 
 kotlin{
-    jvmToolchain(11)
+    jvmToolchain(17)
 }
 
 // A workaround for https://youtrack.jetbrains.com/issue/KT-44101
 
 val copyPlotlyResources by tasks.creating(Copy::class){
-    dependsOn(":plotly:plotlykt-core:jvmProcessResources")
-    mustRunAfter(":plotly:plotlykt-core:jvmTestProcessResources")
-    from(project(":plotly:plotlykt-core").layout.buildDirectory.file("processedResources/jvm"))
-    into(layout.buildDirectory.file("resources"))
+    dependsOn(":plotly:plotlykt-server:jvmProcessResources")
+    mustRunAfter(":plotly:plotlykt-server:jvmTestProcessResources")
+    from(project(":plotly:plotlykt-server").layout.buildDirectory.file("processedResources/jvm/main"))
+    into(layout.buildDirectory.file("resources/main"))
 }
 
 tasks.getByName("classes").dependsOn(copyPlotlyResources)

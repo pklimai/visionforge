@@ -12,7 +12,10 @@ import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.rememberWebViewNavigator
 import com.multiplatform.webview.web.rememberWebViewStateWithHTMLData
 import dev.datlag.kcef.KCEF
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.withContext
+import java.io.File
 
 private val allowedPages = listOf(
     "Static",
@@ -68,19 +71,50 @@ fun App() {
 }
 
 fun main() = application {
-    KCEF.initBlocking(
-        builder = {
-            progress {
-                onDownloading {
-                    println("Download progress: $it%")
-                }
-            }
-            release(true)
-        }
-    )
     Window(onCloseRequest = ::exitApplication) {
-        MaterialTheme {
-            App()
+        var downloadProgress by remember { mutableStateOf(-1F) }
+        var initialized by remember { mutableStateOf(false) } // if true, KCEF can be used to create clients, browsers etc
+        val bundleLocation = System.getProperty("compose.application.resources.dir")?.let { File(it) } ?: File(".")
+
+        LaunchedEffect(Unit) {
+            withContext(Dispatchers.IO) { // IO scope recommended but not required
+                KCEF.init(
+                    builder = {
+                        installDir(File(bundleLocation, "kcef-bundle")) // recommended, but not necessary
+
+                        progress {
+                            onDownloading {
+                                downloadProgress = it
+                                println("Downloading $it")
+                                // use this if you want to display a download progress for example
+                            }
+                            onInitialized {
+                                initialized = true
+                            }
+                        }
+                    },
+                    onError = {
+                        // error during initialization
+                        it?.printStackTrace()
+                    },
+                    onRestartRequired = {
+                        // all required CEF packages downloaded but the application needs a restart to load them (unlikely to happen)
+                        println("Restart required")
+                    }
+                )
+            }
+        }
+
+        if (initialized) {
+            MaterialTheme {
+                App()
+            }
+        }
+
+        DisposableEffect(Unit) {
+            onDispose {
+                KCEF.disposeBlocking()
+            }
         }
     }
 }

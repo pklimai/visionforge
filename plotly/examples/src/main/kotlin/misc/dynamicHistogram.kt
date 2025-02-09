@@ -2,16 +2,16 @@ package misc
 
 import kotlinx.coroutines.*
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.histogram
+import space.kscience.plotly.Plotly.plot
 import space.kscience.plotly.layout
-import space.kscience.plotly.server.close
-import space.kscience.plotly.server.plot
-import space.kscience.plotly.server.serve
+import space.kscience.plotly.models.histogram
+import space.kscience.visionforge.plotly.serveSinglePage
+import space.kscience.visionforge.server.openInBrowser
 import kotlin.random.Random
 
 @OptIn(DelicateCoroutinesApi::class)
-fun main() {
-    val server = Plotly.serve {
+suspend fun main() {
+    val server = Plotly.serveSinglePage {
         val rnd = Random(222)
         plot {
             histogram {
@@ -53,9 +53,11 @@ fun main() {
         }
     }
 
+    server.openInBrowser()
+
     println("Press Enter to close server")
     readLine()
 
-    server.close()
+    server.stop()
 
 }

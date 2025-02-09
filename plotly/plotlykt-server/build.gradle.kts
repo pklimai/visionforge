@@ -1,11 +1,8 @@
-
 plugins {
     id("space.kscience.gradle.mpp")
     alias(spclibs.plugins.compose.compiler)
     alias(spclibs.plugins.compose.jb)
 }
-
-val ktorVersion: String by rootProject.extra
 
 kscience {
     fullStack(
@@ -29,6 +26,6 @@ kscience {
 
     jvmMain {
         api(projects.visionforgeServer)
-        implementation("io.ktor:ktor-server-cio")
+        api("io.ktor:ktor-server-cio")
     }
 }

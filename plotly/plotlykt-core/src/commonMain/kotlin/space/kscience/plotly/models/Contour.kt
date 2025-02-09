@@ -2,7 +2,6 @@ package space.kscience.plotly.models
 
 import space.kscience.dataforge.meta.boolean
 import space.kscience.dataforge.meta.enum
-import space.kscience.dataforge.meta.scheme
 import space.kscience.plotly.Plot
 import space.kscience.plotly.intGreaterThan
 
@@ -44,8 +43,11 @@ public class Contour : Trace(), HeatmapContour, ContourSpec {
         contours = Contours(block)
     }
 
-    public companion object
+    public companion object : Factory<Contour> {
+        override fun build(): Contour = Contour()
+    }
 }
+
 
 public inline fun Plot.contour(block: Contour.() -> Unit): Contour {
     val trace = Contour().apply(block)

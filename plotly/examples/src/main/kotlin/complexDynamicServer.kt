@@ -1,3 +1,5 @@
+import io.ktor.server.cio.CIO
+import io.ktor.server.engine.embeddedServer
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -5,14 +7,12 @@ import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import kotlinx.html.div
 import kotlinx.html.link
-import space.kscience.plotly.Plotly
 import space.kscience.plotly.layout
 import space.kscience.plotly.models.Trace
-import space.kscience.plotly.plotly
-import space.kscience.plotly.server.pushUpdates
-import space.kscience.plotly.server.serve
-import space.kscience.plotly.server.show
+import space.kscience.plotly.plot
 import space.kscience.plotly.trace
+import space.kscience.visionforge.plotly.plotlyPage
+import space.kscience.visionforge.server.openInBrowser
 import java.time.Instant
 import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.math.cos
@@ -48,8 +48,8 @@ suspend fun Trace.updateXYFrom(flow: Flow<Iterable<Pair<Double, Double>>>) {
     }
 }
 
-fun main() {
-    val server = Plotly.serve {
+suspend fun main() {
+    val server = embeddedServer(CIO, port = 7777) {
         val sinFlow = flow {
             while (true) {
                 delay(40)
@@ -67,7 +67,7 @@ fun main() {
         val sinCosFlow = sinFlow.zip(cosFlow) { sin, cos ->
             sin to cos
         }
-        page { renderer ->
+        plotlyPage("/") {
             link {
                 rel = "stylesheet"
                 href = "https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
@@ -76,7 +76,7 @@ fun main() {
             }
             div("row") {
                 div("col-6") {
-                    plotly(renderer = renderer) {
+                    plot {
                         layout {
                             title = "sin property"
                             xaxis.title = "point index"
@@ -91,7 +91,7 @@ fun main() {
                     }
                 }
                 div("col-6") {
-                    plotly(renderer = renderer) {
+                    plot {
                         layout {
                             title = "cos property"
                             xaxis.title = "point index"
@@ -108,7 +108,7 @@ fun main() {
             }
             div("row") {
                 div("col-12") {
-                    plotly(renderer = renderer) {
+                    plot {
                         layout {
                             title = "cos vs sin"
                             xaxis.title = "sin"
@@ -126,13 +126,13 @@ fun main() {
             }
 
         }
-        pushUpdates(100) // start sending updates via websocket to the front-end
+//        pushUpdates(100) // start sending updates via websocket to the front-end
     }
 
-    server.show()
+    server.openInBrowser()
 
     println("Press Enter to close server")
     readLine()
 
-    server.stop(1000, 5000)
+    server.stop()
 }

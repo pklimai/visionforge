@@ -12,9 +12,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromDynamic
 import kotlinx.serialization.json.encodeToDynamic
-import org.w3c.dom.Element
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.MutationObserver
+import org.w3c.dom.*
 import org.w3c.dom.events.MouseEvent
 import space.kscience.dataforge.meta.MetaRepr
 import space.kscience.dataforge.meta.MetaSerializer
@@ -81,11 +79,11 @@ public fun Element.plot(plotlyConfig: PlotlyConfig = PlotlyConfig(), plot: Plot)
     }
 
     //observe node removal to avoid memory leak
-    MutationObserver { records, _ ->
+    MutationObserver { records: Array<MutationRecord>, _ ->
         if (records.firstOrNull()?.removedNodes?.length != 0) {
             listenJob.cancel()
         }
-    }.observe(this)
+    }.observe(this, MutationObserverInit(childList = true, attributes = false))
 }
 
 @Deprecated("Change arguments positions", ReplaceWith("plot(plotlyConfig, plot)"))

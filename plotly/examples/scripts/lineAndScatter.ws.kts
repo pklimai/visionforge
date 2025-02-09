@@ -1,4 +1,3 @@
-import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.models.ScatterMode
 import space.kscience.plotly.scatter

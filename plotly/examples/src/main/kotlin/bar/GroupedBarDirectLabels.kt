@@ -2,9 +2,10 @@ package bar
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.Bar
 import space.kscience.plotly.models.TextPosition
+import space.kscience.plotly.models.invoke
+import space.kscience.plotly.openInBrowser
 
 
 /**
@@ -58,5 +59,5 @@ fun main() {
             title = "January 2013 Sales Report"
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

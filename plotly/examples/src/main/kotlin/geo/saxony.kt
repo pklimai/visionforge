@@ -4,12 +4,12 @@ import kotlinx.serialization.json.int
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.layout
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.geo.LocationMode
 import space.kscience.plotly.models.geo.choroplethMapBox
 import space.kscience.plotly.models.geo.json.GeoJsonFeatureCollection
 import space.kscience.plotly.models.geo.json.combine
 import space.kscience.plotly.models.geo.openStreetMap
+import space.kscience.plotly.openInBrowser
 import java.net.URL
 import kotlin.random.Random
 
@@ -57,5 +57,5 @@ fun main() {
             zoom = 7.0
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

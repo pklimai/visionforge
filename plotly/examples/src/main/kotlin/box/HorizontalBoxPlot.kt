@@ -2,11 +2,8 @@ package box
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
-import space.kscience.plotly.models.Box
-import space.kscience.plotly.models.BoxMean
-import space.kscience.plotly.models.BoxMode
-import space.kscience.plotly.models.Orientation
+import space.kscience.plotly.models.*
+import space.kscience.plotly.openInBrowser
 
 
 /**
@@ -63,5 +60,5 @@ fun main() {
             boxmode = BoxMode.group
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

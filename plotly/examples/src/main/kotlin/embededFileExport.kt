@@ -1,7 +1,7 @@
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.ResourceLocation
-import space.kscience.plotly.makeFile
+import space.kscience.plotly.openInBrowser
 import space.kscience.plotly.trace
 import kotlin.math.PI
 import kotlin.math.sin
@@ -28,5 +28,5 @@ fun main() {
         }
     }
 
-    plot.makeFile(resourceLocation = ResourceLocation.EMBED)
+    plot.openInBrowser(resourceLocation = ResourceLocation.EMBED)
 }

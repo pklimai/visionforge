@@ -14,16 +14,16 @@ import space.kscience.dataforge.context.request
 import space.kscience.plotly.PlotlyPlugin
 import space.kscience.plotly.layout
 import space.kscience.plotly.models.Trace
+import space.kscience.plotly.models.invoke
 import space.kscience.plotly.plotly
 import space.kscience.visionforge.html.VisionPage
-import space.kscience.visionforge.server.close
 import space.kscience.visionforge.server.openInBrowser
 import space.kscience.visionforge.server.visionPage
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-fun main() {
+suspend fun main() {
     val plotlyPlugin = Global.request(PlotlyPlugin)
     val visionManager = plotlyPlugin.visionManager
 
@@ -105,5 +105,5 @@ fun main() {
 
     }
 
-    server.close()
+    server.stop()
 }

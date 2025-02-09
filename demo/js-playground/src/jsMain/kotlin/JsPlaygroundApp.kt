@@ -1,13 +1,11 @@
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.renderComposable
-import org.w3c.dom.Document
 import space.kscience.dataforge.context.Context
 import space.kscience.plotly.PlotlyPlugin
 import space.kscience.plotly.models.Trace
 import space.kscience.plotly.models.scatter
 import space.kscience.visionforge.Colors
-import space.kscience.visionforge.html.Application
 import space.kscience.visionforge.html.Tabs
 import space.kscience.visionforge.html.VisionForgeStyles
 import space.kscience.visionforge.html.startApplication
@@ -24,15 +22,13 @@ fun Trace.appendXYLatest(x: Number, y: Number, history: Int = 400, xErr: Number?
     yErr?.let { error_y.array = (error_y.array + yErr).takeLast(history) }
 }
 
-private class JsPlaygroundApp : Application {
-
+public fun main() {
     val playgroundContext = Context {
         plugin(ThreePlugin)
         plugin(PlotlyPlugin)
         plugin(MarkupPlugin)
     }
-
-    override fun start(document: Document, state: Map<String, Any>) {
+    startApplication { document ->
 
 //        val solids = playgroundContext.request(Solids)
 //        val client = playgroundContext.request(JsVisionClient)
@@ -98,9 +94,4 @@ private class JsPlaygroundApp : Application {
             }
         }
     }
-
-}
-
-public fun main() {
-    startApplication(::JsPlaygroundApp)
 }

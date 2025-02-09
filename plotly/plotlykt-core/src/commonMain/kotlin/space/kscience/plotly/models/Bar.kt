@@ -3,7 +3,6 @@ package space.kscience.plotly.models
 import space.kscience.dataforge.meta.enum
 import space.kscience.dataforge.meta.number
 import space.kscience.dataforge.meta.numberList
-import space.kscience.dataforge.meta.scheme
 import space.kscience.dataforge.names.asName
 import space.kscience.plotly.Plot
 import space.kscience.plotly.numberGreaterThan
@@ -66,7 +65,9 @@ public class Bar : Trace(), SelectedPoints {
         unselected = SelectPoints(block)
     }
 
-    public companion object
+    public companion object: Factory<Bar>{
+        override fun build(): Bar = Bar()
+    }
 }
 
 public inline fun Plot.bar(block: Bar.() -> Unit): Bar {

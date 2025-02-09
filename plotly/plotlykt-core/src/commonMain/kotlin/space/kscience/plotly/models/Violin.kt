@@ -1,7 +1,10 @@
 package space.kscience.plotly.models
 
 import space.kscience.dataforge.meta.*
-import space.kscience.plotly.*
+import space.kscience.plotly.Plot
+import space.kscience.plotly.listOfValues
+import space.kscience.plotly.numberGreaterThan
+import space.kscience.plotly.numberInRange
 import kotlin.js.JsName
 
 public enum class ViolinScaleMode {
@@ -172,7 +175,9 @@ public class Violin : Trace() {
         span = array.map { Value.of(it) }
     }
 
-    public companion object
+    public companion object: Factory<Violin>{
+        override fun build(): Violin = Violin()
+    }
 }
 
 public inline fun Plot.violin(block: Violin.() -> Unit): Violin {

@@ -25,6 +25,6 @@ fun main() {
         }
     }
 
-    plot.makeFile(selectFile())
+    plot.makeFile(Plotly.selectFile()?:error("File not selected"))
     //plot.makeFile(Files.createTempFile("plotlykt",".html"))
 }

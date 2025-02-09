@@ -1,10 +1,10 @@
 package scatter
 
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.GroupNorm
 import space.kscience.plotly.models.ScatterMode
-import space.kscience.plotly.scatter
+import space.kscience.plotly.models.scatter
+import space.kscience.plotly.openInBrowser
 
 
 /**
@@ -34,5 +34,5 @@ fun main() {
         stack(20, 10, 10, 60, colorOverride = "rgb(111, 231, 219)")
         stack(40, 30, 50, 30, colorOverride = "rgb(184, 247, 212)")
 
-    }.makeFile()
+    }.openInBrowser()
 }

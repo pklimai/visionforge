@@ -5,11 +5,11 @@ import space.kscience.dataforge.meta.ValueType
 import space.kscience.plotly.layout
 import space.kscience.plotly.models.ScatterMode
 import space.kscience.plotly.models.TextPosition
-import space.kscience.plotly.scatter
+import space.kscience.plotly.models.scatter
+import space.kscience.plotly.plotly
 import space.kscience.tables.ColumnHeader
 import space.kscience.visionforge.html.ResourceLocation
 import space.kscience.visionforge.markup.markdown
-import space.kscience.visionforge.plotly.plotly
 import space.kscience.visionforge.solid.axes
 import space.kscience.visionforge.solid.box
 import space.kscience.visionforge.solid.solid

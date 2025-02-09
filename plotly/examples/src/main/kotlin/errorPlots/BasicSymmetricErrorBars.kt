@@ -2,8 +2,8 @@ package errorPlots
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.ErrorType
+import space.kscience.plotly.openInBrowser
 import space.kscience.plotly.trace
 
 /**
@@ -33,5 +33,5 @@ fun main() {
         }
     }
 
-    plot.makeFile()
+    plot.openInBrowser()
 }

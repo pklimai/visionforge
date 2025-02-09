@@ -2,11 +2,11 @@ package errorPlots
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.bar
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.BarMode
 import space.kscience.plotly.models.ErrorType
 import space.kscience.plotly.models.XAnchor
+import space.kscience.plotly.models.bar
+import space.kscience.plotly.openInBrowser
 
 
 /**
@@ -56,5 +56,5 @@ fun main() {
         }
     }
 
-    plot.makeFile()
+    plot.openInBrowser()
 }

@@ -1,8 +1,8 @@
 package plots3d
 
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.TraceType
+import space.kscience.plotly.openInBrowser
 import space.kscience.plotly.trace
 
 
@@ -15,5 +15,5 @@ fun main() {
             z(1,2,3)
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

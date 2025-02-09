@@ -4,15 +4,15 @@ plugins {
     `maven-publish`
 }
 
-val dataforgeVersion: String by rootProject.extra
-val plotlyVersion by extra("2.29.0")
+val plotlyVersion by extra("2.35.3")
 
-
-kotlin{
-    applyDefaultHierarchyTemplate()
-}
+//kotlin{
+//    applyDefaultHierarchyTemplate()
+//}
 
 kscience {
+//    jvm()
+//    js()
     fullStack(bundleName = "js/plotly-kt.js")
     native()
 //    wasm()
@@ -20,12 +20,9 @@ kscience {
 
     commonMain {
         api(projects.visionforgeCore)
-//        api("space.kscience:dataforge-meta:$dataforgeVersion")
-//        api(spclibs.kotlinx.html)
-
     }
 
-    jsMain{
+    jsMain {
         api(npm("plotly.js", plotlyVersion))
     }
 
@@ -34,8 +31,15 @@ kscience {
     }
 }
 
-tasks.processJupyterApiResources{
+tasks.processJupyterApiResources {
     libraryProducers = listOf("space.kscience.plotly.PlotlyIntegration")
+}
+
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll("-Xcontext-parameters")
+    }
 }
 
 readme {

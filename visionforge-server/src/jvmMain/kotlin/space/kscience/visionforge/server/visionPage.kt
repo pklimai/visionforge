@@ -72,7 +72,7 @@ public class VisionRoute(
         FETCH,
 
         /**
-         * Connect to server to get pushes. The address of the server is embedded in the tag.
+         * Connect to server to get pushes. Get data on connection.
          */
         UPDATE
     }
@@ -96,8 +96,6 @@ public class VisionRoute(
 
 /**
  * Serve visions in a given [route] without providing a page template.
- *
- * @return a [Flow] of backward events, including vision change events
  */
 public fun Application.serveVisionData(
     configuration: VisionRoute,
@@ -106,6 +104,7 @@ public fun Application.serveVisionData(
     if (pluginOrNull(WebSockets) == null) {
         install(WebSockets)
     }
+
     routing {
         route(configuration.route) {
             //TODO do more precise CORS policy
@@ -167,18 +166,19 @@ public fun Application.serveVisionData(
 ): Unit = serveVisionData(configuration) { data[it]?.vision }
 
 /**
- * Serve a page, potentially containing any number of visions at a given [route] with given [header].
+ * Serve a page, potentially containing any number of visions at a given route [configuration] with given [header].
  *
  * @return a [Flow] containing backward propagated events, including vision change events
  */
 public fun Application.visionPage(
-    route: String,
     configuration: VisionRoute,
     headers: Collection<HtmlFragment>,
     connector: EngineConnectorConfig? = null,
     visionFragment: HtmlVisionFragment,
 ) {
-    install(WebSockets)
+    if (pluginOrNull(WebSockets) == null) {
+        install(WebSockets)
+    }
 
     val cache: MutableMap<Name, VisionDisplay> = mutableMapOf()
 
@@ -187,7 +187,7 @@ public fun Application.visionPage(
 
     //filled pages
     routing {
-        get(route) {
+        get(configuration.route) {
             val host = connector?.host ?: call.request.host()
             val port = connector?.port ?: call.request.port()
             val schema = connector?.type ?: when (val originSchema = call.request.origin.scheme.uppercase()) {
@@ -211,11 +211,14 @@ public fun Application.visionPage(
                         embedData = configuration.dataMode == VisionRoute.Mode.EMBED,
                         fetchDataUrl = if (configuration.dataMode != VisionRoute.Mode.EMBED) {
                             url {
-                                this.protocol =
-                                    if (schema == ConnectorType.HTTPS) URLProtocol.HTTPS else URLProtocol.HTTP
+                                this.protocol = if (schema == ConnectorType.HTTPS) {
+                                    URLProtocol.HTTPS
+                                } else {
+                                    URLProtocol.HTTP
+                                }
                                 this.host = host
                                 this.port = port
-                                path(route, "data")
+                                path(configuration.route, "data")
                             }
                         } else null,
                         updatesUrl = if (configuration.dataMode == VisionRoute.Mode.UPDATE) {
@@ -223,7 +226,7 @@ public fun Application.visionPage(
                                 this.protocol = if (schema == ConnectorType.HTTPS) URLProtocol.WSS else URLProtocol.WS
                                 this.host = host
                                 this.port = port
-                                path(route, "ws")
+                                path(configuration.route, "ws")
                             }
                         } else null,
                         displayCache = cache,
@@ -240,11 +243,11 @@ public fun Application.visionPage(
     vararg headers: HtmlFragment,
     route: String = "/",
     connector: EngineConnectorConfig? = null,
-    configurationBuilder: VisionRoute.() -> Unit = {},
+    routeConfiguration: VisionRoute.() -> Unit = {},
     visionFragment: HtmlVisionFragment,
 ) {
-    val configuration = VisionRoute(route, visionManager).apply(configurationBuilder)
-    visionPage(route, configuration, listOf(*headers), connector, visionFragment)
+    val configuration = VisionRoute(route, visionManager).apply(routeConfiguration)
+    visionPage(configuration, listOf(*headers), connector, visionFragment)
 }
 
 /**
@@ -257,6 +260,6 @@ public fun Application.visionPage(
     configurationBuilder: VisionRoute.() -> Unit = {},
 ) {
     val configuration = VisionRoute(route, page.visionManager).apply(configurationBuilder)
-    visionPage(route, configuration, page.pageHeaders.values, connector, visionFragment = page.content)
+    visionPage(configuration, page.pageHeaders.values, connector, visionFragment = page.content)
 }
 

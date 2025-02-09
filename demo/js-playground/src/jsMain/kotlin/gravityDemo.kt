@@ -1,8 +1,8 @@
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import bootstrap.Column
-import bootstrap.Row
+import app.softwork.bootstrapcompose.Column
+import app.softwork.bootstrapcompose.Row
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import org.jetbrains.compose.web.css.*
@@ -14,6 +14,7 @@ import space.kscience.dataforge.meta.Meta
 import space.kscience.plotly.Plot
 import space.kscience.plotly.layout
 import space.kscience.plotly.models.Trace
+import space.kscience.plotly.models.invoke
 import space.kscience.visionforge.Colors
 import space.kscience.visionforge.html.VisionDiv
 import space.kscience.visionforge.html.zIndex

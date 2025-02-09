@@ -21,19 +21,6 @@ public interface VisionGroup<out V : Vision> : Vision, VisionContainer<V> {
 
     override fun getVision(token: NameToken): V? = visions[token]
 
-    override suspend fun receiveEvent(event: VisionEvent) {
-        super.receiveEvent(event)
-        if (event is VisionChange) {
-            event.children?.forEach { (name, change) ->
-                if (event.vision != null) {
-                    error("VisionGroup is read-only")
-                } else {
-                    getVision(name)?.receiveEvent(change)
-                }
-            }
-        }
-    }
-
     override val defaultTarget: String get() = VISION_CHILD_TARGET
 
     override val defaultChainTarget: String get() = VISION_PROPERTY_TARGET
@@ -67,7 +54,6 @@ public interface MutableVisionGroup<V : Vision> : VisionGroup<V>, MutableVision,
     public fun convertVisionOrNull(vision: Vision): V?
 
     override suspend fun receiveEvent(event: VisionEvent) {
-
         if (event is VisionChange) {
             event.properties?.let {
                 updateProperties(it, Name.EMPTY)

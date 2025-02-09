@@ -2,8 +2,8 @@ package histogram
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.histogram
-import space.kscience.plotly.makeFile
+import space.kscience.plotly.models.histogram
+import space.kscience.plotly.openInBrowser
 import java.util.*
 
 
@@ -51,5 +51,5 @@ fun main() {
         }
     }
 
-    plot.makeFile()
+    plot.openInBrowser()
 }

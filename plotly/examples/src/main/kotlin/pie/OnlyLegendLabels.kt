@@ -2,9 +2,9 @@ package pie
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.TextInfo
-import space.kscience.plotly.pie
+import space.kscience.plotly.models.pie
+import space.kscience.plotly.openInBrowser
 
 fun main() {
     val labels = listOf("Cookies", "Jellybean", "Milkshake", "Cheesecake")
@@ -29,5 +29,5 @@ fun main() {
             }
         }
     }
-    plot.makeFile()
+    plot.openInBrowser()
 }

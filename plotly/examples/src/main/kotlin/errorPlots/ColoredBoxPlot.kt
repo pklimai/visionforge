@@ -2,8 +2,8 @@ package errorPlots
 
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.box
-import space.kscience.plotly.makeFile
+import space.kscience.plotly.models.box
+import space.kscience.plotly.openInBrowser
 import space.kscience.plotly.palettes.T10
 import java.util.*
 
@@ -40,5 +40,5 @@ fun main() {
         }
     }
 
-    plot.makeFile()
+    plot.openInBrowser()
 }

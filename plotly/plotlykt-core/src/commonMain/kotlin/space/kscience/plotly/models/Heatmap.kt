@@ -36,7 +36,9 @@ public open class Heatmap : Trace(), Table2D, HeatmapContour {
      */
     override var ytype: DataType by enum(DataType.array)
 
-    public companion object
+    public companion object : Factory<Heatmap> {
+        override fun build(): Heatmap = Heatmap()
+    }
 }
 
 public inline fun Plot.heatmap(block: Heatmap.() -> Unit): Heatmap {

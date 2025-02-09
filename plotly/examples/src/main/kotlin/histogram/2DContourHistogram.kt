@@ -3,10 +3,11 @@ package histogram
 import space.kscience.dataforge.meta.Value
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.layout
-import space.kscience.plotly.makeFile
 import space.kscience.plotly.models.ContoursColoring
 import space.kscience.plotly.models.Histogram2DContour
 import space.kscience.plotly.models.MeasureMode
+import space.kscience.plotly.models.invoke
+import space.kscience.plotly.openInBrowser
 
 
 /**
@@ -47,5 +48,5 @@ fun main() {
         }
     }
 
-    plot.makeFile()
+    plot.openInBrowser()
 }

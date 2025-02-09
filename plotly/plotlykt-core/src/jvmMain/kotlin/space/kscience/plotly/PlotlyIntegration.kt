@@ -47,7 +47,7 @@ public class PlotlyIntegration : JupyterIntegration() {
     private fun renderPlot(plot: Plot) = if (PlotlyJupyterConfiguration.legacyMode) {
         HTML(plot.toHTMLPage(), true)
     } else {
-        HTML(createHTML().div { plotly(plot, PlotlyConfig { responsive = true }) }, false)
+        HTML(createHTML().div { consumer.staticPlot(plot, PlotlyConfig { responsive = true }) }, false)
     }
 
 
@@ -55,7 +55,7 @@ public class PlotlyIntegration : JupyterIntegration() {
 
         resources {
             js("plotly-kt") {
-                url("https://cdn.plot.ly/plotly-2.29.1.min.js")
+                url(Plotly.PLOTLY_CDN)
                 classPath("js/plotly-kt.js")
             }
         }
