@@ -2,7 +2,7 @@ import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.renderComposable
 import space.kscience.dataforge.context.Context
-import space.kscience.plotly.PlotlyPlugin
+import space.kscience.plotly.PlotlyJSPlugin
 import space.kscience.plotly.models.Trace
 import space.kscience.plotly.models.scatter
 import space.kscience.visionforge.Colors
@@ -25,7 +25,7 @@ fun Trace.appendXYLatest(x: Number, y: Number, history: Int = 400, xErr: Number?
 public fun main() {
     val playgroundContext = Context {
         plugin(ThreePlugin)
-        plugin(PlotlyPlugin)
+        plugin(PlotlyJSPlugin)
         plugin(MarkupPlugin)
     }
     startApplication { document ->

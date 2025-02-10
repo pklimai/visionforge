@@ -11,7 +11,7 @@ dependencies {
     implementation(projects.plotly.plotlyktServer)
     implementation(projects.plotly.plotlyktScript)
     implementation(kotlin("script-runtime"))
-    implementation("org.jetbrains.kotlinx:dataframe:0.13.1")
+    implementation("org.jetbrains.kotlinx:dataframe:0.15.0")
 }
 
 kotlin{

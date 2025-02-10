@@ -23,7 +23,7 @@ public object ThreeMeshLineFactory : ThreeFactory<PolyLine> {
         )
 
         val material = MeshLineMaterial().apply {
-            thickness = vision.thickness.toFloat()
+            lineWidth = vision.thickness.toFloat()
             color = vision.color.string?.let { Color(it) } ?: ThreeMaterials.DEFAULT_LINE_COLOR
         }
 

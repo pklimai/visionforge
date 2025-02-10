@@ -19,7 +19,11 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-suspend fun main() = serve {
+suspend fun main() = serve(
+    routeConfiguration = {
+        updateInterval = 100
+    }
+) {
 
 //    val azimuth = 60.degrees
 //    val inclination = 15.degrees
@@ -45,6 +49,7 @@ suspend fun main() = serve {
             //axes(200)
             ambientLight {
                 color(Colors.white)
+                intensity = 3.0
             }
             val platform = solidGroup("platform") {
                 cylinder(50, 5, name = "base")
@@ -87,7 +92,7 @@ suspend fun main() = serve {
                 var time: Long = 0L
                 while (isActive) {
                     with(QuaternionAlgebra) {
-                        delay(200)
+                        delay(100)
                         platform.quaternion = Quaternion.fromRotation(
                             15.degrees * sin(time.toDouble() * 2 * PI / xPeriod),
                             Float64Space3D.xAxis
@@ -100,7 +105,7 @@ suspend fun main() = serve {
 
                         antenna.quaternion = qi.conjugate * incRot.conjugate * target
 
-                        time += 200
+                        time += 100
                         //antenna.quaternion = Quaternion.fromRotation(5.degrees, Euclidean3DSpace.zAxis) * antenna.quaternion
                     }
                 }

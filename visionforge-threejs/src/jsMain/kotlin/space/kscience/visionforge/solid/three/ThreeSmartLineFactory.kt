@@ -11,7 +11,7 @@ public object ThreeSmartLineFactory : ThreeFactory<PolyLine> {
         three: ThreePlugin,
         vision: PolyLine,
         observe: Boolean,
-    ): Object3D = if (vision.thickness == 1.0) {
+    ): Object3D = if (vision.thickness == PolyLine.DEFAULT_THICKNESS) {
         ThreeLineFactory.build(three, vision, observe)
     } else {
         ThreeMeshLineFactory.build(three, vision, observe)

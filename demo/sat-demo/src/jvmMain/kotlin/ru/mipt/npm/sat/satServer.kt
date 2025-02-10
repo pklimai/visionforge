@@ -36,6 +36,7 @@ suspend fun main() {
     val sat = solids.visionOfSatellite(ySegments = 3).apply {
         ambientLight {
             color(Colors.white)
+            intensity = 3.0
         }
     }
     val server = embeddedServer(CIO, port = 7777) {

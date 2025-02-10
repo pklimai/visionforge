@@ -1,8 +1,8 @@
 plugins {
     kotlin("multiplatform")
     kotlin("jupyter.api")
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-//    application
+    id("com.gradleup.shadow") version "8.3.6"
+
 }
 
 repositories {
@@ -15,13 +15,15 @@ kotlin {
     jvmToolchain(17)
     js(IR) {
         browser {
+            commonWebpackConfig {
+                cssSupport {
+                    enabled = true
+                }
+                scssSupport {
+                    enabled = true
+                }
+            }
             webpackTask {
-                cssSupport{
-                    enabled = true
-                }
-                scssSupport{
-                    enabled = true
-                }
                 mainOutputFileName.set("js/visionforge-playground.js")
             }
         }
@@ -43,9 +45,9 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(projects.visionforgeSolid)
-//                implementation(projects.visionforgePlotly)
+                implementation(projects.plotly.plotlyktCore)
                 implementation(projects.visionforgeMarkdown)
-//                implementation(projects.visionforgeTables)
+                implementation(projects.visionforgeTables)
                 implementation(projects.cernRootLoader)
                 api(projects.visionforgeJupyter.visionforgeJupyterCommon)
             }
@@ -60,7 +62,7 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-server-cio:${spclibs.versions.ktor.get()}")
+                implementation("io.ktor:ktor-server-cio")
                 implementation(projects.visionforgeGdml)
                 implementation(projects.visionforgeServer)
                 implementation(spclibs.logback.classic)
@@ -77,9 +79,7 @@ val jsBrowserDistribution = tasks.getByName("jsBrowserDistribution")
 
 tasks.getByName<ProcessResources>("jvmProcessResources") {
     dependsOn(jsBrowserDistribution)
-    from(jsBrowserDistribution) {
-        exclude("**/*.js.map")
-    }
+    from(jsBrowserDistribution)
 }
 
 val processJupyterApiResources by tasks.getting(org.jetbrains.kotlinx.jupyter.api.plugin.tasks.JupyterApiResourcesTask::class) {

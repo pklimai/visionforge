@@ -25,7 +25,6 @@ fun VisionLayout<Solid>.demo(name: String, title: String = name, block: SolidGro
         block()
         ambientLight {
             color(Colors.white)
-            intensity = 0.5
         }
         pointLight(0, 0, 1000) {
             color(Colors.white)

@@ -9,6 +9,7 @@ import space.kscience.dataforge.context.Global
 import space.kscience.plotly.PlotlyPlugin
 import space.kscience.visionforge.html.*
 import space.kscience.visionforge.markup.MarkupPlugin
+import space.kscience.visionforge.server.VisionRoute
 import space.kscience.visionforge.server.close
 import space.kscience.visionforge.server.openInBrowser
 import space.kscience.visionforge.server.visionPage
@@ -42,6 +43,7 @@ public fun makeVisionFile(
 public suspend fun serve(
     title: String = "VisionForge page",
     show: Boolean = true,
+    routeConfiguration: VisionRoute.() -> Unit = {},
     content: HtmlVisionFragment,
 ) {
     val context = Context("playground") {
@@ -62,6 +64,7 @@ public suspend fun serve(
                 defer = true
             },
             VisionPage.title(title),
+            routeConfiguration = routeConfiguration,
             visionFragment = content
         )
     }.start(false)

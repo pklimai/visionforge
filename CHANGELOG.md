@@ -3,10 +3,12 @@
 ## Unreleased
 
 ### Added
+- Plotly refactored on top of visionforge/server
 
 ### Changed
 - Simplified Vision and VisionGroup logic. Observation logic moved out.
 - Use `Name` for child designation and `Path` for tree access
+- Default intensity for AmbientLight is 2.0
 
 ### Deprecated
 

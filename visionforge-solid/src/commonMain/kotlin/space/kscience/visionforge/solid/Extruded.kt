@@ -1,11 +1,14 @@
+@file:UseSerializers(Float32Space2D.VectorSerializer::class)
 package space.kscience.visionforge.solid
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import space.kscience.dataforge.meta.MutableMeta
 import space.kscience.dataforge.meta.update
 import space.kscience.kmath.geometry.component1
 import space.kscience.kmath.geometry.component2
+import space.kscience.kmath.geometry.euclidean2d.Float32Space2D
 import space.kscience.kmath.geometry.euclidean2d.Float32Vector2D
 import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.visionforge.MutableVisionContainer

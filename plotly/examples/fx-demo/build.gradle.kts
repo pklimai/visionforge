@@ -16,7 +16,7 @@ dependencies {
 
 javafx{
     modules("javafx.web")
-    version = "11"
+    version = "17"
 }
 
 application {
@@ -24,6 +24,6 @@ application {
 }
 
 kotlin{
-    jvmToolchain(11)
+    jvmToolchain(17)
 }
 

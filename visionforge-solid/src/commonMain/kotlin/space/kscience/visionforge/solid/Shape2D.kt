@@ -1,6 +1,9 @@
+@file:UseSerializers(Float32Space2D.VectorSerializer::class)
 package space.kscience.visionforge.solid
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
+import space.kscience.kmath.geometry.euclidean2d.Float32Space2D
 import space.kscience.kmath.geometry.euclidean2d.Float32Vector2D
 import kotlin.math.PI
 import kotlin.math.cos
