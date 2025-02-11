@@ -21,10 +21,12 @@ import space.kscience.visionforge.markup.VisionOfMarkup.Companion.COMMONMARK_FOR
 import space.kscience.visionforge.markup.VisionOfMarkup.Companion.GFM_FORMAT
 import space.kscience.visionforge.useProperty
 
-public actual class MarkupPlugin : VisionPlugin(), ElementVisionRenderer {
+public class MarkupJsPlugin : VisionPlugin(), ElementVisionRenderer {
+    public val markupPlugin: MarkupPlugin by require(MarkupPlugin)
     public val visionClient: JsVisionClient by require(JsVisionClient)
-    actual override val tag: PluginTag get() = Companion.tag
-    actual override val visionSerializersModule: SerializersModule get() = markupSerializersModule
+
+    override val tag: PluginTag get() = Companion.tag
+    override val visionSerializersModule: SerializersModule get() = markupSerializersModule
 
     override fun rateVision(vision: Vision): Int = when (vision) {
         is VisionOfMarkup -> ElementVisionRenderer.DEFAULT_RATING
@@ -56,10 +58,10 @@ public actual class MarkupPlugin : VisionPlugin(), ElementVisionRenderer {
         else -> super.content(target)
     }
 
-    public actual companion object : PluginFactory<MarkupPlugin> {
-        actual override val tag: PluginTag = PluginTag("vision.markup.js", PluginTag.DATAFORGE_GROUP)
+    public companion object : PluginFactory<MarkupPlugin> {
+        override val tag: PluginTag = PluginTag("vision.markup.js", PluginTag.DATAFORGE_GROUP)
 
-        actual override fun build(context: Context, meta: Meta): MarkupPlugin = MarkupPlugin()
+        override fun build(context: Context, meta: Meta): MarkupPlugin = MarkupPlugin()
 
     }
 }

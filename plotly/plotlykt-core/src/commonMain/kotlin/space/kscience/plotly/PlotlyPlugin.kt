@@ -7,6 +7,7 @@ import space.kscience.dataforge.context.Context
 import space.kscience.dataforge.context.PluginFactory
 import space.kscience.dataforge.context.PluginTag
 import space.kscience.dataforge.meta.Meta
+import space.kscience.plotly.models.Trace
 import space.kscience.visionforge.Vision
 import space.kscience.visionforge.VisionPlugin
 
@@ -27,5 +28,6 @@ public class PlotlyPlugin : VisionPlugin() {
 internal val plotlySerializersModule = SerializersModule {
     polymorphic(Vision::class) {
         subclass(Plot.serializer())
+        subclass(Trace.serializer())
     }
 }

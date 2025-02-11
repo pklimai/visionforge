@@ -28,11 +28,13 @@ public object Plotly : ContextAware {
         "x", "y", "z", "text", "hovertext", "close", "high", "low", "open", "locations", "lon", "lat", "ids"
     )
 
-    override val context: Context = Context("Plotly") {
-        plugin(PlotlyPlugin)
+    override val context: Context by lazy {
+        Context("Plotly") {
+            plugin(PlotlyPlugin)
+        }
     }
 
-    public val plugin: PlotlyPlugin = context.request(PlotlyPlugin)
+    public val plugin: PlotlyPlugin by lazy { context.request(PlotlyPlugin) }
 
     public inline fun plot(block: Plot.() -> Unit): Plot = Plot().apply(block)
 }

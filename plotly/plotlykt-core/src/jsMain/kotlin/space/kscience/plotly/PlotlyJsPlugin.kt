@@ -13,7 +13,7 @@ import space.kscience.visionforge.VisionPlugin
 import space.kscience.visionforge.html.ElementVisionRenderer
 import space.kscience.visionforge.html.JsVisionClient
 
-public class PlotlyJSPlugin : VisionPlugin(), ElementVisionRenderer {
+public class PlotlyJsPlugin : VisionPlugin(), ElementVisionRenderer {
     public val plotly: PlotlyPlugin by require(PlotlyPlugin)
     public val visionClient: JsVisionClient by require(JsVisionClient)
 
@@ -39,10 +39,10 @@ public class PlotlyJSPlugin : VisionPlugin(), ElementVisionRenderer {
         else -> super.content(target)
     }
 
-    public  companion object : PluginFactory<PlotlyJSPlugin> {
+    public  companion object : PluginFactory<PlotlyJsPlugin> {
         override val tag: PluginTag = PluginTag("vision.plotly.js", PluginTag.DATAFORGE_GROUP)
 
-        override fun build(context: Context, meta: Meta): PlotlyJSPlugin = PlotlyJSPlugin()
+        override fun build(context: Context, meta: Meta): PlotlyJsPlugin = PlotlyJsPlugin()
 
     }
 }

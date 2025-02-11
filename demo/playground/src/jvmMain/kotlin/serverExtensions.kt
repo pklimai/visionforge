@@ -5,7 +5,6 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.http.content.staticResources
 import io.ktor.server.routing.routing
 import space.kscience.dataforge.context.Context
-import space.kscience.dataforge.context.Global
 import space.kscience.plotly.PlotlyPlugin
 import space.kscience.visionforge.html.*
 import space.kscience.visionforge.markup.MarkupPlugin
@@ -19,6 +18,13 @@ import space.kscience.visionforge.visionManager
 import java.awt.Desktop
 import java.nio.file.Path
 
+val context = Context("playground") {
+    plugin(Solids)
+    plugin(PlotlyPlugin)
+    plugin(MarkupPlugin)
+    plugin(TableVisionPlugin)
+}
+
 
 public fun makeVisionFile(
     path: Path? = null,
@@ -27,7 +33,7 @@ public fun makeVisionFile(
     show: Boolean = true,
     content: HtmlVisionFragment,
 ): Unit {
-    val actualPath = VisionPage(Global.visionManager, content = content).makeFile(path) { actualPath ->
+    val actualPath = VisionPage(context.visionManager, content = content).makeFile(path) { actualPath ->
         mapOf(
             "title" to VisionPage.title(title),
             "playground" to VisionPage.importScriptHeader(
@@ -46,13 +52,6 @@ public suspend fun serve(
     routeConfiguration: VisionRoute.() -> Unit = {},
     content: HtmlVisionFragment,
 ) {
-    val context = Context("playground") {
-        plugin(Solids)
-        plugin(PlotlyPlugin)
-        plugin(MarkupPlugin)
-        plugin(TableVisionPlugin)
-    }
-
     val server = embeddedServer(CIO, port = 7779) {
         routing {
             staticResources("", null, null)

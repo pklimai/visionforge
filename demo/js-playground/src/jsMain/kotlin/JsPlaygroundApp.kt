@@ -2,14 +2,14 @@ import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.renderComposable
 import space.kscience.dataforge.context.Context
-import space.kscience.plotly.PlotlyJSPlugin
+import space.kscience.plotly.PlotlyJsPlugin
 import space.kscience.plotly.models.Trace
 import space.kscience.plotly.models.scatter
 import space.kscience.visionforge.Colors
 import space.kscience.visionforge.html.Tabs
 import space.kscience.visionforge.html.VisionForgeStyles
 import space.kscience.visionforge.html.startApplication
-import space.kscience.visionforge.markup.MarkupPlugin
+import space.kscience.visionforge.markup.MarkupJsPlugin
 import space.kscience.visionforge.solid.*
 import space.kscience.visionforge.solid.three.ThreePlugin
 import space.kscience.visionforge.solid.three.compose.ThreeView
@@ -25,8 +25,8 @@ fun Trace.appendXYLatest(x: Number, y: Number, history: Int = 400, xErr: Number?
 public fun main() {
     val playgroundContext = Context {
         plugin(ThreePlugin)
-        plugin(PlotlyJSPlugin)
-        plugin(MarkupPlugin)
+        plugin(PlotlyJsPlugin)
+        plugin(MarkupJsPlugin)
     }
     startApplication { document ->
 

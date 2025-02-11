@@ -4,8 +4,6 @@ import kotlinx.html.body
 import kotlinx.html.head
 import kotlinx.html.meta
 import kotlinx.html.stream.createHTML
-import space.kscience.dataforge.context.Global
-import space.kscience.visionforge.visionManager
 import java.awt.Desktop
 import java.nio.file.Files
 import java.nio.file.Path
@@ -23,7 +21,7 @@ public fun VisionPage.makeString(additionalHeaders: Map<String, HtmlFragment> = 
         }
     }
     body {
-        visionFragment(Global.visionManager, fragment = content)
+        visionFragment(visionManager, fragment = content)
     }
 }.finalize()
 
