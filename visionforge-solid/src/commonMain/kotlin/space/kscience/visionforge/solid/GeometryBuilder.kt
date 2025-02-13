@@ -14,17 +14,23 @@ public interface GeometryBuilder<T : Any> {
      * @param normal optional external normal to the face
      * @param meta optional additional platform-specific parameters like color or texture index
      */
-    public fun face(vertex1: Float32Vector3D, vertex2: Float32Vector3D, vertex3: Float32Vector3D, normal: Float32Vector3D? = null, meta: Meta = Meta.EMPTY)
+    public fun face(
+        vertex1: FloatVector3D,
+        vertex2: FloatVector3D,
+        vertex3: FloatVector3D,
+        normal: FloatVector3D? = null,
+        meta: Meta = Meta.EMPTY
+    )
 
     public fun build(): T
 }
 
 public fun GeometryBuilder<*>.face4(
-    vertex1: Float32Vector3D,
-    vertex2: Float32Vector3D,
-    vertex3: Float32Vector3D,
-    vertex4: Float32Vector3D,
-    normal: Float32Vector3D? = null,
+    vertex1: FloatVector3D,
+    vertex2: FloatVector3D,
+    vertex3: FloatVector3D,
+    vertex4: FloatVector3D,
+    normal: FloatVector3D? = null,
     meta: Meta = Meta.EMPTY
 ) {
     face(vertex1, vertex2, vertex3, normal, meta)
@@ -38,7 +44,7 @@ public interface GeometrySolid : Solid {
     public fun <T : Any> toGeometry(geometryBuilder: GeometryBuilder<T>)
 }
 
-public fun <T : Any> GeometryBuilder<T>.cap(shape: List<Float32Vector3D>, normal: Float32Vector3D? = null) {
+public fun <T : Any> GeometryBuilder<T>.cap(shape: List<FloatVector3D>, normal: FloatVector3D? = null) {
     //FIXME won't work for non-convex shapes
     val center = Float32Vector3D(
         shape.map { it.x }.average(),

@@ -9,7 +9,7 @@ kscience {
     js {
         binaries.library()
         browser {
-            webpackTask{
+            webpackTask {
                 cssSupport {
                     enabled = true
                 }
@@ -26,8 +26,9 @@ kscience {
         api("space.kscience:tables-kt:${tablesVersion}")
     }
     jsMain {
-        api(npm("tabulator-tables", "6.3.1"))
-        api(npm("@types/tabulator-tables", "6.2.3"))
+        api("org.jetbrains.kotlin-wrappers:kotlin-js")
+        implementation(npm("tabulator-tables", "6.3.1"))
+//        api(npm("@types/tabulator-tables", "6.2.3"))
     }
 }
 

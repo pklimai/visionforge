@@ -1,21 +1,18 @@
-@file:UseSerializers(Float32Space2D.VectorSerializer::class)
 package space.kscience.visionforge.solid
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
-import space.kscience.kmath.geometry.euclidean2d.Float32Space2D
 import space.kscience.kmath.geometry.euclidean2d.Float32Vector2D
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-public typealias Shape2D = List<Float32Vector2D>
+public typealias Shape2D = List<FloatVector2D>
 
 /**
  * A builder for 2D shapes
  */
 @Serializable
-public class Shape2DBuilder(private val points: ArrayList<Float32Vector2D> = ArrayList()) {
+public class Shape2DBuilder(private val points: ArrayList<FloatVector2D> = ArrayList()) {
 
     public fun point(x: Number, y: Number) {
         points.add(Float32Vector2D(x, y))

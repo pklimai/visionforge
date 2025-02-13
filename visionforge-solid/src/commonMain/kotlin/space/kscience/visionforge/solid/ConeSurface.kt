@@ -38,7 +38,7 @@ public class ConeSurface(
         require(segments >= 4) { "The number of segments in tube is too small" }
         val angleStep = phi / (segments - 1)
 
-        fun shape(r: Float, z: Float): List<Float32Vector3D> = (0 until segments).map { i ->
+        fun shape(r: Float, z: Float): List<FloatVector3D> = (0 until segments).map { i ->
             Float32Vector3D(r * cos(phiStart + angleStep * i), r * sin(phiStart + angleStep * i), z)
         }
 
@@ -137,7 +137,7 @@ public inline fun MutableVisionContainer<Solid>.tube(
     topInnerRadius = innerRadius.toFloat(),
     phiStart = startAngle.toFloat(),
     phi = angle.toFloat()
-).apply(block).also { 
+).apply(block).also {
     setVision(SolidGroup.inferNameFor(name, it), it)
 }
 
@@ -160,6 +160,6 @@ public inline fun MutableVisionContainer<Solid>.coneSurface(
     topInnerRadius = topInnerRadius.toFloat(),
     phiStart = startAngle.toFloat(),
     phi = angle.toFloat()
-).apply(block).also { 
+).apply(block).also {
     setVision(SolidGroup.inferNameFor(name, it), it)
 }

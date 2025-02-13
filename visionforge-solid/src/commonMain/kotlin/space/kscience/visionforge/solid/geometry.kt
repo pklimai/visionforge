@@ -1,9 +1,11 @@
 package space.kscience.visionforge.solid
 
+import kotlinx.serialization.Serializable
 import space.kscience.dataforge.meta.Meta
 import space.kscience.dataforge.meta.MetaProvider
 import space.kscience.dataforge.meta.float
 import space.kscience.dataforge.meta.get
+import space.kscience.kmath.geometry.euclidean2d.Float32Space2D
 import space.kscience.kmath.geometry.euclidean2d.Float32Vector2D
 import space.kscience.kmath.geometry.euclidean3d.Float32Space3D
 import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
@@ -12,19 +14,22 @@ import space.kscience.visionforge.solid.Solid.Companion.Y_KEY
 import space.kscience.visionforge.solid.Solid.Companion.Z_KEY
 import kotlin.math.PI
 
+public typealias FloatVector2D = @Serializable(with = Float32Space2D.VectorSerializer::class) Float32Vector2D
+public typealias FloatVector3D = @Serializable(with = Float32Space3D.VectorSerializer::class) Float32Vector3D
+
 public const val PI2: Float = 2 * PI.toFloat()
 
-public fun Float32Vector2D.toMeta(): Meta = Meta {
+public fun FloatVector2D.toMeta(): Meta = Meta {
     X_KEY put x
     Y_KEY put y
 }
 
-internal fun Meta.toVector2D(): Float32Vector2D =
+internal fun Meta.toVector2D(): FloatVector2D =
     Float32Vector2D(this["x"].float ?: 0f, this["y"].float ?: 0f)
 
 //@Suppress("SERIALIZER_TYPE_INCOMPATIBLE")
 //@Serializable(Point3DSerializer::class)
-//public interface MutablePoint3D : Float32Vector3D {
+//public interface MutablePoint3D : Vector3D {
 //    override var x: Float
 //    override var y: Float
 //    override var z: Float
@@ -45,7 +50,7 @@ internal fun MetaProvider.point3D(default: Float = 0f) = Float32Space3D.vector(
 )
 
 
-public fun Float32Vector3D.toMeta(): Meta = Meta {
+public fun FloatVector3D.toMeta(): Meta = Meta {
     X_KEY put x
     Y_KEY put y
     Z_KEY put z

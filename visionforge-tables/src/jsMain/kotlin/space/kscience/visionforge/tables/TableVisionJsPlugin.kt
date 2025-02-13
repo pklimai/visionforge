@@ -1,6 +1,5 @@
 package space.kscience.visionforge.tables
 
-import js.import.importAsync
 import js.objects.jso
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
@@ -15,8 +14,9 @@ import space.kscience.dataforge.names.asName
 import space.kscience.visionforge.Vision
 import space.kscience.visionforge.html.ElementVisionRenderer
 import space.kscience.visionforge.html.JsVisionClient
-import tabulator.Tabulator
+import tabulator.Options
 import tabulator.TabulatorFull
+import tabulator.TabulatorSimpleCss
 
 public class TableVisionJsPlugin : AbstractPlugin(), ElementVisionRenderer {
     public val visionClient: JsVisionClient by require(JsVisionClient)
@@ -26,8 +26,8 @@ public class TableVisionJsPlugin : AbstractPlugin(), ElementVisionRenderer {
 
     override fun attach(context: Context) {
         super.attach(context)
-        importAsync<Any>("tabulator-tables/dist/css/tabulator.min.css")
-        importAsync<Any>("tabulator-tables/src/js/modules/ResizeColumns/ResizeColumns.js")
+        //TODO add dynamic CSS loading
+        @Suppress("UnusedVariable") val css = TabulatorSimpleCss
     }
 
     override fun rateVision(vision: Vision): Int = when (vision) {
@@ -39,15 +39,7 @@ public class TableVisionJsPlugin : AbstractPlugin(), ElementVisionRenderer {
         val table: VisionOfTable = (vision as? VisionOfTable)
             ?: error("VisionOfTable expected but ${vision::class} found")
 
-        val tableOptions = jso<Tabulator.Options> {
-            columns = table.headers.map { header ->
-                jso<Tabulator.ColumnDefinition> {
-                    field = header.name
-                    title = header.properties.title ?: header.name
-                    resizable = true
-                }
-            }.toTypedArray()
-
+        val tableOptions = jso<Options> {
             columns = Array(table.headers.size + 1) {
                 if (it == 0) {
                     jso {

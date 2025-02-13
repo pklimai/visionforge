@@ -37,11 +37,11 @@ public class Surface(
             require(inner == null || inner.size == outer.size) { "Outer shape size is ${outer.size}, but inner is ${inner?.size}" }
         }
 
-        public fun outerPoints(): List<Float32Vector3D> = outer.map { (x, y) -> Float32Vector3D(x, y, z) }
+        public fun outerPoints(): List<FloatVector3D> = outer.map { (x, y) -> Float32Vector3D(x, y, z) }
 
-        public fun innerPoints(): List<Float32Vector3D>? = inner?.map { (x, y) -> Float32Vector3D(x, y, z) }
+        public fun innerPoints(): List<FloatVector3D>? = inner?.map { (x, y) -> Float32Vector3D(x, y, z) }
 
-        public val center: Float32Vector3D by lazy {
+        public val center: FloatVector3D by lazy {
             Float32Vector3D(
                 outer.sumOf { it.x } / size,
                 outer.sumOf { it.y } / size,

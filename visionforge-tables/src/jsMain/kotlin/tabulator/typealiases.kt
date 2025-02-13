@@ -2,44 +2,38 @@
 
 package tabulator
 
+import js.objects.Record
 import org.w3c.dom.events.UIEvent
 
-@Suppress("UNUSED_TYPEALIAS_PARAMETER")
-internal typealias Pick<T, K> = Any
 
-@Suppress("UNUSED_TYPEALIAS_PARAMETER")
-internal typealias Record<K, T> = Any
+typealias ValueStringCallback = (value: Any) -> String
 
-internal typealias FilterFunction = (field: String, type: String /* "=" | "!=" | "like" | "<" | ">" | "<=" | ">=" | "in" | "regex" | "starts" | "ends" */, value: Any, filterParams: Tabulator.FilterParams) -> Unit
+typealias ValueBooleanCallback = (value: Any) -> Boolean
 
-internal typealias GroupValuesArg = Array<Array<Any>>
+typealias ValueVoidCallback = (value: Any) -> Unit
 
-internal typealias CustomMutator = (value: Any, data: Any, type: String /* "data" | "edit" */, mutatorParams: Any, cell: Tabulator.CellComponent) -> Any
+typealias EmptyCallback = (callback: () -> Unit) -> Unit
 
-internal typealias CustomAccessor = (value: Any, data: Any, type: String /* "data" | "download" | "clipboard" */, AccessorParams: Any, column: Tabulator.ColumnComponent, row: Tabulator.RowComponent) -> Any
+typealias CellEventCallback = (e: UIEvent, cell: CellComponent) -> Unit
 
-internal typealias ColumnCalcParams = (values: Any, data: Any) -> Any
+typealias CellEditEventCallback = (cell: CellComponent) -> Unit
 
-internal typealias ValueStringCallback = (value: Any) -> String
+typealias ColumnEventCallback = (e: UIEvent, column: ColumnComponent) -> Unit
 
-internal typealias ValueBooleanCallback = (value: Any) -> Boolean
+typealias RowEventCallback = (e: UIEvent, row: RowComponent) -> Unit
 
-internal typealias ValueVoidCallback = (value: Any) -> Unit
+typealias RowChangedCallback = (row: RowComponent) -> Unit
 
-internal typealias EmptyCallback = (callback: () -> Unit) -> Unit
+typealias GroupEventCallback = (e: UIEvent, group: GroupComponent) -> Unit
 
-internal typealias CellEventCallback = (e: UIEvent, cell: Tabulator.CellComponent) -> Unit
+typealias JSONRecord = Record<String, dynamic /* String | Number | Boolean */>
 
-internal typealias CellEditEventCallback = (cell: Tabulator.CellComponent) -> Unit
+typealias FilterFunction = (field: String, type: String /* "=" | "!=" | "like" | "<" | ">" | "<=" | ">=" | "in" | "regex" | "starts" | "ends" */, value: Any, filterParams: FilterParams) -> Unit
 
-internal typealias ColumnEventCallback = (e: UIEvent, column: Tabulator.ColumnComponent) -> Unit
+typealias GroupValuesArg = Array<Array<Any>>
 
-internal typealias RowEventCallback = (e: UIEvent, row: Tabulator.RowComponent) -> Unit
+typealias CustomMutator = (value: Any, data: Any, type: String /* "data" | "edit" */, mutatorParams: Any, cell: CellComponent) -> Any
 
-internal typealias RowChangedCallback = (row: Tabulator.RowComponent) -> Unit
+typealias CustomAccessor = (value: Any, data: Any, type: String /* "data" | "download" | "clipboard" */, AccessorParams: Any, column: ColumnComponent, row: RowComponent) -> Any
 
-internal typealias GroupEventCallback = (e: UIEvent, group: Tabulator.GroupComponent) -> Unit
-
-internal typealias JSONRecord = Record<String, dynamic /* String | Number | Boolean */>
-
-internal typealias ColumnSorterParamLookupFunction = (column: Tabulator.ColumnComponent, dir: String /* "asc" | "desc" */) -> Any
+typealias ColumnSorterParamLookupFunction = (column: ColumnComponent, dir: String /* "asc" | "desc" */) -> Any

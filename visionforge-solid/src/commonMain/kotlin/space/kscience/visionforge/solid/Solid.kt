@@ -170,19 +170,19 @@ internal fun float32(name: Name, default: Number): ReadWriteProperty<Solid, Numb
     }
 
 /**
- * A [Float32Vector3D] solid property delegate
+ * A [FloatVector3D] solid property delegate
  */
 internal fun float32Vector(
     name: Name,
     defaultX: Float,
     defaultY: Float = defaultX,
     defaultZ: Float = defaultX,
-): ReadWriteProperty<Solid, Float32Vector3D?> =
-    object : ReadWriteProperty<Solid, Float32Vector3D?> {
-        override fun getValue(thisRef: Solid, property: KProperty<*>): Float32Vector3D? {
+): ReadWriteProperty<Solid, FloatVector3D?> =
+    object : ReadWriteProperty<Solid, FloatVector3D?> {
+        override fun getValue(thisRef: Solid, property: KProperty<*>): FloatVector3D? {
             val item = thisRef.properties[name] ?: return null
             //using dynamic property accessor because values could change
-            return object : Float32Vector3D {
+            return object : FloatVector3D {
                 override val x: Float get() = item[X_KEY]?.float ?: defaultX
                 override val y: Float get() = item[Y_KEY]?.float ?: defaultY
                 override val z: Float get() = item[Z_KEY]?.float ?: defaultZ
@@ -191,7 +191,7 @@ internal fun float32Vector(
             }
         }
 
-        override fun setValue(thisRef: Solid, property: KProperty<*>, value: Float32Vector3D?) {
+        override fun setValue(thisRef: Solid, property: KProperty<*>, value: FloatVector3D?) {
             if (value == null) {
                 thisRef.properties[name] = null
             } else {
@@ -202,9 +202,9 @@ internal fun float32Vector(
         }
     }
 
-public var Solid.position: Float32Vector3D? by float32Vector(POSITION_KEY, 0f)
-public var Solid.rotation: Float32Vector3D? by float32Vector(ROTATION_KEY, 0f)
-public var Solid.scale: Float32Vector3D? by float32Vector(SCALE_KEY, 1f)
+public var Solid.position: FloatVector3D? by float32Vector(POSITION_KEY, 0f)
+public var Solid.rotation: FloatVector3D? by float32Vector(ROTATION_KEY, 0f)
+public var Solid.scale: FloatVector3D? by float32Vector(SCALE_KEY, 1f)
 
 public fun Solid.scale(scaleFactor: Number) {
     scale = Float32Vector3D(scaleFactor, scaleFactor, scaleFactor)

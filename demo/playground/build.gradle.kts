@@ -13,18 +13,17 @@ repositories {
 
 kotlin {
     jvmToolchain(17)
-    js(IR) {
+    js {
+        useEsModules()
         browser {
             commonWebpackConfig {
+                outputFileName = "js/visionforge-playground.js"
                 cssSupport {
                     enabled = true
                 }
                 scssSupport {
                     enabled = true
                 }
-            }
-            webpackTask {
-                mainOutputFileName.set("js/visionforge-playground.js")
             }
         }
         binaries.executable()
@@ -66,16 +65,22 @@ kotlin {
                 implementation(projects.visionforgeGdml)
                 implementation(projects.visionforgeServer)
                 implementation(spclibs.logback.classic)
-                implementation("com.github.Ricky12Awesome:json-schema-serialization:0.6.6")
             }
         }
+
         all {
             languageSettings.optIn("space.kscience.dataforge.misc.DFExperimental")
         }
     }
 }
 
-val jsBrowserDistribution = tasks.getByName("jsBrowserDistribution")
+val debug = false
+
+val jsBrowserDistribution = if(debug) {
+    tasks.getByName("jsBrowserDevelopmentExecutableDistribution")
+} else {
+    tasks.getByName("jsBrowserDistribution")
+}
 
 tasks.getByName<ProcessResources>("jvmProcessResources") {
     dependsOn(jsBrowserDistribution)

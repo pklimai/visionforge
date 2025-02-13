@@ -24,6 +24,7 @@ kscience {
 //        api(npm("file-saver", "2.0.5"))
 //        api(npm("@types/file-saver", "2.0.7"))
         implementation(npm("three", "0.173.0"))
+        implementation(npm("@types/three", "0.173.0"))
         implementation(npm("three-csg-ts", "3.2.0"))
         implementation(npm("meshline", "3.3.1"))
     }

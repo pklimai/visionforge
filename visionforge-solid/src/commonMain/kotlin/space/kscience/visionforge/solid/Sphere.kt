@@ -21,7 +21,7 @@ public class Sphere(
 ) : SolidBase<Sphere>(), GeometrySolid {
 
     override fun <T : Any> toGeometry(geometryBuilder: GeometryBuilder<T>) {
-        fun point3dFromSphCoord(r: Float, theta: Float, phi: Float): Float32Vector3D {
+        fun point3dFromSphCoord(r: Float, theta: Float, phi: Float): FloatVector3D {
             // This transformation matches three.js sphere implementation
             val y = r * cos(theta)
             val z = r * sin(theta) * sin(phi)
@@ -59,6 +59,6 @@ public inline fun MutableVisionContainer<Solid>.sphere(
     action: Sphere.() -> Unit = {},
 ): Sphere = Sphere(
     radius.toFloat(),
-).apply(action).also { 
+).apply(action).also {
     setVision(name?.let(NameToken::parse) ?: SolidGroup.staticNameFor(it), it)
 }
