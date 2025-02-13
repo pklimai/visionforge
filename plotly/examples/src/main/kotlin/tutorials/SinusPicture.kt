@@ -4,7 +4,6 @@ import space.kscience.dataforge.meta.Value
 import space.kscience.plotly.*
 import space.kscience.plotly.models.*
 import space.kscience.plotly.palettes.Xkcd
-import space.kscience.visionforge.html.openInBrowser
 import kotlin.math.PI
 import kotlin.math.sin
 
@@ -42,7 +41,7 @@ fun main() {
         }
     }
 
-    Plotly.page(mathJaxHeader, cdnPlotlyHeader) {
+    Plotly.makePageFile(additionalHeaders = mapOf("mathJax" to mathJaxHeader)) {
         plot {
             scatter { // sinus
                 x.set(xValues)
@@ -152,5 +151,5 @@ fun main() {
                 }
             }
         }
-    }.openInBrowser()
+    }
 }

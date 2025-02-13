@@ -1,6 +1,7 @@
 package space.kscience.plotly
 
-import space.kscience.visionforge.html.HtmlFragment
+import space.kscience.visionforge.html.*
+import space.kscience.visionforge.visionManager
 import java.awt.Desktop
 import java.nio.file.Files
 import java.nio.file.Path
@@ -9,31 +10,6 @@ import javax.swing.filechooser.FileNameExtensionFilter
 
 
 internal const val assetsDirectory = "assets"
-
-/**
- * The location of resources for plot.
- */
-public enum class ResourceLocation {
-    /**
-     * Use cdn or other remote source for assets
-     */
-    REMOTE,
-
-    /**
-     * Store assets in a sibling folder `plotly-assets` or in a system-wide folder if this is a default temporary file
-     */
-    LOCAL,
-
-    /**
-     * Store assets in a system-window `~/.plotly/plotly-assets` folder
-     */
-    SYSTEM,
-
-    /**
-     * Embed the asset into the html. Could produce very large files.
-     */
-    EMBED
-}
 
 /**
  * Create a standalone html with the plot
@@ -59,6 +35,28 @@ public fun Plot.openInBrowser(
 ) {
     makeFile(path, *headers, resourceLocation = resourceLocation, config = config)
     Desktop.getDesktop().browse(path.toFile().toURI())
+}
+
+public fun Plotly.makePageFile(
+    path: Path? = null,
+    title: String = "VisionForge Plotly page",
+    additionalHeaders: Map<String, HtmlFragment> = emptyMap(),
+    resourceLocation: ResourceLocation = ResourceLocation.SYSTEM,
+    show: Boolean = true,
+    content: HtmlVisionFragment,
+): Path {
+    val actualPath = VisionPage(context.visionManager, content = content).makeFile(path) { actualPath ->
+        mapOf(
+            "title" to VisionPage.title(title),
+            "plotly" to VisionPage.importScriptHeader(
+                "js/plotly-kt.js",
+                resourceLocation,
+                actualPath
+            ),
+        ) + additionalHeaders
+    }
+    if (show) Desktop.getDesktop().browse(actualPath.toFile().toURI())
+    return actualPath
 }
 
 ///**

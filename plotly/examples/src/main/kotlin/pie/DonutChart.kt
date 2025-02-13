@@ -2,11 +2,10 @@ package pie
 
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.layout
+import space.kscience.plotly.makePageFile
 import space.kscience.plotly.models.Pie
 import space.kscience.plotly.models.invoke
-import space.kscience.plotly.page
 import space.kscience.plotly.plot
-import space.kscience.visionforge.html.openInBrowser
 
 
 fun main() {
@@ -22,7 +21,7 @@ fun main() {
         hole = 0.4
     }
 
-    Plotly.page {
+    Plotly.makePageFile {
         plot {
             traces(donut1)
 
@@ -42,5 +41,5 @@ fun main() {
                 title = "CO2"
             }
         }
-    }.openInBrowser()
+    }
 }

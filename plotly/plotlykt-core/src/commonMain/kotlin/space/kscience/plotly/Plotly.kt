@@ -10,7 +10,6 @@ import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.names.Name
 import space.kscience.plotly.models.Trace
 import space.kscience.visionforge.VisionBuilder
-import space.kscience.visionforge.VisionManager
 import space.kscience.visionforge.html.*
 import kotlin.js.JsName
 
@@ -92,24 +91,6 @@ public inline fun VisionOutput.plotly(
     meta = config.meta
     return Plotly.plot(block)
 }
-
-public fun Plotly.page(
-    pageHeaders: Map<String, HtmlFragment> = emptyMap(),
-    content: HtmlVisionFragment,
-): VisionPage = VisionPage(
-    visionManager = context.request(VisionManager),
-    pageHeaders = mapOf("plotly" to cdnPlotlyHeader) + pageHeaders,
-    content = content
-)
-
-public fun Plotly.page(
-    vararg pageHeaders: HtmlFragment,
-    content: HtmlVisionFragment,
-): VisionPage = VisionPage(
-    visionManager = context.request(VisionManager),
-    pageHeaders = mapOf("plotly" to cdnPlotlyHeader) + pageHeaders.associateBy { it.toString() },
-    content = content
-)
 
 context(rootConsumer: VisionTagConsumer<*>)
 public fun TagConsumer<*>.plot(

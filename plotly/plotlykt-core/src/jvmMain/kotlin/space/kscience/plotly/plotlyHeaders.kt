@@ -4,6 +4,7 @@ import kotlinx.html.link
 import kotlinx.html.script
 import kotlinx.html.unsafe
 import space.kscience.visionforge.html.HtmlFragment
+import space.kscience.visionforge.html.ResourceLocation
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
@@ -107,14 +108,15 @@ internal val embededPlotlyHeader = HtmlFragment {
 
 internal fun inferPlotlyHeader(
     target: Path?,
-    resourceLocation: ResourceLocation
+    resourceLocation: ResourceLocation?
 ): HtmlFragment = when (resourceLocation) {
-    ResourceLocation.REMOTE -> cdnPlotlyHeader
+    null -> cdnPlotlyHeader
     ResourceLocation.LOCAL -> if (target != null) {
         localPlotlyHeader(target)
     } else {
         systemPlotlyHeader
     }
+
     ResourceLocation.SYSTEM -> systemPlotlyHeader
     ResourceLocation.EMBED -> embededPlotlyHeader
 }

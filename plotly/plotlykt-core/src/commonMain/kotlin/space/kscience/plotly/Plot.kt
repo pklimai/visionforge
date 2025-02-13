@@ -1,5 +1,6 @@
 package space.kscience.plotly
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonArray
@@ -21,6 +22,7 @@ import space.kscience.visionforge.*
 @Serializable
 public class Plot : AbstractVision(), MutableVisionGroup<Trace> {
 
+    @SerialName("data")
     private val _data = mutableListOf<Trace>()
     public val data: List<Trace> get() = _data
 

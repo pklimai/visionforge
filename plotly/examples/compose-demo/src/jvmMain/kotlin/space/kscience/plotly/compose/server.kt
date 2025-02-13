@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import space.kscience.plotly.*
 import space.kscience.plotly.models.Scatter
 import space.kscience.plotly.models.Trace
+import space.kscience.visionforge.html.VisionPage
 import space.kscience.visionforge.html.makeString
 import space.kscience.visionforge.plotly.plotlyPage
 import kotlin.math.PI
@@ -31,7 +32,7 @@ public fun Scatter(
 }
 
 
-fun staticPlot(): String = Plotly.page {
+internal fun staticPlot(): String = Plotly.plugin.visionManager.VisionPage(cdnPlotlyHeader) {
     val x = (0..100).map { it.toDouble() / 100.0 }.toDoubleArray()
     val y1 = x.map { sin(2.0 * PI * it) }.toDoubleArray()
     val y2 = x.map { cos(2.0 * PI * it) }.toDoubleArray()
@@ -41,19 +42,17 @@ fun staticPlot(): String = Plotly.page {
     val trace2 = Scatter(x, y2) {
         name = "cos"
     }
-    vision {
-        plotly(config = PlotlyConfig { responsive = true }) {//static plot
-            traces(trace1, trace2)
-            layout {
-                title = "First graph, row: 1, size: 8/12"
-                xaxis.title = "x axis name"
-                yaxis { title = "y axis name" }
-            }
+    staticPlot {
+        traces(trace1, trace2)
+        layout {
+            title = "First graph, row: 1, size: 8/12"
+            xaxis.title = "x axis name"
+            yaxis { title = "y axis name" }
         }
     }
 }.makeString()
 
-fun CoroutineScope.servePlots(scale: StateFlow<Number>): EmbeddedServer<*, *> = embeddedServer(CIO, port = 7777) {
+fun CoroutineScope.servePlots(scale: StateFlow<Number>, port: Int = 7778): EmbeddedServer<*, *> = embeddedServer(CIO, port = port) {
 
     val x = (0..100).map { it.toDouble() / 100.0 }.toDoubleArray()
 
@@ -107,5 +106,5 @@ fun CoroutineScope.servePlots(scale: StateFlow<Number>): EmbeddedServer<*, *> = 
             }
         }
     }
-}
+}.start()
 

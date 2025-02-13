@@ -3,7 +3,10 @@ import space.kscience.plotly.*
 import space.kscience.plotly.models.Trace
 import space.kscience.plotly.models.invoke
 import space.kscience.plotly.palettes.T10
-import space.kscience.visionforge.html.*
+import space.kscience.visionforge.html.HtmlFragment
+import space.kscience.visionforge.html.VisionPage
+import space.kscience.visionforge.html.appendTo
+import space.kscience.visionforge.html.openInBrowser
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -29,12 +32,12 @@ public val cdnBootstrap: HtmlFragment = HtmlFragment {
 
 
 public class PlotTabs {
-    public data class Tab(val title: String, val id: String, val content: HtmlVisionFragment)
+    public data class Tab(val title: String, val id: String, val content: HtmlFragment)
 
     private val _tabs = ArrayList<Tab>()
     public val tabs: List<Tab> get() = _tabs
 
-    public fun tab(title: String, id: String = title, fragment: HtmlVisionFragment) {
+    public fun tab(title: String, id: String = title, fragment: HtmlFragment) {
         _tabs.add(Tab(title, id, fragment))
     }
 }
@@ -42,7 +45,7 @@ public class PlotTabs {
 public fun Plotly.tabs(tabsID: String = "tabs", block: PlotTabs.() -> Unit): VisionPage {
     val grid = PlotTabs().apply(block)
 
-    return page(cdnBootstrap, cdnPlotlyHeader) {
+    return plugin.visionManager.VisionPage(cdnBootstrap, cdnPlotlyHeader) {
         ul("nav nav-tabs") {
             role = "tablist"
             id = tabsID
@@ -73,7 +76,7 @@ public fun Plotly.tabs(tabsID: String = "tabs", block: PlotTabs.() -> Unit): Vis
                     id = tab.id
                     role = "tabpanel"
                     attributes["aria-labelledby"] = "${tab.id}-tab"
-                    visionFragment(visionManager, fragment = tab.content)
+                    tab.content.appendTo(consumer)
                 }
             }
         }
@@ -105,10 +108,10 @@ fun main() {
         responsive = true
     }
 
-    val plot = Plotly.tabs {
+    val page = Plotly.tabs {
 
         tab("First") {
-            plot(config = responsive) {
+            staticPlot(config = responsive) {
                 traces(trace1)
                 layout {
                     title = "First graph"
@@ -118,7 +121,7 @@ fun main() {
             }
         }
         tab("Second") {
-            plot(config = responsive) {
+            staticPlot(config = responsive) {
                 traces(trace2)
                 layout {
                     title = "Second graph"
@@ -129,5 +132,5 @@ fun main() {
         }
     }
 
-    plot.openInBrowser()
+    page.openInBrowser()
 }

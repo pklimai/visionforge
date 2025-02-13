@@ -64,7 +64,7 @@ private class PlotGrid {
 
 private fun Plotly.grid(block: PlotGrid.() -> Unit): VisionPage {
     val grid = PlotGrid().apply(block)
-    return page(cdnBootstrap, cdnPlotlyHeader) {
+    return plugin.visionManager.VisionPage(cdnBootstrap, cdnPlotlyHeader) {
         div("col") {
             grid.grid.forEach { row ->
                 div("row") {

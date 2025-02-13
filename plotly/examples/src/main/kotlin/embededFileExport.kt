@@ -1,8 +1,8 @@
 import space.kscience.dataforge.meta.invoke
 import space.kscience.plotly.Plotly
-import space.kscience.plotly.ResourceLocation
 import space.kscience.plotly.openInBrowser
 import space.kscience.plotly.trace
+import space.kscience.visionforge.html.ResourceLocation
 import kotlin.math.PI
 import kotlin.math.sin
 

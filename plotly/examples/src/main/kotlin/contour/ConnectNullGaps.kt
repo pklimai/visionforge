@@ -2,11 +2,10 @@ package contour
 
 import space.kscience.plotly.Plotly
 import space.kscience.plotly.layout
+import space.kscience.plotly.makePageFile
 import space.kscience.plotly.models.Contour
 import space.kscience.plotly.models.invoke
-import space.kscience.plotly.page
 import space.kscience.plotly.plot
-import space.kscience.visionforge.html.openInBrowser
 
 
 /**
@@ -43,7 +42,7 @@ fun main() {
         connectgaps = true
     }
 
-    Plotly.page {
+    Plotly.makePageFile {
         plot {
             traces(contour1)
             layout {
@@ -61,5 +60,5 @@ fun main() {
                 title = "Connected Gaps"
             }
         }
-    }.openInBrowser()
+    }
 }
