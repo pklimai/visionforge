@@ -178,8 +178,8 @@ public class JsVisionClient : AbstractPlugin(), VisionClient {
 
     private fun renderVision(element: Element, name: Name, vision: Vision, outputMeta: Meta) {
         vision.setAsRoot(visionManager)
-        val renderer: ElementVisionRenderer =
-            findRendererFor(vision) ?: error("Could not find renderer for ${vision::class}")
+        val renderer: ElementVisionRenderer = findRendererFor(vision)
+            ?: error("Could not find renderer for ${vision::class}")
         //render vision
         renderer.render(element, name, vision, outputMeta)
         //start vision update from a backend model
@@ -249,7 +249,7 @@ public class JsVisionClient : AbstractPlugin(), VisionClient {
                 val embeddedVision = element.getEmbeddedData(VisionTagConsumer.OUTPUT_DATA_CLASS)!!.let {
                     visionManager.decodeFromString(it)
                 }
-                logger.info { "Found embedded vision for output with name $name" }
+                logger.info { "Found embedded vision data with name $name" }
                 renderVision(element, name, embeddedVision, outputMeta)
             }
 

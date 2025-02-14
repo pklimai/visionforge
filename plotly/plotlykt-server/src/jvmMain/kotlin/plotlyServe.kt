@@ -6,7 +6,6 @@ import io.ktor.server.engine.EmbeddedServer
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.http.content.staticResources
 import io.ktor.server.routing.routing
-import space.kscience.dataforge.misc.DFExperimental
 import space.kscience.plotly.Plotly
 import space.kscience.visionforge.html.HtmlFragment
 import space.kscience.visionforge.html.HtmlVisionFragment
@@ -39,7 +38,6 @@ public fun Application.plotlyPage(
     )
 }
 
-@DFExperimental
 public fun Plotly.serveSinglePage(
     title: String = "VisionForge Plotly page",
     port: Int = 7777,

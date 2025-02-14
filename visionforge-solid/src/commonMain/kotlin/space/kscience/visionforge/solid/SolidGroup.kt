@@ -40,15 +40,17 @@ public class SolidGroup : AbstractVision(), SolidContainer, PrototypeHolder, Mut
 
     private val solids = LinkedHashMap<NameToken, Solid>()
 
-    // ensure proper children links after deserialization
-    init {
-        solids.forEach { it.value.parent = this }
-    }
-
-
     override val visions: Map<NameToken, Solid> get() = solids
 
     private var prototypes: SolidGroup? = null
+
+
+    // ensure proper children links after deserialization
+    init {
+        solids.forEach { it.value.parent = this }
+        prototypes?.parent = this
+    }
+
 
     override val descriptor: MetaDescriptor get() = Solid.descriptor
 

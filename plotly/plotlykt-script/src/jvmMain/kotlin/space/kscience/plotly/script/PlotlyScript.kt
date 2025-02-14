@@ -1,6 +1,7 @@
 package space.kscience.plotly.script
 
-import kotlinx.html.FlowContent
+import kotlinx.html.TagConsumer
+import kotlin.reflect.typeOf
 import kotlin.script.experimental.annotations.KotlinScript
 import kotlin.script.experimental.api.*
 import kotlin.script.experimental.jvm.defaultJvmScriptingHostConfiguration
@@ -16,7 +17,7 @@ public abstract class PlotlyScript
 
 public class PlotlyScriptCompilationConfiguration: ScriptCompilationConfiguration({
     baseClass(PlotlyScript::class)
-    implicitReceivers(FlowContent::class)
+    implicitReceivers(typeOf<TagConsumer<*>>())
     defaultImports(
         "kotlin.math.*",
         "space.kscience.plotly.*",

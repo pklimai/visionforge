@@ -74,7 +74,7 @@ kotlin {
     }
 }
 
-val debug = false
+val debug = true
 
 val jsBrowserDistribution = if(debug) {
     tasks.getByName("jsBrowserDevelopmentExecutableDistribution")

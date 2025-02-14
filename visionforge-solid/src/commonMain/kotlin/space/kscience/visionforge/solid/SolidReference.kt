@@ -241,7 +241,7 @@ private class SolidReferenceChild(
         } ?: emptyMap()
 
     override fun getVision(token: NameToken): Solid? = (prototype as? SolidContainer)?.getVision(token)?.let {
-        SolidReferenceChild(owner, it, childName + token)
+        SolidReferenceChild(owner, this, childName + token)
     }
 
     companion object {
