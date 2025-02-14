@@ -4,6 +4,7 @@ import io.ktor.server.cio.CIO
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.http.content.staticResources
 import io.ktor.server.routing.routing
+import kotlinx.html.unsafe
 import space.kscience.dataforge.context.Context
 import space.kscience.plotly.PlotlyPlugin
 import space.kscience.visionforge.html.*
@@ -41,6 +42,11 @@ public fun makeVisionFile(
                 resourceLocation,
                 actualPath
             ),
+            "playground-style" to VisionPage.styleHeader {
+                unsafe {
+                    +".visionforge-output { height:100vh; }"
+                }
+            }
         )
     }
     if (show) Desktop.getDesktop().browse(actualPath.toFile().toURI())

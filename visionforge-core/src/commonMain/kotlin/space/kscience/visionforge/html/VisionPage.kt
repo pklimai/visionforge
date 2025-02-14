@@ -36,6 +36,15 @@ public data class VisionPage(
             }
         }
 
+        /**
+         * Inject a simple style header
+         */
+        public fun styleHeader(block: STYLE.() -> Unit): HtmlFragment = HtmlFragment {
+            style {
+                block()
+            }
+        }
+
         public fun title(title: String): HtmlFragment = HtmlFragment {
             title(title)
         }
