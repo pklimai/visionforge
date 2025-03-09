@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("jupyter.api")
     id("com.github.johnrengelman.shadow") version "7.1.2"
+//    application
 }
 
 repositories {
@@ -11,29 +12,27 @@ repositories {
 }
 
 kotlin {
-
+    jvmToolchain(11)
     js(IR) {
-        useCommonJs()
         browser {
             webpackTask {
-                this.outputFileName = "js/visionforge-playground.js"
-            }
-            commonWebpackConfig {
-                sourceMaps = true
-                cssSupport.enabled = false
+                cssSupport{
+                    enabled = true
+                }
+                scssSupport{
+                    enabled = true
+                }
+                mainOutputFileName.set("js/visionforge-playground.js")
             }
         }
         binaries.executable()
     }
 
     jvm {
-        withJava()
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "11"
-                freeCompilerArgs =
-                    freeCompilerArgs + "-Xjvm-default=all" + "-Xopt-in=kotlin.RequiresOptIn" + "-Xlambdas=indy"
-            }
+//        withJava()
+        compilerOptions {
+            freeCompilerArgs.addAll("-Xjvm-default=all", "-Xopt-in=kotlin.RequiresOptIn", "-Xlambdas=indy", "-Xcontext-receivers")
+
         }
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()
@@ -44,18 +43,16 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(projects.visionforgeSolid)
-                implementation(projects.visionforgeGdml)
-                implementation(projects.visionforgePlotly)
+//                implementation(projects.visionforgePlotly)
                 implementation(projects.visionforgeMarkdown)
-                implementation(projects.visionforgeTables)
+//                implementation(projects.visionforgeTables)
                 implementation(projects.cernRootLoader)
-                implementation(projects.jupyter)
+                api(projects.visionforgeJupyter.visionforgeJupyterCommon)
             }
         }
 
         val jsMain by getting {
             dependencies {
-                implementation(projects.ui.ring)
                 implementation(projects.visionforgeThreejs)
                 compileOnly(npm("webpack-bundle-analyzer","4.5.0"))
             }
@@ -63,8 +60,10 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
+                implementation("io.ktor:ktor-server-cio:${spclibs.versions.ktor.get()}")
+                implementation(projects.visionforgeGdml)
                 implementation(projects.visionforgeServer)
-                implementation("ch.qos.logback:logback-classic:1.2.3")
+                implementation(spclibs.logback.classic)
                 implementation("com.github.Ricky12Awesome:json-schema-serialization:0.6.6")
             }
         }
@@ -88,3 +87,7 @@ val processJupyterApiResources by tasks.getting(org.jetbrains.kotlinx.jupyter.ap
 }
 
 tasks.findByName("shadowJar")?.dependsOn(processJupyterApiResources)
+
+//application{
+//    mainClass.set("space.kscience.visionforge.examples.ShapesKt")
+//}

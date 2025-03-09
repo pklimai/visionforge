@@ -1,5 +1,9 @@
+import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
+
+
 plugins {
-    id("ru.mipt.npm.gradle.jvm")
+    id("space.kscience.gradle.mpp")
+    alias(spclibs.plugins.ktor)
     application
 }
 
@@ -8,15 +12,19 @@ kscience {
 //    useSerialization {
 //        json()
 //    }
-    application()
+    jvm{
+        withJava()
+    }
+    jvmMain{
+        implementation("io.ktor:ktor-server-cio")
+        implementation(projects.visionforgeThreejs.visionforgeThreejsServer)
+        implementation(spclibs.logback.classic)
+    }
 }
 
-group = "ru.mipt.npm"
+group = "center.sciprog"
 
-dependencies{
-    implementation(project(":visionforge-threejs:visionforge-threejs-server"))
-    implementation("ch.qos.logback:logback-classic:1.2.3")
-}
+kotlin.explicitApi = ExplicitApiMode.Disabled
 
 application {
     mainClass.set("ru.mipt.npm.sat.SatServerKt")

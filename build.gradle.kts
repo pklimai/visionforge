@@ -1,29 +1,48 @@
+import space.kscience.gradle.useApache2Licence
+import space.kscience.gradle.useSPCTeam
+
 plugins {
-    id("ru.mipt.npm.gradle.project")
-    id("org.jetbrains.kotlinx.kover") version "0.5.0-RC"
+    id("space.kscience.gradle.project")
+    alias(spclibs.plugins.kotlinx.kover)
 }
 
-val dataforgeVersion by extra("0.5.2")
-val fxVersion by extra("11")
+val dataforgeVersion by extra("0.9.0")
 
-allprojects{
+allprojects {
     group = "space.kscience"
-    version = "0.2.0"
+    version = "0.4.2"
 }
 
 subprojects {
     if (name.startsWith("visionforge")) apply<MavenPublishPlugin>()
 
     repositories {
+        mavenLocal()
         maven("https://repo.kotlin.link")
         mavenCentral()
         maven("https://maven.jzy3d.org/releases")
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        compilerOptions {
+            freeCompilerArgs.add("-Xcontext-receivers")
+        }
+    }
+
+//    tasks.withType<KotlinJsCompile>{
+//        kotlinOptions{
+//            useEsClasses = true
+//        }
+//    }
 }
 
 ksciencePublish {
-    github("visionforge")
-    space()
+    pom("https://github.com/SciProgCentre/visionforge") {
+        useApache2Licence()
+        useSPCTeam()
+    }
+    repository("spc","https://maven.sciprog.center/kscience")
     sonatype()
 }
 

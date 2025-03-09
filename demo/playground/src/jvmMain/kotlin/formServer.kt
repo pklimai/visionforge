@@ -1,22 +1,42 @@
 package space.kscience.visionforge.examples
 
+import io.ktor.server.cio.CIO
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.http.content.staticResources
+import io.ktor.server.routing.routing
 import kotlinx.html.*
 import space.kscience.dataforge.context.Global
-import space.kscience.dataforge.context.fetch
+import space.kscience.dataforge.context.request
 import space.kscience.visionforge.VisionManager
-import space.kscience.visionforge.html.Page
-import space.kscience.visionforge.html.formFragment
+import space.kscience.visionforge.html.VisionOfHtmlForm
+import space.kscience.visionforge.html.VisionPage
+import space.kscience.visionforge.html.visionOfForm
 import space.kscience.visionforge.onPropertyChange
 import space.kscience.visionforge.server.close
 import space.kscience.visionforge.server.openInBrowser
-import space.kscience.visionforge.server.serve
+import space.kscience.visionforge.server.visionPage
 
+@Suppress("ExtractKtorModule")
 fun main() {
-    val visionManager = Global.fetch(VisionManager)
+    val visionManager = Global.request(VisionManager)
 
-    val server = visionManager.serve {
-        page(header = Page.scriptHeader("js/visionforge-playground.js")) {
-            val form = formFragment("form") {
+    val server = embeddedServer(CIO) {
+
+        routing {
+            staticResources("/", null)
+        }
+
+        val form = VisionOfHtmlForm("form").apply {
+            onPropertyChange(visionManager.context) {
+                println(values)
+            }
+        }
+
+        visionPage(
+            visionManager,
+            VisionPage.scriptHeader("js/visionforge-playground.js"),
+        ) {
+            visionOfForm(form) {
                 label {
                     htmlFor = "fname"
                     +"First name:"
@@ -47,17 +67,15 @@ fun main() {
                     value = "Submit"
                 }
             }
-
-            vision("form") { form }
-            form.onPropertyChange {
-                println(this)
-            }
+            vision(form)
+            println(form.values)
         }
-    }
+
+    }.start(false)
 
     server.openInBrowser()
 
-    while (readln() != "exit") {
+    while (readlnOrNull() != "exit") {
 
     }
 

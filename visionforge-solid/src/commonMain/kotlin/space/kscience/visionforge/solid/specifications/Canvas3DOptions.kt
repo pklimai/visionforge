@@ -1,44 +1,46 @@
+@file:OptIn(DFExperimental::class)
+
 package space.kscience.visionforge.solid.specifications
 
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
+import space.kscience.dataforge.meta.descriptors.ValueRestriction
 import space.kscience.dataforge.meta.descriptors.scheme
 import space.kscience.dataforge.meta.descriptors.value
+import space.kscience.dataforge.meta.set
+import space.kscience.dataforge.misc.DFExperimental
 import space.kscience.dataforge.names.Name
 import space.kscience.visionforge.hide
 import space.kscience.visionforge.widgetType
 
-public class Clipping : Scheme() {
-    public var x: Double? by double()
-    public var y: Double? by double()
-    public var z: Double? by double()
 
-    public companion object : SchemeSpec<Clipping>(::Clipping) {
-        override val descriptor: MetaDescriptor = MetaDescriptor {
-            value(Clipping::x) {
-                widgetType = "range"
-                attributes["min"] = 0.0
-                attributes["max"] = 1.0
-                attributes["step"] = 0.01
-                default(1.0)
-            }
-            value(Clipping::y) {
-                widgetType = "range"
-                attributes["min"] = 0.0
-                attributes["max"] = 1.0
-                attributes["step"] = 0.01
-                default(1.0)
-            }
-            value(Clipping::z) {
-                widgetType = "range"
-                attributes["min"] = 0.0
-                attributes["max"] = 1.0
-                attributes["step"] = 0.01
-                default(1.0)
-            }
+public object Clipping : SchemeSpec<PointScheme>(::PointScheme) {
+    override val descriptor: MetaDescriptor = MetaDescriptor {
+        valueRestriction = ValueRestriction.ABSENT
+        value(PointScheme::x) {
+            widgetType = "range"
+            attributes["min"] = 0.0
+            attributes["max"] = 1.0
+            attributes["step"] = 0.01
+            default(1.0)
+        }
+        value(PointScheme::y) {
+            widgetType = "range"
+            attributes["min"] = 0.0
+            attributes["max"] = 1.0
+            attributes["step"] = 0.01
+            default(1.0)
+        }
+        value(PointScheme::z) {
+            widgetType = "range"
+            attributes["min"] = 0.0
+            attributes["max"] = 1.0
+            attributes["step"] = 0.01
+            default(1.0)
         }
     }
 }
+
 
 public class CanvasSize : Scheme() {
     public var minSize: Int by int(400)
@@ -62,16 +64,16 @@ public class CanvasSize : Scheme() {
 }
 
 public class Canvas3DOptions : Scheme() {
-    public var axes: Axes by spec(Axes)
-    public var light: Light by spec(Light)
-    public var camera: Camera by spec(Camera)
-    public var controls: Controls by spec(Controls)
+    public var canvasName: String by string("vision")
 
-    public var size: CanvasSize by spec(CanvasSize)
+    public var camera: CameraScheme by scheme(CameraScheme)
+    public var controls: Canvas3DUIScheme by scheme(Canvas3DUIScheme)
+
+    public var size: CanvasSize by scheme(CanvasSize)
 
     public var layers: List<Number> by numberList(0)
 
-    public var clipping: Clipping by spec(Clipping)
+    public var clipping: PointScheme by scheme(Clipping)
 
     public var onSelect: ((Name?) -> Unit)? = null
 
@@ -79,8 +81,6 @@ public class Canvas3DOptions : Scheme() {
     public companion object : SchemeSpec<Canvas3DOptions>(::Canvas3DOptions) {
         override val descriptor: MetaDescriptor by lazy {
             MetaDescriptor {
-                scheme(Canvas3DOptions::axes, Axes)
-
                 value(Canvas3DOptions::layers) {
                     multiple = true
                     default(listOf(0))
@@ -90,15 +90,11 @@ public class Canvas3DOptions : Scheme() {
 
                 scheme(Canvas3DOptions::clipping, Clipping)
 
-                scheme(Canvas3DOptions::light, Light){
+                scheme(Canvas3DOptions::camera, CameraScheme) {
                     hide()
                 }
 
-                scheme(Canvas3DOptions::camera, Camera) {
-                    hide()
-                }
-
-                scheme(Canvas3DOptions::controls, Controls) {
+                scheme(Canvas3DOptions::controls, Canvas3DUIScheme) {
                     hide()
                 }
 

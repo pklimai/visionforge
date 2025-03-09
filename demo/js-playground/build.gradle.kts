@@ -1,28 +1,36 @@
 plugins {
-    id("ru.mipt.npm.gradle.js")
+    id("space.kscience.gradle.mpp")
+    alias(spclibs.plugins.compose.compiler)
+    alias(spclibs.plugins.compose.jb)
 }
 
-kscience{
+kscience {
     useCoroutines()
-    application()
 }
 
-kotlin{
-    js(IR){
-        useCommonJs()
+kotlin {
+    explicitApi = null
+    js {
         browser {
-            commonWebpackConfig {
-                cssSupport.enabled = false
+            binaries.executable()
+            commonWebpackConfig{
+                cssSupport{
+                    enabled = true
+                }
+                scssSupport{
+                    enabled = true
+                }
+                sourceMaps = true
             }
         }
     }
 }
 
-
-dependencies{
-    implementation(projects.visionforge.visionforgeGdml)
-    implementation(projects.visionforge.visionforgePlotly)
-    implementation(projects.visionforge.visionforgeMarkdown)
-    implementation(projects.visionforge.visionforgeThreejs)
-    implementation(projects.ui.ring)
+kscience {
+    dependencies {
+        implementation(projects.visionforge.visionforgeGdml)
+        implementation(projects.visionforge.visionforgePlotly)
+        implementation(projects.visionforge.visionforgeMarkdown)
+        implementation(projects.visionforge.visionforgeThreejs)
+    }
 }

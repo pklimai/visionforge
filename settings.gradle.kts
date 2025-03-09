@@ -1,7 +1,6 @@
 rootProject.name = "visionforge"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-enableFeaturePreview("VERSION_CATALOGS")
 
 pluginManagement {
 
@@ -12,13 +11,13 @@ pluginManagement {
         maven("https://repo.kotlin.link")
         mavenCentral()
         gradlePluginPortal()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 
     plugins {
-        id("ru.mipt.npm.gradle.project") version toolsVersion
-        id("ru.mipt.npm.gradle.mpp") version toolsVersion
-        id("ru.mipt.npm.gradle.jvm") version toolsVersion
-        id("ru.mipt.npm.gradle.js") version toolsVersion
+        id("space.kscience.gradle.project") version toolsVersion
+        id("space.kscience.gradle.mpp") version toolsVersion
+        id("space.kscience.gradle.jvm") version toolsVersion
     }
 }
 
@@ -33,21 +32,17 @@ dependencyResolutionManagement {
     }
 
     versionCatalogs {
-        create("npmlibs") {
-            from("ru.mipt.npm:version-catalog:$toolsVersion")
+        create("spclibs") {
+            from("space.kscience:version-catalog:$toolsVersion")
         }
     }
 }
 
 include(
-//    ":ui",
-    ":ui:react",
-    ":ui:ring",
-//    ":ui:material",
-    ":ui:bootstrap",
     ":visionforge-core",
+    ":visionforge-compose-html",
+    ":visionforge-compose-multiplatform",
     ":visionforge-solid",
-    ":visionforge-fx",
     ":visionforge-threejs",
     ":visionforge-threejs:visionforge-threejs-server",
     ":visionforge-gdml",
@@ -61,8 +56,18 @@ include(
     ":demo:muon-monitor",
     ":demo:sat-demo",
     ":demo:playground",
-    ":demo:plotly-fx",
     ":demo:js-playground",
-    ":jupyter",
-    ":jupyter:visionforge-jupyter-gdml"
+    ":demo:compose-desktop-demo",
+    ":visionforge-jupyter",
+    ":visionforge-jupyter:visionforge-jupyter-common",
+    ":plotly",
+    ":plotly:plotlykt-core",
+    ":plotly:plotlykt-jupyter",
+    ":plotly:plotlykt-server",
+    ":plotly:plotlykt-script",
+    ":plotly:examples",
+    ":plotly:examples:fx-demo",
+    ":plotly:examples:compose-demo",
+    ":plotly:examples:js-demo",
+    ":plotly:examples:native-demo"
 )

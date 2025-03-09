@@ -3,7 +3,13 @@
 *.iws
 out/
 .gradle
+.kotlin
 build/
 data/
+.kotlin/
+
+jcef-bundle/
 
 !gradle-wrapper.jar
+
+/kotlin-js-store/yarn.lock

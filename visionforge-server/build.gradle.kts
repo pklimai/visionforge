@@ -1,10 +1,16 @@
 plugins {
-    id("ru.mipt.npm.gradle.jvm")
+    id("space.kscience.gradle.mpp")
 }
 
-dependencies {
-    api(project(":visionforge-core"))
-    api(npmlibs.ktor.server.cio)
-    api(npmlibs.ktor.html.builder)
-    api(npmlibs.ktor.websockets)
+kscience{
+    jvm()
+    useKtor()
+    jvmMain {
+        api(projects.visionforgeCore)
+        api("io.ktor:ktor-server-host-common")
+        api("io.ktor:ktor-server-html-builder")
+        api("io.ktor:ktor-server-websockets")
+        api("io.ktor:ktor-server-cors")
+    }
 }
+

@@ -1,45 +1,40 @@
+
 plugins {
-    id("ru.mipt.npm.gradle.mpp")
- }
+    id("space.kscience.gradle.mpp")
+    alias(spclibs.plugins.compose.compiler)
+    alias(spclibs.plugins.compose.jb)
+}
 
 val ktorVersion: String by rootProject.extra
 
-kotlin {
-    js{
-        browser {
+kscience {
+    fullStack(
+        bundleName = "js/visionforge-three.js",
+        browserConfig = {
             webpackTask {
-                this.outputFileName = "js/visionforge-three.js"
+                cssSupport {
+                    enabled = true
+                }
+                scssSupport {
+                    enabled = true
+                }
             }
         }
-        binaries.executable()
+    )
+
+    commonMain {
+        api(projects.visionforgeSolid)
+        api(projects.visionforgeComposeHtml)
     }
 
-    afterEvaluate {
-        val jsBrowserDistribution by tasks.getting
-
-        tasks.getByName<ProcessResources>("jvmProcessResources") {
-            dependsOn(jsBrowserDistribution)
-            afterEvaluate {
-                from(jsBrowserDistribution)
-            }
-        }
+    jvmMain {
+        api(projects.visionforgeServer)
     }
 
-    sourceSets {
-        commonMain {
-            dependencies {
-                api(project(":visionforge-solid"))
-            }
-        }
-        jvmMain {
-            dependencies {
-                api(project(":visionforge-server"))
-            }
-        }
-        jsMain {
-            dependencies {
-                api(project(":visionforge-threejs"))
-            }
-        }
+    jsMain {
+        api(projects.visionforgeThreejs)
+        api(npm("file-saver", "2.0.5"))
+        api(npm("@types/file-saver", "2.0.7"))
+        compileOnly(npm("webpack-bundle-analyzer", "4.5.0"))
     }
 }

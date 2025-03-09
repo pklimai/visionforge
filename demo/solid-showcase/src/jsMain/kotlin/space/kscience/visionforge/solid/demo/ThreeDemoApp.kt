@@ -1,18 +1,18 @@
 package space.kscience.visionforge.solid.demo
 
-import kotlinx.browser.document
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import space.kscience.visionforge.Application
+import org.w3c.dom.Document
+import space.kscience.visionforge.html.Application
+import space.kscience.visionforge.html.startApplication
 import space.kscience.visionforge.solid.x
 import space.kscience.visionforge.solid.y
-import space.kscience.visionforge.startApplication
 import kotlin.random.Random
 
 private class ThreeDemoApp : Application {
 
-    override fun start(state: Map<String, Any>) {
+    override fun start(document: Document, state: Map<String, Any>) {
 
         val element = document.getElementById("demo") ?: error("Element with id 'demo' not found on page")
 

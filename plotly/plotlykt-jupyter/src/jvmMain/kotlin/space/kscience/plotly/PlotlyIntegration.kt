@@ -1,0 +1,138 @@
+package space.kscience.plotly
+
+import kotlinx.html.*
+import kotlinx.html.stream.createHTML
+import org.jetbrains.kotlinx.jupyter.api.HTML
+import org.jetbrains.kotlinx.jupyter.api.libraries.JupyterIntegration
+import org.jetbrains.kotlinx.jupyter.api.libraries.resources
+import space.kscience.visionforge.html.HtmlFragment
+
+public object PlotlyJupyterConfiguration {
+    public var legacyMode: Boolean = false
+
+    /**
+     * Switch plotly renderer to the legacy notebook mode (Jupyter classic)
+     */
+    public fun notebook(): HtmlFragment {
+        legacyMode = true
+        return HtmlFragment {
+            div {
+                style = "color: blue;"
+                +"Plotly notebook integration switched into the notebook mode."
+            }
+        }
+    }
+
+    public fun lab(): HtmlFragment {
+        legacyMode = false
+        return HtmlFragment {
+            div {
+                style = "color: blue;"
+                +"Plotly notebook integration switched into the lab mode."
+            }
+        }
+    }
+}
+
+/**
+ * Global plotly jupyter configuration
+ */
+public val Plotly.jupyter: PlotlyJupyterConfiguration
+    get() = PlotlyJupyterConfiguration
+
+public class PlotlyIntegration : JupyterIntegration(), PlotlyRenderer {
+    override fun FlowContent.renderPlot(plot: Plot, plotId: String, config: PlotlyConfig): Plot {
+        div {
+            id = plotId
+            script {
+                unsafe {
+                    //language=JavaScript
+                    +"""
+                        if(typeof Plotly !== "undefined"){
+                            Plotly.react(
+                                    '$plotId',
+                                    ${plot.data.toJsonString()},
+                                    ${plot.layout.toJsonString()},
+                                    ${config.toJsonString()}
+                                );       
+                        } else {
+                            console.error("Plotly not loaded")
+                        }
+                    """.trimIndent()
+                }
+            }
+        }
+        return plot
+    }
+
+    private fun renderPlot(plot: Plot): String = createHTML().div {
+        plot(plot, config = PlotlyConfig {
+            responsive = true
+        }, renderer = this@PlotlyIntegration)
+    }
+
+    private fun renderFragment(fragment: PlotlyFragment): String = createHTML().div {
+        with(fragment) {
+            render(this@PlotlyIntegration)
+        }
+    }
+
+    private fun renderPage(page: PlotlyPage): String = page.copy(renderer = this@PlotlyIntegration).render()
+
+    override fun Builder.onLoaded() {
+
+        resources {
+            js("plotly-kt") {
+                url("https://cdn.plot.ly/plotly-2.29.1.min.js")
+                classPath("js/plotly-kt.js")
+            }
+        }
+
+        repositories("https://repo.kotlin.link")
+
+        import(
+            "space.kscience.plotly.*",
+            "space.kscience.plotly.models.*",
+            "space.kscience.dataforge.meta.*",
+            "kotlinx.html.*"
+        )
+
+        import("space.kscience.plotly.jupyter")
+
+        render<HtmlFragment> {
+            HTML(it.toString())
+        }
+
+        val renderer = this@PlotlyIntegration
+
+        render<Plot> { plot ->
+            if (PlotlyJupyterConfiguration.legacyMode) {
+                HTML(
+                    Plotly.page(renderer = renderer) {
+                        plot(renderer = renderer, plot = plot)
+                    }.render(),
+                    true
+                )
+            } else {
+                HTML(renderPlot(plot), false)
+            }
+        }
+
+        render<PlotlyFragment> { fragment ->
+            if (PlotlyJupyterConfiguration.legacyMode) {
+                HTML(
+                    Plotly.page(renderer = renderer) { renderer ->
+                        fragment.render(this, renderer)
+                    }.render(), true
+                )
+            } else {
+                HTML(renderFragment(fragment), false)
+            }
+        }
+
+        render<PlotlyPage> {
+            HTML(renderPage(it), true)
+        }
+    }
+
+}

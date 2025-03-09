@@ -1,40 +1,33 @@
 plugins {
-    id("ru.mipt.npm.gradle.mpp")
+    id("space.kscience.gradle.mpp")
 }
 
-val tablesVersion = "0.1.4"
+val tablesVersion = "0.4.1"
 
 kscience {
-    useSerialization()
-}
-
-kotlin {
+    jvm()
     js {
-        useCommonJs()
         binaries.library()
-        browser{
-            commonWebpackConfig{
-                cssSupport.enabled = true
+        browser {
+            webpackTask{
+                scssSupport {
+                    enabled = true
+                }
             }
         }
     }
 
-    sourceSets {
-        commonMain {
-            dependencies {
-                api(project(":visionforge-core"))
-                api("space.kscience:tables-kt:${tablesVersion}")
-            }
-        }
-        jsMain {
-            dependencies {
-                implementation(npm("tabulator-tables", "5.0.1"))
-                implementation(npm("@types/tabulator-tables", "5.0.1"))
-            }
-        }
+    useSerialization()
+    commonMain {
+        api(projects.visionforgeCore)
+        api("space.kscience:tables-kt:${tablesVersion}")
+    }
+    jsMain {
+        api(npm("tabulator-tables", "5.5.2"))
+        api(npm("@types/tabulator-tables", "5.5.3"))
     }
 }
 
-readme{
-    maturity = ru.mipt.npm.gradle.Maturity.PROTOTYPE
+readme {
+    maturity = space.kscience.gradle.Maturity.PROTOTYPE
 }

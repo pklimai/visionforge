@@ -1,50 +1,65 @@
 package space.kscience.visionforge.html
 
 import kotlinx.html.*
-import space.kscience.dataforge.context.Context
-import space.kscience.dataforge.context.Global
 import space.kscience.dataforge.meta.Meta
-import space.kscience.dataforge.misc.DFExperimental
 import space.kscience.dataforge.names.Name
+import space.kscience.dataforge.names.NameToken
+import space.kscience.dataforge.names.asName
 import space.kscience.visionforge.Vision
 import space.kscience.visionforge.VisionManager
-import kotlin.random.Random
-import kotlin.random.nextUInt
 
-public typealias HtmlVisionFragment = VisionTagConsumer<*>.() -> Unit
+public fun interface HtmlVisionFragment {
+    public fun VisionTagConsumer<*>.append()
+}
 
-@DFExperimental
-public fun HtmlVisionFragment(content: VisionTagConsumer<*>.() -> Unit): HtmlVisionFragment = content
+public fun HtmlVisionFragment.appendTo(consumer: VisionTagConsumer<*>): Unit = consumer.append()
 
-
-internal const val RENDER_FUNCTION_NAME = "renderAllVisionsById"
-
+public data class VisionDisplay(val visionManager: VisionManager, val vision: Vision, val meta: Meta)
 
 /**
  * Render a fragment in the given consumer and return a map of extracted visions
- * @param manager a VisionManager used for serialization
+ * @param visionManager a context plugin used to create a vision fragment
  * @param embedData embed Vision initial state in the HTML
  * @param fetchDataUrl fetch data after first render from given url
- * @param fetchUpdatesUrl receive push updates from the server at given url
+ * @param updatesUrl receive push updates from the server at given url
  * @param idPrefix a prefix to be used before vision ids
- * @param renderScript if true add rendering script after the fragment
+ * @param displayCache external cache for Vision displays. It is required to avoid re-creating visions on page update
+ * @param fragment the fragment to render
  */
 public fun TagConsumer<*>.visionFragment(
-    context: Context = Global,
+    visionManager: VisionManager,
     embedData: Boolean = true,
     fetchDataUrl: String? = null,
-    fetchUpdatesUrl: String? = null,
+    updatesUrl: String? = null,
     idPrefix: String? = null,
-    renderScript: Boolean = true,
+    displayCache: MutableMap<Name, VisionDisplay> = mutableMapOf(),
     fragment: HtmlVisionFragment,
-): Map<Name, Vision> {
-    val visionMap = HashMap<Name, Vision>()
-    val consumer = object : VisionTagConsumer<Any?>(this@visionFragment, context, idPrefix) {
-        override fun DIV.renderVision(manager: VisionManager, name: Name, vision: Vision, outputMeta: Meta) {
-            visionMap[name] = vision
-            // Toggle update mode
+) {
 
-            fetchUpdatesUrl?.let {
+    val consumer = object : VisionTagConsumer<Any?>(this@visionFragment, visionManager, idPrefix) {
+
+        override fun <T> TagConsumer<T>.vision(name: Name?, buildOutput: VisionOutput.() -> Vision): T {
+            //Avoid re-creating cached visions
+            val actualName = name ?: NameToken(
+                DEFAULT_VISION_NAME,
+                buildOutput.hashCode().toString(16)
+            ).asName()
+
+            val display = displayCache.getOrPut(actualName) {
+                val output = VisionOutput(context, actualName)
+                val vision = output.buildOutput()
+                VisionDisplay(output.visionManager, vision, output.meta)
+            }
+
+            return addVision(actualName, display.visionManager, display.vision, display.meta)
+        }
+
+        override fun DIV.renderVision(manager: VisionManager, name: Name, vision: Vision, outputMeta: Meta) {
+
+            displayCache[name] = VisionDisplay(manager, vision, outputMeta)
+
+            // Toggle update mode
+            updatesUrl?.let {
                 attributes[OUTPUT_CONNECT_ATTRIBUTE] = it
             }
 
@@ -63,36 +78,24 @@ public fun TagConsumer<*>.visionFragment(
             }
         }
     }
-    if (renderScript) {
-        val id = "fragment[${fragment.hashCode()}/${Random.nextUInt()}]"
-        div {
-            this.id = id
-            fragment(consumer)
-        }
-        script {
-            type = "text/javascript"
-            unsafe { +"window.${RENDER_FUNCTION_NAME}(\"$id\");" }
-        }
-    } else {
-        fragment(consumer)
-    }
-    return visionMap
+
+    fragment.appendTo(consumer)
 }
 
 public fun FlowContent.visionFragment(
-    context: Context = Global,
+    visionManager: VisionManager,
     embedData: Boolean = true,
     fetchDataUrl: String? = null,
-    fetchUpdatesUrl: String? = null,
+    updatesUrl: String? = null,
     idPrefix: String? = null,
-    renderScript: Boolean = true,
+    displayCache: MutableMap<Name, VisionDisplay> = mutableMapOf(),
     fragment: HtmlVisionFragment,
-): Map<Name, Vision> = consumer.visionFragment(
-    context,
-    embedData,
-    fetchDataUrl,
-    fetchUpdatesUrl,
-    idPrefix,
-    renderScript,
-    fragment
+): Unit = consumer.visionFragment(
+    visionManager = visionManager,
+    embedData = embedData,
+    fetchDataUrl = fetchDataUrl,
+    updatesUrl = updatesUrl,
+    idPrefix = idPrefix,
+    displayCache = displayCache,
+    fragment = fragment
 )

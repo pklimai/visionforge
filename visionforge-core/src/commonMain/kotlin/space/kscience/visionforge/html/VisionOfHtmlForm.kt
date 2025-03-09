@@ -1,46 +1,61 @@
 package space.kscience.visionforge.html
 
-import kotlinx.html.FORM
-import kotlinx.html.TagConsumer
-import kotlinx.html.form
-import kotlinx.html.id
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.html.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import space.kscience.dataforge.meta.Meta
-import space.kscience.dataforge.meta.get
 import space.kscience.dataforge.meta.node
+import space.kscience.dataforge.meta.string
+import space.kscience.visionforge.AbstractControlVision
+import space.kscience.visionforge.DataControl
+import space.kscience.visionforge.onSubmit
 
+/**
+ * @param formId an id of the element in rendered DOM, this form is bound to
+ */
 @Serializable
 @SerialName("html.form")
 public class VisionOfHtmlForm(
     public val formId: String,
-) : VisionOfHtmlInput() {
-    public var values: Meta? by meta.node()
+) : AbstractControlVision(), DataControl, VisionOfHtml {
+    public var values: Meta? by properties.node()
 }
 
-public class HtmlFormFragment internal constructor(
-    public val vision: VisionOfHtmlForm,
-    public val formBody: HtmlFragment,
-){
-    public val values: Meta? get() = vision.values
-    public operator fun get(valueName: String): Meta? = values?.get(valueName)
+
+/**
+ * Create a [VisionOfHtmlForm] and bind this form to the id
+ */
+@HtmlTagMarker
+public inline fun <T, C : TagConsumer<T>> C.visionOfForm(
+    vision: VisionOfHtmlForm,
+    action: String? = null,
+    encType: FormEncType? = null,
+    method: FormMethod? = null,
+    classes: String? = null,
+    crossinline block: FORM.() -> Unit = {},
+) : T  = form(action, encType, method, classes){
+    this.id = vision.formId
+    block()
 }
 
-public fun HtmlFormFragment(id: String? = null, builder: FORM.() -> Unit): HtmlFormFragment {
-    val realId = id ?: "form[${builder.hashCode().toUInt()}]"
-    return HtmlFormFragment(VisionOfHtmlForm(realId)) {
-        form {
-            this.id = realId
-            builder()
-        }
-    }
+
+public fun VisionOfHtmlForm.onFormSubmit(scope: CoroutineScope, block: (Meta?) -> Unit): Job = onSubmit(scope) { block(payload) }
+
+
+@Serializable
+@SerialName("html.button")
+public class VisionOfHtmlButton : AbstractControlVision(), DataControl, VisionOfHtml {
+    public var label: String? by properties.string()
 }
 
-public fun <R> TagConsumer<R>.formFragment(
-    id: String? = null,
-    builder: FORM.() -> Unit,
-): VisionOfHtmlForm {
-    val formFragment = HtmlFormFragment(id, builder)
-    fragment(formFragment.formBody)
-    return formFragment.vision
+
+@Suppress("UnusedReceiverParameter")
+public inline fun VisionOutput.button(
+    text: String,
+    block: VisionOfHtmlButton.() -> Unit = {},
+): VisionOfHtmlButton = VisionOfHtmlButton().apply {
+    label = text
+    block()
 }
