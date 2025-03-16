@@ -3,7 +3,7 @@
 ## Unreleased
 
 ### Added
-- Plotly refactored on top of visionforge/server
+- Plotly refactored on top of visionforge/server. Now it is called `plotly-kt`. Version follows general VisionForge version.
 
 ### Changed
 - Simplified Vision and VisionGroup logic. Observation logic moved out.

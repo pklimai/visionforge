@@ -21,7 +21,7 @@ kscience {
 
     commonMain {
         api(projects.visionforgeComposeHtml)
-        api(projects.plotly.plotlyktCore)
+        api(projects.plotlyKt.plotlyKtCore)
     }
 
     jvmMain {

@@ -28,7 +28,7 @@ kotlin {
 
 kscience {
     dependencies {
-        implementation(projects.plotly.plotlyktCore)
+        implementation(projects.plotlyKt.plotlyKtCore)
         implementation(projects.visionforge.visionforgeGdml)
         implementation(projects.visionforge.visionforgeMarkdown)
         implementation(projects.visionforge.visionforgeThreejs)

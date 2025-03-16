@@ -17,7 +17,7 @@ kotlin {
     sourceSets{
         commonMain {
             dependencies {
-                implementation(project(":plotly:plotlykt-core"))
+                implementation(project(":plotly-kt:plotly-kt-core"))
             }
         }
     }

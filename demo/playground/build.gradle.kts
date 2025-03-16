@@ -44,7 +44,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(projects.visionforgeSolid)
-                implementation(projects.plotly.plotlyktCore)
+                implementation(projects.plotlyKt.plotlyKtCore)
                 implementation(projects.visionforgeMarkdown)
                 implementation(projects.visionforgeTables)
                 implementation(projects.cernRootLoader)
@@ -74,7 +74,7 @@ kotlin {
     }
 }
 
-val debug = true
+val debug = false
 
 val jsBrowserDistribution = if(debug) {
     tasks.getByName("jsBrowserDevelopmentExecutableDistribution")

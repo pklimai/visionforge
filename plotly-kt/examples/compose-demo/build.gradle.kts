@@ -16,7 +16,7 @@ kotlin {
     sourceSets {
         jvmMain {
             dependencies {
-                implementation(projects.plotly.plotlyktServer)
+                implementation(projects.plotlyKt.plotlyKtServer)
                 api("io.ktor:ktor-server-cio")
 
                 implementation(compose.runtime)

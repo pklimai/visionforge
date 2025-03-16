@@ -7,8 +7,7 @@ plugins {
     alias(spclibs.plugins.kotlinx.kover)
 }
 
-val dataforgeVersion by extra("0.10.1-dev-1")
-val plotlyVersion by extra("0.8.0")
+val dataforgeVersion by extra("0.10.1")
 
 allprojects {
     group = "space.kscience"

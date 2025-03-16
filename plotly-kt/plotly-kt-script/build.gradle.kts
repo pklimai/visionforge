@@ -7,12 +7,10 @@ plugins {
 val ktorVersion: String by rootProject.extra
 val dataforgeVersion: String by rootProject.extra
 
-kscience{
-    jvm{
-        withJava()
-    }
-    jvmMain{
-        api(projects.plotly.plotlyktCore)
+kscience {
+    jvm()
+    jvmMain {
+        api(projects.plotlyKt.plotlyKtCore)
         api(spclibs.kotlinx.html)
         api(kotlin("scripting-jvm-host"))
         api(kotlin("scripting-jvm"))
@@ -23,6 +21,6 @@ kscience{
 }
 
 
-application{
+application {
     mainClass.set("space.kscience.plotly.script.CliKt")
 }

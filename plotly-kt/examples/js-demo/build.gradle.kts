@@ -15,7 +15,7 @@ kotlin {
     sourceSets{
         jsMain{
             dependencies{
-                implementation(projects.plotly.plotlyktCore)
+                implementation(projects.plotlyKt.plotlyKtCore)
                 implementation(spclibs.kotlinx.coroutines.core)
             }
         }

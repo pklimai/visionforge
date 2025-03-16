@@ -5,12 +5,10 @@ import ru.mipt.npm.root.DGeoManager
 import ru.mipt.npm.root.rootGeo
 import ru.mipt.npm.root.serialization.TGeoManager
 import ru.mipt.npm.root.toVector
-import space.kscience.dataforge.meta.Meta
-import space.kscience.dataforge.meta.get
-import space.kscience.dataforge.meta.isLeaf
-import space.kscience.dataforge.meta.string
+import space.kscience.dataforge.meta.*
 import space.kscience.visionforge.Colors
 import space.kscience.visionforge.html.ResourceLocation
+import space.kscience.visionforge.html.meta
 import space.kscience.visionforge.solid.*
 import java.util.zip.ZipInputStream
 import kotlin.io.path.Path
@@ -41,16 +39,22 @@ fun main() {
         println(it)
     }
 
-    val events = BMN.readEventJson(TGeoManager::class.java.getResourceAsStream("/root/event_0.json")!!.bufferedReader().readText())
+    val events = BMN.readEventJson(
+        TGeoManager::class.java.getResourceAsStream("/root/event_0.json")!!.bufferedReader().readText()
+    )
 
     makeVisionFile(path = Path("data/output.html"), resourceLocation = ResourceLocation.EMBED) {
         vision("canvas") {
             requirePlugin(Solids)
+            meta {
+                "layers" put ListValue(0, 1, 2, 3, 4, 5, 6)
+            }
             solid {
                 ambientLight {
                     color(Colors.white)
                 }
-                rootGeo(geo,"BM@N", ignoreRootColors = true).also {
+
+                rootGeo(geo, "BM@N", ignoreRootColors = true).also {
                     Path("data/BM@N.vf.json").writeText(Solids.encodeToString(it))
                 }
 

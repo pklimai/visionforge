@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Name change from `plotlykt` to `plotly-kt`. Version now follows VisionForge version.
 - Moved plotly implementation on top of VisionForge framework.
 - `Plot` and `Trace` now inherit `Vision`.
 - `Trace` no longer inherit `Scheme`. It requires `Trace.Factory` and import of `space.kscience.plotly.models.invoke` to be automatically created.

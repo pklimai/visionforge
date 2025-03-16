@@ -20,7 +20,7 @@ kscience {
     )
     dependencies {
         api(projects.visionforgeSolid)
-        api(projects.plotly.plotlyktCore)
+        api(projects.plotlyKt.plotlyKtCore)
         api(projects.visionforgeTables)
         api(projects.visionforgeMarkdown)
         api(projects.visionforgeJupyter)
