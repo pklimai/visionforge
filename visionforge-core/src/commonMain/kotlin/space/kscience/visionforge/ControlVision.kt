@@ -2,11 +2,12 @@ package space.kscience.visionforge
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.parseAsName
@@ -19,9 +20,7 @@ public abstract class VisionControlEvent : VisionEvent, MetaRepr {
     override fun toString(): String = toMeta().toString()
 }
 
-public interface ControlVision : Vision {
-    public val controlEventFlow: SharedFlow<VisionControlEvent>
-
+public interface ControlVision : MutableVision {
     /**
      * Fire a [VisionControlEvent] on this [ControlVision]
      */
@@ -45,14 +44,8 @@ public fun ControlVision.asyncControlEvent(
 @Serializable
 public abstract class AbstractControlVision : AbstractVision(), ControlVision {
 
-    @Transient
-    private val mutableControlEventFlow = MutableSharedFlow<VisionControlEvent>()
-
-    override val controlEventFlow: SharedFlow<VisionControlEvent>
-        get() = mutableControlEventFlow
-
     override suspend fun dispatchControlEvent(event: VisionControlEvent) {
-        mutableControlEventFlow.emit(event)
+        emitEvent(event)
     }
 }
 
@@ -62,7 +55,7 @@ public abstract class AbstractControlVision : AbstractVision(), ControlVision {
  */
 @Serializable
 @SerialName("control.submit")
-public class VisionSubmitEvent(override val meta: Meta) : VisionControlEvent() {
+public class ControlSubmitEvent(override val meta: Meta) : VisionControlEvent() {
     public val payload: Meta get() = meta[::payload.name] ?: Meta.EMPTY
 
     public val name: Name? get() = meta["name"].string?.parseAsName()
@@ -70,10 +63,10 @@ public class VisionSubmitEvent(override val meta: Meta) : VisionControlEvent() {
     override fun toString(): String = meta.toString()
 }
 
-public fun VisionSubmitEvent(payload: Meta = Meta.EMPTY, name: Name? = null): VisionSubmitEvent = VisionSubmitEvent(
+public fun ControlSubmitEvent(payload: Meta = Meta.EMPTY, name: Name? = null): ControlSubmitEvent = ControlSubmitEvent(
     Meta {
-        VisionSubmitEvent::payload.name put payload
-        VisionSubmitEvent::name.name put name.toString()
+        ControlSubmitEvent::payload.name put payload
+        ControlSubmitEvent::name.name put name.toString()
     }
 )
 
@@ -83,20 +76,20 @@ public interface DataControl : ControlVision {
      * Create and dispatch submit event
      */
     public suspend fun submit(builder: MutableMeta.() -> Unit = {}) {
-        dispatchControlEvent(VisionSubmitEvent(Meta(builder)))
+        dispatchControlEvent(ControlSubmitEvent(Meta(builder)))
     }
 }
 
 /**
  * Register listener
  */
-public fun DataControl.onSubmit(scope: CoroutineScope, block: suspend VisionSubmitEvent.() -> Unit): Job =
-    controlEventFlow.filterIsInstance<VisionSubmitEvent>().onEach(block).launchIn(scope)
+public fun DataControl.onSubmit(scope: CoroutineScope, block: suspend ControlSubmitEvent.() -> Unit): Job =
+    eventFlow.filterIsInstance<ControlSubmitEvent>().onEach(block).launchIn(scope)
 
 
 @Serializable
 @SerialName("control.valueChange")
-public class VisionValueChangeEvent(override val meta: Meta) : VisionControlEvent() {
+public class ControlValueChangeEvent(override val meta: Meta) : VisionControlEvent() {
 
     public val value: Value? get() = meta.value
 
@@ -109,7 +102,7 @@ public class VisionValueChangeEvent(override val meta: Meta) : VisionControlEven
 }
 
 
-public fun VisionValueChangeEvent(value: Value?, name: Name? = null): VisionValueChangeEvent = VisionValueChangeEvent(
+public fun ControlValueChangeEvent(value: Value?, name: Name? = null): ControlValueChangeEvent = ControlValueChangeEvent(
     Meta {
         this.value = value
         name?.let { set("name", it.toString()) }
@@ -119,7 +112,7 @@ public fun VisionValueChangeEvent(value: Value?, name: Name? = null): VisionValu
 
 @Serializable
 @SerialName("control.input")
-public class VisionInputEvent(override val meta: Meta) : VisionControlEvent() {
+public class ControlInputEvent(override val meta: Meta) : VisionControlEvent() {
 
     public val value: Value? get() = meta.value
 
@@ -131,7 +124,7 @@ public class VisionInputEvent(override val meta: Meta) : VisionControlEvent() {
     override fun toString(): String = meta.toString()
 }
 
-public fun VisionInputEvent(value: Value?, name: Name? = null): VisionInputEvent = VisionInputEvent(
+public fun ControlInputEvent(value: Value?, name: Name? = null): ControlInputEvent = ControlInputEvent(
     Meta {
         this.value = value
         name?.let { set("name", it.toString()) }

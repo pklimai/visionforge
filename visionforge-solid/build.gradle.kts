@@ -2,7 +2,7 @@ plugins {
     id("space.kscience.gradle.mpp")
 }
 
-val kmathVersion = "0.3.1"
+val kmathVersion = "0.4.1"
 
 kscience {
     jvm()
@@ -14,7 +14,7 @@ kscience {
     }
     useCoroutines()
     dependencies {
-        api("space.kscience:kmath-geometry:0.3.1")
+        api("space.kscience:kmath-geometry:$kmathVersion")
         api(projects.visionforgeCore)
     }
     dependencies(jvmTest) {

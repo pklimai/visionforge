@@ -1,0 +1,62 @@
+package space.kscience.plotly.models
+
+import space.kscience.dataforge.meta.enum
+import space.kscience.plotly.Plot
+import space.kscience.plotly.numberGreaterThan
+
+public open class Heatmap : Trace(), Table2D, HeatmapContour {
+    init {
+        type = TraceType.heatmap
+    }
+
+    /**
+     * Sets the horizontal gap (in pixels) between bricks.
+     */
+    override var xgap: Number by numberGreaterThan(0)
+
+    /**
+     * Sets the vertical gap (in pixels) between bricks.
+     */
+    override var ygap: Number by numberGreaterThan(0)
+
+    /**
+     * Picks a smoothing algorithm use to smooth `z` data.
+     */
+    override var zsmooth: ZsmoothType by enum(ZsmoothType.best)
+
+    /**
+     * If "array", the heatmap's x coordinates are given by "x" (the default behavior when `x` is provided).
+     * If "scaled", the heatmap's x coordinates are given by "x0" and "dx" (the default behavior when `x` is not provided).
+     */
+    override var xtype: DataType by enum(DataType.array)
+
+    /**
+     * If "array", the heatmap's y coordinates are given by "y" (the default behavior when `y` is provided)
+     * If "scaled", the heatmap's y coordinates are given by "y0" and "dy" (the default behavior when `y` is not provided)
+     */
+    override var ytype: DataType by enum(DataType.array)
+
+    public companion object : Factory<Heatmap> {
+        override fun build(): Heatmap = Heatmap()
+    }
+}
+
+public inline fun Plot.heatmap(block: Heatmap.() -> Unit): Heatmap {
+    val trace = Heatmap().apply(block)
+    traces(trace)
+    return trace
+}
+
+public class HeatmapGL : Heatmap() {
+    init {
+        type = TraceType.heatmapgl
+    }
+
+    public companion object
+}
+
+public inline fun Plot.heatmapGl(block: HeatmapGL.() -> Unit): HeatmapGL {
+    val trace = HeatmapGL().apply(block)
+    traces(trace)
+    return trace
+}

@@ -8,8 +8,13 @@ import org.w3c.dom.Node
 import org.w3c.dom.events.MouseEvent
 import space.kscience.dataforge.context.info
 import space.kscience.dataforge.context.logger
-import space.kscience.dataforge.meta.*
-import space.kscience.dataforge.names.*
+import space.kscience.dataforge.meta.get
+import space.kscience.dataforge.meta.isEmpty
+import space.kscience.dataforge.meta.string
+import space.kscience.dataforge.meta.useProperty
+import space.kscience.dataforge.names.Name
+import space.kscience.dataforge.names.asName
+import space.kscience.dataforge.names.plus
 import space.kscience.visionforge.Colors
 import space.kscience.visionforge.solid.Solid
 import space.kscience.visionforge.solid.specifications.*
@@ -21,7 +26,10 @@ import three.external.controls.OrbitControls
 import three.external.controls.TrackballControls
 import three.geometries.EdgesGeometry
 import three.materials.Material
-import three.math.*
+import three.math.Box3
+import three.math.Plane
+import three.math.Vector2
+import three.math.Vector3
 import three.meshline.MeshLine
 import three.meshline.MeshLineMaterial
 import three.meshline.isMeshLineMaterial
@@ -104,10 +112,6 @@ public class ThreeCanvas(
         camera.updateProjectionMatrix()
     }
 
-
-    /**
-     * Attach canvas to given [HTMLElement]
-     */
     init {
         check(element.getElementsByClassName("three-canvas").length == 0) {
             "Three canvas already created in this element"
@@ -311,13 +315,13 @@ public class ThreeCanvas(
     public companion object {
         public val SELECTED_MATERIAL: MeshLineMaterial = MeshLineMaterial().apply {
             color.set(Colors.ivory)
-            thickness = 2f
+            lineWidth = 2f
             cached = true
         }
 
         public val HIGHLIGHT_MATERIAL: MeshLineMaterial = MeshLineMaterial().apply {
             color.set(Colors.blue)
-            thickness = 1f
+            lineWidth = 1f
             cached = true
         }
 //

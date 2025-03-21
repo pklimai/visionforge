@@ -21,8 +21,8 @@ public object ThreePointLightFactory : ThreeFactory<PointLightSource> {
             updatePosition(vision)
         }
 
-        if(observe) {
-            vision.onPropertyChange(three.context) { name ->
+        if (observe) {
+            vision.onPropertyChange(three.context) { name, _ ->
                 when (name) {
                     LightSource::color.name.asName() -> res.color = vision.color.threeColor() ?: DEFAULT_COLOR
                     LightSource::intensity.name.asName() -> res.intensity = vision.intensity.toDouble()

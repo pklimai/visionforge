@@ -1,5 +1,5 @@
 @file:JsModule("three/examples/jsm/geometries/ConvexGeometry.js")
-@file:JsNonModule
+
 
 package three.external.geometries
 

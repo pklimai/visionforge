@@ -23,7 +23,7 @@
  */
 
 @file:JsModule("three/examples/jsm/controls/OrbitControls.js")
-@file:JsNonModule
+
 
 package three.external.controls
 

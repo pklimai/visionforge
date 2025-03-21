@@ -3,11 +3,12 @@ package space.kscience.visionforge.solid
 import space.kscience.dataforge.context.Global
 import space.kscience.dataforge.context.request
 import space.kscience.dataforge.misc.DFExperimental
-import space.kscience.visionforge.getChild
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal val testSolids = Global.request(Solids)
+internal val testVisionManager = testSolids.visionManager
+
 
 class SolidPluginTest {
     val vision = testSolids.solidGroup {
@@ -21,14 +22,13 @@ class SolidPluginTest {
     @DFExperimental
     @Test
     fun testPluginConverter() {
-        val visionManager = Global.request(Solids).visionManager
-        val meta = visionManager.encodeToMeta(vision)
+        val meta = testVisionManager.encodeToMeta(vision)
 
-        val reconstructed = visionManager.decodeFromMeta(meta) as SolidGroup
+        val reconstructed = testVisionManager.decodeFromMeta(meta) as SolidGroup
 
         assertEquals(
-            visionManager.encodeToJsonElement(vision.children.getChild("aBox")!!),
-            visionManager.encodeToJsonElement(reconstructed.children.getChild("aBox")!!)
+            testVisionManager.encodeToJsonElement(vision["aBox"]!!),
+            testVisionManager.encodeToJsonElement(reconstructed["aBox"]!!)
         )
     }
 }

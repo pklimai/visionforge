@@ -9,8 +9,11 @@ import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.asName
 import space.kscience.dataforge.names.plus
 import space.kscience.kmath.complex.Quaternion
-import space.kscience.kmath.complex.QuaternionField
-import space.kscience.kmath.geometry.*
+import space.kscience.kmath.complex.QuaternionAlgebra
+import space.kscience.kmath.geometry.Angle
+import space.kscience.kmath.geometry.euclidean3d.*
+import space.kscience.kmath.geometry.radians
+import space.kscience.visionforge.MutableVision
 import space.kscience.visionforge.Vision
 import space.kscience.visionforge.Vision.Companion.VISIBLE_KEY
 import space.kscience.visionforge.hide
@@ -39,7 +42,7 @@ import kotlin.reflect.KProperty
 /**
  * Interface for a [Vision] representing a 3D object
  */
-public interface Solid : Vision {
+public interface Solid : MutableVision {
 
     override val descriptor: MetaDescriptor get() = Companion.descriptor
 
@@ -118,7 +121,7 @@ public interface Solid : Vision {
  * Get the layer number this solid belongs to. Return 0 if layer is not defined.
  */
 public var Solid.layer: Int
-    get() = properties.getValue(LAYER_KEY, inherit = true)?.int ?: 0
+    get() = readProperty(LAYER_KEY, inherited = true).int ?: 0
     set(value) {
         properties[LAYER_KEY] = value
     }
@@ -137,15 +140,15 @@ public var Solid.rotationOrder: RotationOrder
  * Preferred number of polygons for displaying the object. If not defined, uses shape or renderer default. Not inherited
  */
 public var Solid.detail: Int?
-    get() = properties.getValue(DETAIL_KEY, inherit = false)?.int
+    get() = readProperty(DETAIL_KEY, inherited = false).int
     set(value) = properties.setValue(DETAIL_KEY, value?.asValue())
 
 /**
  * If this property is true, the object will be ignored on render.
  * Property is not inherited.
  */
-public var Vision.ignore: Boolean?
-    get() = properties.getValue(IGNORE_KEY, inherit = false, includeStyles = false)?.boolean
+public var MutableVision.ignore: Boolean?
+    get() = readProperty(IGNORE_KEY, inherited = false, useStyles = false).boolean
     set(value) = properties.setValue(IGNORE_KEY, value?.asValue())
 
 //var VisualObject.selected: Boolean?
@@ -167,19 +170,19 @@ internal fun float32(name: Name, default: Number): ReadWriteProperty<Solid, Numb
     }
 
 /**
- * A [Float32Vector3D] solid property delegate
+ * A [FloatVector3D] solid property delegate
  */
 internal fun float32Vector(
     name: Name,
     defaultX: Float,
     defaultY: Float = defaultX,
     defaultZ: Float = defaultX,
-): ReadWriteProperty<Solid, Float32Vector3D?> =
-    object : ReadWriteProperty<Solid, Float32Vector3D?> {
-        override fun getValue(thisRef: Solid, property: KProperty<*>): Float32Vector3D? {
-            val item = thisRef.properties.own[name] ?: return null
+): ReadWriteProperty<Solid, FloatVector3D?> =
+    object : ReadWriteProperty<Solid, FloatVector3D?> {
+        override fun getValue(thisRef: Solid, property: KProperty<*>): FloatVector3D? {
+            val item = thisRef.properties[name] ?: return null
             //using dynamic property accessor because values could change
-            return object : Float32Vector3D {
+            return object : FloatVector3D {
                 override val x: Float get() = item[X_KEY]?.float ?: defaultX
                 override val y: Float get() = item[Y_KEY]?.float ?: defaultY
                 override val z: Float get() = item[Z_KEY]?.float ?: defaultZ
@@ -188,7 +191,7 @@ internal fun float32Vector(
             }
         }
 
-        override fun setValue(thisRef: Solid, property: KProperty<*>, value: Float32Vector3D?) {
+        override fun setValue(thisRef: Solid, property: KProperty<*>, value: FloatVector3D?) {
             if (value == null) {
                 thisRef.properties[name] = null
             } else {
@@ -199,9 +202,9 @@ internal fun float32Vector(
         }
     }
 
-public var Solid.position: Float32Vector3D? by float32Vector(POSITION_KEY, 0f)
-public var Solid.rotation: Float32Vector3D? by float32Vector(ROTATION_KEY, 0f)
-public var Solid.scale: Float32Vector3D? by float32Vector(SCALE_KEY, 1f)
+public var Solid.position: FloatVector3D? by float32Vector(POSITION_KEY, 0f)
+public var Solid.rotation: FloatVector3D? by float32Vector(ROTATION_KEY, 0f)
+public var Solid.scale: FloatVector3D? by float32Vector(SCALE_KEY, 1f)
 
 public fun Solid.scale(scaleFactor: Number) {
     scale = Float32Vector3D(scaleFactor, scaleFactor, scaleFactor)
@@ -258,6 +261,6 @@ public var Solid.scaleZ: Number by float32(Z_SCALE_KEY, 1f)
 /**
  * Add rotation with given [angle] relative to given [axis]
  */
-public fun Solid.rotate(angle: Angle, axis: DoubleVector3D): Unit = with(QuaternionField) {
+public fun Solid.rotate(angle: Angle, axis: Float64Vector3D): Unit = with(QuaternionAlgebra) {
     quaternion = Quaternion.fromRotation(angle, axis) * quaternion
 }

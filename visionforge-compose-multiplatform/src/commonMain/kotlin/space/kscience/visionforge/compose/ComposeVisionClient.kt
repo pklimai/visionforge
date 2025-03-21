@@ -42,7 +42,7 @@ public class ComposeVisionClient : AbstractPlugin(), VisionClient {
     private val mutex = Mutex()
 
 
-    private val rootChangeCollector = VisionChangeBuilder()
+    private val rootChangeCollector = VisionChangeCollector()
 
     /**
      * Communicate vision property changed from rendering engine to model
@@ -50,7 +50,7 @@ public class ComposeVisionClient : AbstractPlugin(), VisionClient {
     override fun notifyPropertyChanged(visionName: Name, propertyName: Name, item: Meta?) {
         context.launch {
             mutex.withLock {
-                rootChangeCollector.propertyChanged(visionName, propertyName, item)
+                rootChangeCollector.getOrCreateChange(visionName).propertyChanged(propertyName, item)
             }
         }
     }
@@ -76,7 +76,7 @@ public class ComposeVisionClient : AbstractPlugin(), VisionClient {
         //subscribe to a backwards events propagation for control visions
         if (vision is ControlVision) {
             LaunchedEffect(vision) {
-                vision.controlEventFlow.collect {
+                vision.eventFlow.collect {
                     sendEvent(name, it)
                 }
             }

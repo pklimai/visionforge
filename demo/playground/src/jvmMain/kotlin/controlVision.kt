@@ -11,7 +11,7 @@ import space.kscience.visionforge.onSubmit
 import kotlin.time.Duration.Companion.seconds
 
 
-fun main() = serve {
+suspend fun main() = serve {
 
     val events = ArrayDeque<VisionControlEvent>(10)
 

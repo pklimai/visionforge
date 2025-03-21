@@ -4,14 +4,16 @@ import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.meta.descriptors.ValueRestriction
 import space.kscience.dataforge.meta.descriptors.value
-import space.kscience.dataforge.meta.set
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.asName
 import space.kscience.dataforge.names.plus
-import space.kscience.visionforge.*
+import space.kscience.visionforge.VisionBuilder
+import space.kscience.visionforge.hide
+import space.kscience.visionforge.inherited
 import space.kscience.visionforge.solid.SolidMaterial.Companion.MATERIAL_COLOR_KEY
 import space.kscience.visionforge.solid.SolidMaterial.Companion.MATERIAL_KEY
 import space.kscience.visionforge.solid.SolidMaterial.Companion.MATERIAL_OPACITY_KEY
+import space.kscience.visionforge.widgetType
 
 /**
  * A scheme for vision material
@@ -24,14 +26,14 @@ public class SolidMaterial : Scheme() {
     /**
      * Primary web-color for the material
      */
-    public val color: ColorAccessor = ColorAccessor(meta, COLOR_KEY)
+    public val color: ColorAccessor = ColorAccessor(meta.view(COLOR_KEY))
 
     /**
      * Specular color for phong material
      */
-    public val specularColor: ColorAccessor = ColorAccessor(meta, SPECULAR_COLOR_KEY)
+    public val specularColor: ColorAccessor = ColorAccessor(meta.view(SPECULAR_COLOR_KEY))
 
-    public val emissiveColor: ColorAccessor = ColorAccessor(meta, EMISSIVE_COLOR_KEY)
+    public val emissiveColor: ColorAccessor = ColorAccessor(meta.view(EMISSIVE_COLOR_KEY))
 
     /**
      * Opacity
@@ -111,19 +113,19 @@ public class SolidMaterial : Scheme() {
 }
 
 public val Solid.color: ColorAccessor
-    get() = ColorAccessor(properties.root(true), MATERIAL_COLOR_KEY)
+    get() = ColorAccessor(mutableProperty(MATERIAL_COLOR_KEY, inherited = true))
 
 public var Solid.material: SolidMaterial?
-    get() = SolidMaterial.read(properties[MATERIAL_KEY])
+    get() = readProperty(MATERIAL_KEY)?.let { SolidMaterial.read(it)}
     set(value) = properties.set(MATERIAL_KEY, value?.meta)
 
 @VisionBuilder
 public fun Solid.material(builder: SolidMaterial.() -> Unit) {
-    properties[MATERIAL_KEY].updateWith(SolidMaterial, builder)
+    mutableProperty(MATERIAL_KEY, inherited = false, useStyles = false).updateWith(SolidMaterial, builder)
 }
 
 public var Solid.opacity: Number?
-    get() = properties.getValue(MATERIAL_OPACITY_KEY, inherit = true)?.number
+    get() = readProperty(MATERIAL_OPACITY_KEY, inherited = true).number
     set(value) {
         properties.setValue(MATERIAL_OPACITY_KEY, value?.asValue())
     }
@@ -132,5 +134,5 @@ public var Solid.opacity: Number?
 @VisionBuilder
 public fun Solid.edges(enabled: Boolean = true, block: SolidMaterial.() -> Unit = {}) {
     properties[SolidMaterial.EDGES_ENABLED_KEY] = enabled
-    SolidMaterial.write(properties[SolidMaterial.EDGES_MATERIAL_KEY]).apply(block)
+    SolidMaterial.write(mutableProperty(SolidMaterial.EDGES_MATERIAL_KEY)).apply(block)
 }

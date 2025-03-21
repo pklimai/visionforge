@@ -1,8 +1,8 @@
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import bootstrap.Column
-import bootstrap.Row
+import app.softwork.bootstrapcompose.Column
+import app.softwork.bootstrapcompose.Row
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import org.jetbrains.compose.web.css.*
@@ -14,11 +14,11 @@ import space.kscience.dataforge.meta.Meta
 import space.kscience.plotly.Plot
 import space.kscience.plotly.layout
 import space.kscience.plotly.models.Trace
+import space.kscience.plotly.models.invoke
 import space.kscience.visionforge.Colors
-import space.kscience.visionforge.html.Vision
+import space.kscience.visionforge.html.VisionDiv
 import space.kscience.visionforge.html.zIndex
 import space.kscience.visionforge.markup.VisionOfMarkup
-import space.kscience.visionforge.plotly.asVision
 import space.kscience.visionforge.solid.*
 import space.kscience.visionforge.solid.three.compose.ThreeView
 import kotlin.math.sqrt
@@ -29,11 +29,11 @@ fun Plot(
     meta: Meta = Meta.EMPTY,
     attrs: AttrBuilderContext<HTMLDivElement>? = null,
     block: Plot.() -> Unit,
-) = Vision(
+) = VisionDiv(
     context = context,
     attrs = attrs,
     meta = meta,
-    vision = Plot().apply(block).asVision()
+    vision = Plot().apply(block)
 )
 
 @Composable
@@ -42,7 +42,7 @@ fun Markup(
     markup: VisionOfMarkup,
     meta: Meta = Meta.EMPTY,
     attrs: AttrBuilderContext<HTMLDivElement>? = null,
-) = Vision(
+) = VisionDiv(
     context = context,
     attrs = attrs,
     meta = meta,

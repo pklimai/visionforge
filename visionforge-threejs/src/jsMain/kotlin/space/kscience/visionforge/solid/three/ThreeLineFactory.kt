@@ -24,7 +24,7 @@ public object ThreeLineFactory : ThreeFactory<PolyLine> {
         }
 
         val material = ThreeMaterials.getLineMaterial(
-            vision.properties[SolidMaterial.MATERIAL_KEY],
+            vision.readProperty(SolidMaterial.MATERIAL_KEY),
             false
         )
 
@@ -36,7 +36,7 @@ public object ThreeLineFactory : ThreeFactory<PolyLine> {
             //layers.enable(obj.layer)
             //add listener to object properties
             if(observe) {
-                vision.onPropertyChange(three.context) { propertyName ->
+                vision.onPropertyChange(three.context) { propertyName,_ ->
                     updateProperty(vision, propertyName)
                 }
             }

@@ -28,7 +28,7 @@ public object ThreeLabelFactory : ThreeFactory<SolidLabel> {
             setMaterial(vision)
             updatePosition(vision)
             if (observe) {
-                vision.onPropertyChange(three.context) {
+                vision.onPropertyChange(three.context) { _, _ ->
                     //TODO
                     three.logger.warn { "Label parameter change not implemented" }
                 }

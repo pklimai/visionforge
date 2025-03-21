@@ -4,7 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
-import space.kscience.visionforge.setChild
 
 @Serializable
 @SerialName("solid.label")
@@ -21,4 +20,6 @@ public fun MutableVisionContainer<Solid>.label(
     fontFamily: String = "Arial",
     name: String? = null,
     action: SolidLabel.() -> Unit = {},
-): SolidLabel = SolidLabel(text, fontSize.toDouble(), fontFamily).apply(action).also { setChild(name, it) }
+): SolidLabel = SolidLabel(text, fontSize.toDouble(), fontFamily).apply(action).also { 
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}

@@ -3,8 +3,8 @@
 package space.kscience.visionforge.gdml.demo
 
 import androidx.compose.runtime.*
-import bootstrap.Container
-import bootstrap.Icon
+import app.softwork.bootstrapcompose.Container
+import app.softwork.bootstrapcompose.Icon
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.attributes.name

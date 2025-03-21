@@ -2,19 +2,21 @@ package space.kscience.visionforge.gdml
 
 import space.kscience.dataforge.misc.DFExperimental
 import space.kscience.dataforge.names.Name
-import space.kscience.dataforge.names.asName
-import space.kscience.dataforge.names.plus
-
+import space.kscience.dataforge.names.NameToken
 import space.kscience.gdml.*
-import space.kscience.kmath.geometry.RotationOrder
-import space.kscience.visionforge.*
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
+import space.kscience.kmath.geometry.euclidean3d.RotationOrder
+import space.kscience.visionforge.VisionBuilder
 import space.kscience.visionforge.html.VisionOutput
+import space.kscience.visionforge.setStyle
 import space.kscience.visionforge.solid.*
+import space.kscience.visionforge.style
+import space.kscience.visionforge.useStyle
 import kotlin.math.cos
 import kotlin.math.sin
 
-private val solidsName = "solids".asName()
-private val volumesName = "volumes".asName()
+private val solidsName = "solids"
+private val volumesName = "volumes"
 
 @Suppress("NOTHING_TO_INLINE")
 private inline operator fun Number.times(d: Double) = toDouble() * d
@@ -46,7 +48,7 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
     }
 
     private fun proxySolid(root: Gdml, group: SolidGroup, solid: GdmlSolid, name: String): SolidReference {
-        val templateName = solidsName + name
+        val templateName = Name.of(solidsName, name)
         if (templates[templateName] == null) {
             solids.addSolid(root, solid, name)
         }
@@ -61,9 +63,9 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
         physVolume: GdmlPhysVolume,
         volume: GdmlGroup,
     ): SolidReference {
-        val templateName = volumesName + volume.name.asName()
+        val templateName = Name.of(volumesName, volume.name)
         if (templates[templateName] == null) {
-            templates.setChild(templateName, volume(root, volume))
+            templates[templateName] = volume(root, volume)
         }
         val ref = group.ref(templateName, physVolume.name).withPosition(root, physVolume)
         referenceStore.getOrPut(templateName) { ArrayList() }.add(ref)
@@ -313,7 +315,7 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
         when (settings.volumeAction(volume)) {
             GdmlLoaderOptions.Action.ADD -> {
                 val group: SolidGroup = volume(root, volume)
-                this.setChild(physVolume.name, group.withPosition(root, physVolume))
+                this.setVision(NameToken(physVolume.name), group.withPosition(root, physVolume))
             }
 
             GdmlLoaderOptions.Action.PROTOTYPE -> {
@@ -334,7 +336,7 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
             ?: error("Volume with ref ${divisionVolume.volumeref.ref} could not be resolved")
 
         //TODO add divisions
-        children.static(volume(root, volume))
+        static(volume(root, volume))
     }
 
     private fun volume(
@@ -368,18 +370,16 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
             Solid.ROTATION_ORDER_KEY put RotationOrder.ZXY
         }
 
-        rootSolid.useStyle(rootStyle, false)
+        rootSolid.useStyle(rootStyle)
 
         rootSolid.prototypes {
-            templates.items.forEach { (token, item) ->
+            templates.visions.forEach { (name, item) ->
                 item.parent = null
-                setChild(token.asName(), item)
+                setVision(name, item)
             }
         }
         settings.styleCache.forEach {
-            rootSolid.styleSheet {
-                define(it.key.toString(), it.value)
-            }
+            rootSolid.setStyle(it.key.toString(), it.value)
         }
         return rootSolid
     }
@@ -389,7 +389,7 @@ private class GdmlLoader(val settings: GdmlLoaderOptions) {
 public fun Gdml.toVision(block: GdmlLoaderOptions.() -> Unit = {}): SolidGroup {
     val settings = GdmlLoaderOptions().apply(block)
     return GdmlLoader(settings).transform(this).also {
-        it.children["light"] = settings.light
+        it.setVision(NameToken("light"), settings.light)
     }
 }
 
@@ -399,7 +399,7 @@ public fun Gdml.toVision(block: GdmlLoaderOptions.() -> Unit = {}): SolidGroup {
 public fun SolidGroup.gdml(gdml: Gdml, key: String? = null, transformer: GdmlLoaderOptions.() -> Unit = {}) {
     val vision = gdml.toVision(transformer)
     //println(Visual3DPlugin.json.stringify(VisualGroup3D.serializer(), visual))
-    children.setChild(key, vision)
+    setVision(SolidGroup.inferNameFor(key, vision), vision)
 }
 
 @VisionBuilder

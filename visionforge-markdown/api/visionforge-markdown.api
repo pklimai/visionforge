@@ -15,10 +15,6 @@ public final class space/kscience/visionforge/markup/MarkupPlugin$Companion : sp
 	public fun getTag ()Lspace/kscience/dataforge/context/PluginTag;
 }
 
-public final class space/kscience/visionforge/markup/MarkupPluginKt {
-	public static final fun content (Lspace/kscience/visionforge/markup/VisionOfMarkup;Ljava/lang/String;)V
-}
-
 public final class space/kscience/visionforge/markup/VisionOfMarkup : space/kscience/visionforge/AbstractVision {
 	public static final field COMMONMARK_FORMAT Ljava/lang/String;
 	public static final field Companion Lspace/kscience/visionforge/markup/VisionOfMarkup$Companion;
@@ -39,7 +35,6 @@ public synthetic class space/kscience/visionforge/markup/VisionOfMarkup$$seriali
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/markup/VisionOfMarkup;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class space/kscience/visionforge/markup/VisionOfMarkup$Companion {

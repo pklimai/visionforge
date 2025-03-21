@@ -6,8 +6,7 @@ import kotlinx.coroutines.launch
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.plus
 import space.kscience.visionforge.Vision
-import space.kscience.visionforge.children
-import space.kscience.visionforge.forEach
+import space.kscience.visionforge.VisionGroup
 
 public interface VisionVisitor {
     /**
@@ -38,8 +37,10 @@ public interface VisionVisitor {
 
             visionVisitor.visitChildren(name, vision)
 
-            vision.children?.forEach { token, child ->
-                visitTreeAsync(visionVisitor, name + token, child)
+            if (vision is VisionGroup<*>) {
+                vision.visions.forEach { (token, child) ->
+                    visitTreeAsync(visionVisitor, name + token, child)
+                }
             }
         }
 

@@ -2,9 +2,9 @@ package space.kscience.visionforge.solid
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
-import space.kscience.visionforge.setChild
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -36,7 +36,7 @@ public class ConeSegment(
         require(segments >= 4) { "The number of segments in cone is too small" }
         val angleStep = phi / (segments - 1)
 
-        fun shape(r: Float, z: Float): List<Float32Vector3D> = (0 until segments).map { i ->
+        fun shape(r: Float, z: Float): List<FloatVector3D> = (0 until segments).map { i ->
             Float32Vector3D(r * cos(phiStart + angleStep * i), r * sin(phiStart + angleStep * i), z)
         }
 
@@ -81,7 +81,9 @@ public inline fun MutableVisionContainer<Solid>.cylinder(
     r.toFloat(),
     height.toFloat(),
     r.toFloat()
-).apply(block).also { setChild(name, it) }
+).apply(block).also {
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}
 
 @VisionBuilder
 public inline fun MutableVisionContainer<Solid>.cone(
@@ -98,4 +100,6 @@ public inline fun MutableVisionContainer<Solid>.cone(
     topRadius = upperRadius.toFloat(),
     phiStart = startAngle.toFloat(),
     phi = angle.toFloat()
-).apply(block).also { setChild(name, it) }
+).apply(block).also {
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}

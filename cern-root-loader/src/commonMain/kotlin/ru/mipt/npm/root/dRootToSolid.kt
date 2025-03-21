@@ -2,14 +2,14 @@ package ru.mipt.npm.root
 
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.names.Name
-import space.kscience.dataforge.names.parseAsName
+import space.kscience.dataforge.names.NameToken
 import space.kscience.dataforge.names.plus
 import space.kscience.dataforge.names.withIndex
 import space.kscience.kmath.complex.Quaternion
-import space.kscience.kmath.geometry.fromRotationMatrix
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
+import space.kscience.kmath.geometry.euclidean3d.fromRotationMatrix
 import space.kscience.kmath.linear.VirtualMatrix
 import space.kscience.visionforge.MutableVisionContainer
-import space.kscience.visionforge.isEmpty
 import space.kscience.visionforge.solid.*
 import space.kscience.visionforge.solid.SolidMaterial.Companion.MATERIAL_COLOR_KEY
 import kotlin.math.PI
@@ -198,7 +198,7 @@ private fun SolidGroup.addShape(
             val startphi = degToRad(fPhi1)
             val deltaphi = degToRad(fDphi)
 
-            fun Shape2DBuilder.pGon(radius: Double){
+            fun Shape2DBuilder.pGon(radius: Double) {
                 (0..<fNedges).forEach {
                     val phi = deltaphi / fNedges * it + startphi
                     point(radius * cos(phi), radius * sin(phi))
@@ -208,7 +208,7 @@ private fun SolidGroup.addShape(
             surface(name) {
                 //getting the radius of first
                 require(fNz > 1) { "The polyhedron geometry requires at least two planes" }
-                for (index in 0 until fNz){
+                for (index in 0 until fNz) {
                     layer(
                         fZ[index],
                         innerBuilder = {
@@ -265,7 +265,7 @@ private fun SolidGroup.addShape(
             val fShape by shape.dObject(::DGeoShape)
             val fScale by shape.dObject(::DGeoScale)
             fShape?.let { scaledShape ->
-                solidGroup(name?.let { Name.parse(it) }) {
+                solidGroup(name?.let { NameToken.parse(it) }) {
                     scale = Float32Vector3D(fScale?.x ?: 1.0, fScale?.y ?: 1.0, fScale?.z ?: 1.0)
                     addShape(scaledShape, context)
                     apply(block)
@@ -360,10 +360,10 @@ private fun buildVolume(volume: DGeoVolume, context: RootToSolidContext): Solid?
             }
         }
     }
-    return if (group.children.isEmpty()) {
+    return if (group.visions.isEmpty()) {
         null
-    } else if (group.items.size == 1 && group.properties.own.isEmpty()) {
-        group.items.values.first().apply { parent = null }
+    } else if (group.visions.size == 1 && group.properties.isEmpty()) {
+        group.visions.values.first().apply { parent = null }
     } else {
         group
     }.apply {
@@ -388,25 +388,26 @@ private fun SolidGroup.addRootVolume(
     cache: Boolean = true,
     block: Solid.() -> Unit = {},
 ) {
-    val combinedName = name?.parseAsName()?.let {
+    val combinedName: NameToken = name?.let {
+        val token = NameToken.parse(it)
         // this fix is required to work around malformed root files with duplicated node names
         if (get(it) != null) {
-            it.withIndex(volume.hashCode().toString(16))
+            token.withIndex(volume.hashCode().toString(16))
         } else {
-            it
+            token
         }
-    }
+    } ?: NameToken("volume[${volume.hashCode().toString(16)}]")
 
     if (!cache) {
         val group = buildVolume(volume, context)?.apply(block) ?: return
-        setChild(combinedName, group)
+        set(combinedName, group)
     } else {
         val templateName = volumesName + volume.name
         val existing = context.prototypeHolder.getPrototype(templateName)
         if (existing == null) {
             context.prototypeHolder.prototypes {
                 val group = buildVolume(volume, context) ?: return@prototypes
-                setChild(templateName, group)
+                set(templateName, group)
             }
         }
 
@@ -419,7 +420,7 @@ public fun MutableVisionContainer<Solid>.rootGeo(
     name: String? = null,
     maxLayer: Int = 5,
     ignoreRootColors: Boolean = false,
-): SolidGroup = solidGroup(name = name?.parseAsName()) {
+): SolidGroup = solidGroup(token = name?.let { NameToken.parse(it) }) {
     val context = RootToSolidContext(this, maxLayer = maxLayer, ignoreRootColors = ignoreRootColors)
     dGeoManager.fNodes.forEach { node ->
         addRootNode(node, context)

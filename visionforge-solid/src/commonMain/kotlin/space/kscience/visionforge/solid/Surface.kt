@@ -3,13 +3,14 @@ package space.kscience.visionforge.solid
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import space.kscience.dataforge.meta.MutableMeta
-import space.kscience.dataforge.names.Name
+import space.kscience.dataforge.meta.update
 import space.kscience.kmath.geometry.component1
 import space.kscience.kmath.geometry.component2
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.kmath.structures.Float32
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
-import space.kscience.visionforge.setChild
+import space.kscience.visionforge.properties
 
 
 private inline fun <T> Iterable<T>.sumOf(selector: (T) -> Float32): Float32 {
@@ -36,11 +37,11 @@ public class Surface(
             require(inner == null || inner.size == outer.size) { "Outer shape size is ${outer.size}, but inner is ${inner?.size}" }
         }
 
-        public fun outerPoints(): List<Float32Vector3D> = outer.map { (x, y) -> Float32Vector3D(x, y, z) }
+        public fun outerPoints(): List<FloatVector3D> = outer.map { (x, y) -> Float32Vector3D(x, y, z) }
 
-        public fun innerPoints(): List<Float32Vector3D>? = inner?.map { (x, y) -> Float32Vector3D(x, y, z) }
+        public fun innerPoints(): List<FloatVector3D>? = inner?.map { (x, y) -> Float32Vector3D(x, y, z) }
 
-        public val center: Float32Vector3D by lazy {
+        public val center: FloatVector3D by lazy {
             Float32Vector3D(
                 outer.sumOf { it.x } / size,
                 outer.sumOf { it.y } / size,
@@ -155,7 +156,9 @@ public class Surface(
         }
 
         internal fun build(): Surface = Surface(layers).apply {
-            properties[Name.EMPTY] = this@Builder.properties
+            properties {
+                update(this@Builder.properties)
+            }
         }
     }
 
@@ -170,4 +173,6 @@ public class Surface(
 public fun MutableVisionContainer<Solid>.surface(
     name: String? = null,
     action: Surface.Builder.() -> Unit = {},
-): Surface = Surface.Builder().apply(action).build().also { setChild(name, it) }
+): Surface = Surface.Builder().apply(action).build().also {
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}

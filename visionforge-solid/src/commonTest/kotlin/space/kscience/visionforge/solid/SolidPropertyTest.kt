@@ -6,9 +6,9 @@ import space.kscience.dataforge.meta.int
 import space.kscience.dataforge.meta.set
 import space.kscience.dataforge.meta.string
 import space.kscience.dataforge.names.asName
-import space.kscience.visionforge.getValue
-import space.kscience.visionforge.styleSheet
+import space.kscience.visionforge.readProperty
 import space.kscience.visionforge.styles
+import space.kscience.visionforge.updateStyle
 import space.kscience.visionforge.useStyle
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -47,17 +47,15 @@ class SolidPropertyTest {
                 box = box(100, 100, 100)
             }
         }
-        assertEquals(22, box?.properties?.getValue("test", inherit = true)?.int)
+        assertEquals(22, box?.readProperty("test".asName(), inherited = true)?.int)
     }
 
     @Test
     fun testStyleProperty() {
         var box: Box? = null
         val group = testSolids.solidGroup {
-            styleSheet {
-                update("testStyle") {
-                    "test" put 22
-                }
+            updateStyle("testStyle") {
+                "test" put 22
             }
             solidGroup {
                 box = box(100, 100, 100) {
@@ -65,17 +63,16 @@ class SolidPropertyTest {
                 }
             }
         }
-        assertEquals(22, box?.properties?.getValue("test")?.int)
+        assertEquals(22, box?.readProperty("test")?.int)
     }
 
     @Test
     fun testStyleColor() {
         var box: Box? = null
         val group = SolidGroup().apply {
-            styleSheet {
-                update("testStyle") {
-                    SolidMaterial.MATERIAL_COLOR_KEY put "#555555"
-                }
+            updateStyle("testStyle") {
+                SolidMaterial.MATERIAL_COLOR_KEY put "#555555"
+                SolidMaterial.MATERIAL_OPACITY_KEY put 0.3
             }
             solidGroup {
                 box = box(100, 100, 100) {
@@ -83,17 +80,18 @@ class SolidPropertyTest {
                 }
             }
         }
+        assertEquals("#555555", box?.readProperty(SolidMaterial.MATERIAL_COLOR_KEY)?.string)
         assertEquals("#555555", box?.color?.string)
+        assertEquals(0.3, box?.opacity)
     }
 
     @Test
     fun testReferenceStyleProperty() {
         var box: SolidReference? = null
         val group = testSolids.solidGroup {
-            styleSheet {
-                update("testStyle") {
-                    SolidMaterial.MATERIAL_COLOR_KEY put "#555555"
-                }
+            updateStyle("testStyle") {
+                SolidMaterial.MATERIAL_COLOR_KEY put "#555555"
+                SolidMaterial.MATERIAL_OPACITY_KEY put 0.3
             }
             prototypes {
                 box(100, 100, 100, name = "box") {
@@ -104,6 +102,8 @@ class SolidPropertyTest {
                 box = ref("box".asName())
             }
         }
+        assertEquals("#555555", box?.readProperty(SolidMaterial.MATERIAL_COLOR_KEY)?.string)
         assertEquals("#555555", box!!.color.string)
+        assertEquals(0.3, box.opacity)
     }
 }

@@ -2,9 +2,10 @@ package space.kscience.visionforge.solid
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import space.kscience.dataforge.names.NameToken
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
-import space.kscience.visionforge.setChild
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -20,7 +21,7 @@ public class Sphere(
 ) : SolidBase<Sphere>(), GeometrySolid {
 
     override fun <T : Any> toGeometry(geometryBuilder: GeometryBuilder<T>) {
-        fun point3dFromSphCoord(r: Float, theta: Float, phi: Float): Float32Vector3D {
+        fun point3dFromSphCoord(r: Float, theta: Float, phi: Float): FloatVector3D {
             // This transformation matches three.js sphere implementation
             val y = r * cos(theta)
             val z = r * sin(theta) * sin(phi)
@@ -58,4 +59,6 @@ public inline fun MutableVisionContainer<Solid>.sphere(
     action: Sphere.() -> Unit = {},
 ): Sphere = Sphere(
     radius.toFloat(),
-).apply(action).also { setChild(name, it) }
+).apply(action).also {
+    setVision(name?.let(NameToken::parse) ?: SolidGroup.staticNameFor(it), it)
+}

@@ -1,5 +1,5 @@
 @file:JsModule("three-csg-ts")
-@file:JsNonModule
+
 
 import three.core.BufferGeometry
 import three.math.Matrix4

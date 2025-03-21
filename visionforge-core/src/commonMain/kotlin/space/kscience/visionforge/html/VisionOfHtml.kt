@@ -16,13 +16,13 @@ import space.kscience.dataforge.names.asName
 import space.kscience.visionforge.*
 
 
-public interface VisionOfHtml : Vision {
+public interface VisionOfHtml : MutableVision {
 
     /**
      * Html class strings for this instance. Does not use vision inheritance, but uses styles
      */
     public var classes: Set<String>
-        get() = properties[::classes.name, false, true].stringList?.toSet() ?: emptySet()
+        get() = readProperty(::classes.name, false, true).stringList?.toSet() ?: emptySet()
         set(value) {
             properties[::classes.name] = value.map { it.asValue() }
         }
@@ -31,7 +31,7 @@ public interface VisionOfHtml : Vision {
      * A custom style string
      */
     public var styleString: String?
-        get() = properties[::styleString.name,false,true].string
+        get() = readProperty(::styleString.name,false,true).string
         set(value){
             properties[::styleString.name] = value?.asValue()
         }
@@ -87,13 +87,13 @@ public open class VisionOfHtmlInput(
  */
 public fun VisionOfHtmlInput.onValueChange(
     scope: CoroutineScope = manager?.context ?: error("Coroutine context is not resolved for $this"),
-    callback: suspend VisionValueChangeEvent.() -> Unit,
-): Job = controlEventFlow.filterIsInstance<VisionValueChangeEvent>().onEach(callback).launchIn(scope)
+    callback: suspend ControlValueChangeEvent.() -> Unit,
+): Job = eventFlow.filterIsInstance<ControlValueChangeEvent>().onEach(callback).launchIn(scope)
 
 public fun VisionOfHtmlInput.onInput(
     scope: CoroutineScope = manager?.context ?: error("Coroutine context is not resolved for $this"),
-    callback: suspend VisionInputEvent.() -> Unit,
-): Job = controlEventFlow.filterIsInstance<VisionInputEvent>().onEach(callback).launchIn(scope)
+    callback: suspend ControlInputEvent.() -> Unit,
+): Job = eventFlow.filterIsInstance<ControlInputEvent>().onEach(callback).launchIn(scope)
 
 @Suppress("UnusedReceiverParameter")
 public inline fun VisionOutput.htmlInput(

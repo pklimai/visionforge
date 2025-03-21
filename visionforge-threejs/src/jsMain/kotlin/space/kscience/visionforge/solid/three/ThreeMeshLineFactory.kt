@@ -23,7 +23,7 @@ public object ThreeMeshLineFactory : ThreeFactory<PolyLine> {
         )
 
         val material = MeshLineMaterial().apply {
-            thickness = vision.thickness.toFloat()
+            lineWidth = vision.thickness.toFloat()
             color = vision.color.string?.let { Color(it) } ?: ThreeMaterials.DEFAULT_LINE_COLOR
         }
 
@@ -32,7 +32,7 @@ public object ThreeMeshLineFactory : ThreeFactory<PolyLine> {
             //layers.enable(obj.layer)
             //add listener to object properties
             if (observe) {
-                vision.onPropertyChange(three.context) { propertyName ->
+                vision.onPropertyChange(three.context) { propertyName, _ ->
                     updateProperty(vision, propertyName)
                 }
             }

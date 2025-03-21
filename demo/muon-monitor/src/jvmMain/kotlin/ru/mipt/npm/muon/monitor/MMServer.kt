@@ -5,7 +5,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
-import io.ktor.server.application.call
 import io.ktor.server.application.install
 import io.ktor.server.application.log
 import io.ktor.server.cio.CIO
@@ -14,8 +13,8 @@ import io.ktor.server.http.content.staticResources
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
-import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
+import io.ktor.server.routing.routing
 import org.apache.commons.math3.random.JDKRandomGenerator
 import ru.mipt.npm.muon.monitor.sim.Cos2TrackGenerator
 import ru.mipt.npm.muon.monitor.sim.simulateOne
@@ -39,7 +38,8 @@ fun Application.module(context: Context = Global) {
     install(ContentNegotiation) {
         json()
     }
-    install(Routing) {
+
+    routing {
         get("/event") {
             val event = generator.simulateOne()
             call.respond(event)
@@ -53,6 +53,7 @@ fun Application.module(context: Context = Global) {
         }
         staticResources("/", null)
     }
+
     try {
         Desktop.getDesktop().browse(URI("http://localhost:8080/index.html"))
     } catch (ex: Exception) {

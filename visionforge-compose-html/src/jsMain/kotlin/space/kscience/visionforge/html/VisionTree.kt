@@ -13,8 +13,6 @@ import space.kscience.dataforge.names.plus
 import space.kscience.dataforge.names.startsWith
 import space.kscience.visionforge.Vision
 import space.kscience.visionforge.VisionGroup
-import space.kscience.visionforge.asSequence
-import space.kscience.visionforge.isEmpty
 
 
 @Composable
@@ -49,9 +47,9 @@ public fun VisionTree(
     var expanded: Boolean by remember { mutableStateOf(selected?.startsWith(name) ?: false) }
 
     //display as node if any child is visible
-    if (vision is VisionGroup) {
+    if (vision is VisionGroup<*>) {
         FlexRow {
-            if (vision.children.keys.any { !it.body.startsWith("@") }) {
+            if (vision.visions.keys.any { !it.body.startsWith("@") }) {
                 Span({
                     classes(TreeStyles.treeCaret)
                     if (expanded) {
@@ -68,9 +66,9 @@ public fun VisionTree(
             FlexColumn({
                 classes(TreeStyles.tree)
             }) {
-                vision.children.asSequence()
-                    .filter { !it.first.toString().startsWith("@") } // ignore statics and other hidden children
-                    .sortedBy { (it.second as? VisionGroup)?.children?.isEmpty() ?: true } // ignore empty groups
+                vision.visions.asSequence()
+                    .filter { !it.key.toString().startsWith("@") } // ignore statics and other hidden children
+                    .sortedBy { (it.value as? VisionGroup<Vision>)?.visions?.isEmpty() ?: true } // ignore empty groups
                     .forEach { (childToken, child) ->
                         Div({ classes(TreeStyles.treeItem) }) {
                             VisionTree(

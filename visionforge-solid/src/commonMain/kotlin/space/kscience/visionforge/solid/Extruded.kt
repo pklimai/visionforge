@@ -3,12 +3,13 @@ package space.kscience.visionforge.solid
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import space.kscience.dataforge.meta.MutableMeta
-import space.kscience.dataforge.names.Name
+import space.kscience.dataforge.meta.update
 import space.kscience.kmath.geometry.component1
 import space.kscience.kmath.geometry.component2
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
-import space.kscience.visionforge.setChild
+import space.kscience.visionforge.properties
 
 
 /**
@@ -36,7 +37,7 @@ public class Extruded(
         /**
          * Expand the shape for specific layers
          */
-        val layers: List<List<Float32Vector3D>> = layers.map { layer ->
+        val layers: List<List<FloatVector3D>> = layers.map { layer ->
             shape.map { (x, y) ->
                 val newX = layer.x + x * layer.scale
                 val newY = layer.y + y * layer.scale
@@ -47,7 +48,7 @@ public class Extruded(
         if (layers.size < 2) error("Extruded shape requires more than one layer")
 
         var lowerLayer = layers.first()
-        var upperLayer: List<Float32Vector3D>
+        var upperLayer: List<FloatVector3D>
 
         geometryBuilder.cap(layers.first().reversed())
 
@@ -77,7 +78,7 @@ public class Extruded(
     }
 
     public class Builder(
-        public var shape: List<Float32Vector2D> = emptyList(),
+        public var shape: List<FloatVector2D> = emptyList(),
         public var layers: MutableList<Layer> = ArrayList(),
         public val properties: MutableMeta = MutableMeta(),
     ) {
@@ -92,7 +93,9 @@ public class Extruded(
         }
 
         internal fun build(): Extruded = Extruded(shape, layers).apply {
-            this.properties[Name.EMPTY] = this@Builder.properties
+            properties {
+                update(this@Builder.properties)
+            }
         }
     }
 
@@ -105,4 +108,6 @@ public class Extruded(
 public fun MutableVisionContainer<Solid>.extruded(
     name: String? = null,
     action: Extruded.Builder.() -> Unit = {},
-): Extruded = Extruded.Builder().apply(action).build().also { setChild(name, it) }
+): Extruded = Extruded.Builder().apply(action).build().also {
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}

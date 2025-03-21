@@ -22,9 +22,10 @@ kotlin {
 
         jsMain {
             dependencies {
-                implementation(npm("bootstrap", "5.3.3"))
-                implementation(npm(" bootstrap-icons", "1.11.3"))
-                api("com.benasher44:uuid:0.8.4")
+                api("app.softwork:bootstrap-compose:0.3.0")
+                api("app.softwork:bootstrap-compose-icons:0.3.0")
+//                implementation(npm("bootstrap", "5.3.3"))
+//                implementation(npm(" bootstrap-icons", "1.11.3"))
                 api(compose.html.core)
             }
         }

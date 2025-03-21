@@ -24,7 +24,6 @@ public synthetic class ru/mipt/npm/muon/monitor/Event$$serializer : kotlinx/seri
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/muon/monitor/Event;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/muon/monitor/Event$Companion {
@@ -69,9 +68,9 @@ public final class ru/mipt/npm/muon/monitor/ReadResourceKt {
 
 public final class ru/mipt/npm/muon/monitor/SC1 {
 	public static final field $stable I
-	public fun <init> (Ljava/lang/String;Lspace/kscience/visionforge/solid/Float32Vector3D;FFF)V
-	public synthetic fun <init> (Ljava/lang/String;Lspace/kscience/visionforge/solid/Float32Vector3D;FFFILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getCenter ()Lspace/kscience/visionforge/solid/Float32Vector3D;
+	public fun <init> (Ljava/lang/String;Lspace/kscience/kmath/geometry/Vector3D;FFF)V
+	public synthetic fun <init> (Ljava/lang/String;Lspace/kscience/kmath/geometry/Vector3D;FFFILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getCenter ()Lspace/kscience/kmath/geometry/Vector3D;
 	public final fun getName ()Ljava/lang/String;
 	public final fun getXSize ()F
 	public final fun getYSize ()F
@@ -80,8 +79,8 @@ public final class ru/mipt/npm/muon/monitor/SC1 {
 
 public final class ru/mipt/npm/muon/monitor/SC16 {
 	public static final field $stable I
-	public fun <init> (Ljava/lang/String;Lspace/kscience/visionforge/solid/Float32Vector3D;)V
-	public final fun getCenter ()Lspace/kscience/visionforge/solid/Float32Vector3D;
+	public fun <init> (Ljava/lang/String;Lspace/kscience/kmath/geometry/Vector3D;)V
+	public final fun getCenter ()Lspace/kscience/kmath/geometry/Vector3D;
 	public final fun getName ()Ljava/lang/String;
 	public final fun getPixels ()Ljava/util/Collection;
 }
@@ -116,7 +115,7 @@ public final class ru/mipt/npm/muon/monitor/sim/LineKt {
 	public static final fun getY (Lorg/apache/commons/math3/geometry/euclidean/threed/Line;)D
 	public static final fun makeTrack (DDDD)Lorg/apache/commons/math3/geometry/euclidean/threed/Line;
 	public static final fun makeTrack (Lorg/apache/commons/math3/geometry/euclidean/threed/Vector3D;Lorg/apache/commons/math3/geometry/euclidean/threed/Vector3D;)Lorg/apache/commons/math3/geometry/euclidean/threed/Line;
-	public static final fun toKMathVector (Lorg/apache/commons/math3/geometry/euclidean/threed/Vector3D;)Lspace/kscience/visionforge/solid/Float32Vector3D;
+	public static final fun toKMathVector (Lorg/apache/commons/math3/geometry/euclidean/threed/Vector3D;)Lspace/kscience/kmath/geometry/Vector3D;
 	public static final fun toKMathVectors (Lorg/apache/commons/math3/geometry/euclidean/threed/Line;)Ljava/util/List;
 }
 

@@ -3,7 +3,6 @@
 package space.kscience.visionforge.html
 
 import androidx.compose.runtime.*
-import com.benasher44.uuid.uuid4
 import org.jetbrains.compose.web.attributes.*
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.HTMLOptionElement
@@ -12,6 +11,7 @@ import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
 import space.kscience.dataforge.meta.descriptors.allowedValues
 import space.kscience.visionforge.Colors
+import space.kscience.visionforge.Vision
 import space.kscience.visionforge.widgetType
 
 
@@ -44,7 +44,7 @@ public fun BooleanValueChooser(
     value: Value?,
     onValueChange: (Value?) -> Unit,
 ) {
-    val uid = remember { "checkbox[${uuid4()}]" }
+    val uid = remember { "checkbox[${Vision.randomId()}]" }
     var innerValue by remember(value, descriptor) {
         mutableStateOf(
             value?.boolean ?: descriptor?.defaultValue?.boolean
@@ -167,7 +167,7 @@ public fun MultiSelectChooser(
     onValueChange: (Value?) -> Unit,
 ) {
     Select({
-        classes("w-100","form-select")
+        classes("w-100", "form-select")
         onChange { event ->
             val newSelected = event.target.selectedOptions.asList()
                 .map { (it as HTMLOptionElement).value.asValue() }

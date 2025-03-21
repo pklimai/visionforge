@@ -32,21 +32,21 @@ public interface HtmlVisionContext : ContextAware {
 }
 
 
-public typealias HtmlVisionContextFragment = context(HtmlVisionContext) TagConsumer<*>.() -> Unit
+//public typealias HtmlVisionContextFragment = context(htmlContext: HtmlVisionContext) TagConsumer<*>.() -> Unit
 
 //context(HtmlVisionContext)
 //public fun HtmlVisionFragment(
 //    content: TagConsumer<*>.() -> Unit,
 //): HtmlVisionFragment = HtmlVisionFragment {  }
 
-context(HtmlVisionContext)
+context(htmlContext: HtmlVisionContext)
 private fun <T> TagConsumer<T>.vision(
     visionManager: VisionManager,
     name: Name,
     vision: Vision,
     outputMeta: Meta = Meta.EMPTY,
 ): T = div {
-    id = generateId(name)
+    id = htmlContext.generateId(name)
     classes = setOf(VisionTagConsumer.OUTPUT_CLASS)
     vision.setAsRoot(visionManager)
     attributes[VisionTagConsumer.OUTPUT_NAME_ATTRIBUTE] = name.toString()
@@ -59,27 +59,29 @@ private fun <T> TagConsumer<T>.vision(
             }
         }
     }
-    renderVision(name, vision, outputMeta)
+    with(htmlContext) {
+        renderVision(name, vision, outputMeta)
+    }
 }
 
-context(HtmlVisionContext)
+context(htmlContext: HtmlVisionContext)
 private fun <T> TagConsumer<T>.vision(
     name: Name,
     vision: Vision,
     outputMeta: Meta = Meta.EMPTY,
-): T = vision(context.visionManager, name, vision, outputMeta)
+): T = vision(htmlContext.context.visionManager, name, vision, outputMeta)
 
 /**
  * Insert a vision in this HTML.
  */
-context(HtmlVisionContext)
+context(htmlContext: HtmlVisionContext)
 @VisionDSL
 public fun <T> TagConsumer<T>.vision(
     name: Name? = null,
     visionProvider: VisionOutput.() -> Vision,
 ): T {
     val actualName = name ?: NameToken(DEFAULT_VISION_NAME, visionProvider.hashCode().toUInt().toString()).asName()
-    val output = VisionOutput(context, actualName)
+    val output = VisionOutput(htmlContext.context, actualName)
     val vision = output.visionProvider()
     return vision(output.visionManager, actualName, vision, output.meta)
 }
@@ -87,7 +89,7 @@ public fun <T> TagConsumer<T>.vision(
 /**
  * Insert a vision in this HTML.
  */
-context(HtmlVisionContext)
+context(htmlContext: HtmlVisionContext)
 @VisionDSL
 public fun <T> TagConsumer<T>.vision(
     name: String?,

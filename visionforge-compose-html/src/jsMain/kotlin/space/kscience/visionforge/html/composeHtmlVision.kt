@@ -14,14 +14,16 @@ import space.kscience.dataforge.context.request
 import space.kscience.dataforge.meta.Meta
 import space.kscience.dataforge.names.Name
 import space.kscience.dataforge.names.asName
-import space.kscience.visionforge.*
+import space.kscience.visionforge.Vision
+import space.kscience.visionforge.VisionClient
+import space.kscience.visionforge.setAsRoot
 
 
 /**
  * Render an Element vision via injected vision renderer inside compose-html
  */
 @Composable
-public fun Vision(
+public fun VisionDiv(
     context: Context,
     vision: Vision,
     name: Name = "@vision[${vision.hashCode().toString(16)}]".asName(),

@@ -14,8 +14,9 @@ import space.kscience.dataforge.names.asName
 import space.kscience.visionforge.Vision
 import space.kscience.visionforge.html.ElementVisionRenderer
 import space.kscience.visionforge.html.JsVisionClient
-import tabulator.Tabulator
+import tabulator.Options
 import tabulator.TabulatorFull
+import tabulator.TabulatorSimpleCss
 
 public class TableVisionJsPlugin : AbstractPlugin(), ElementVisionRenderer {
     public val visionClient: JsVisionClient by require(JsVisionClient)
@@ -25,8 +26,8 @@ public class TableVisionJsPlugin : AbstractPlugin(), ElementVisionRenderer {
 
     override fun attach(context: Context) {
         super.attach(context)
-        kotlinext.js.require<Any>("tabulator-tables/dist/css/tabulator.min.css")
-        kotlinext.js.require<Any>("tabulator-tables/src/js/modules/ResizeColumns/ResizeColumns.js")
+        //TODO add dynamic CSS loading
+        @Suppress("UnusedVariable") val css = TabulatorSimpleCss
     }
 
     override fun rateVision(vision: Vision): Int = when (vision) {
@@ -38,15 +39,7 @@ public class TableVisionJsPlugin : AbstractPlugin(), ElementVisionRenderer {
         val table: VisionOfTable = (vision as? VisionOfTable)
             ?: error("VisionOfTable expected but ${vision::class} found")
 
-        val tableOptions = jso<Tabulator.Options> {
-            columns = table.headers.map { header ->
-                jso<Tabulator.ColumnDefinition> {
-                    field = header.name
-                    title = header.properties.title ?: header.name
-                    resizable = true
-                }
-            }.toTypedArray()
-
+        val tableOptions = jso<Options> {
             columns = Array(table.headers.size + 1) {
                 if (it == 0) {
                     jso {
@@ -81,7 +74,7 @@ public class TableVisionJsPlugin : AbstractPlugin(), ElementVisionRenderer {
         TabulatorFull(element as HTMLElement, tableOptions)
     }
 
-    override fun toString(): String  = "Table"
+    override fun toString(): String = "Table"
 
     override fun content(target: String): Map<Name, Any> = when (target) {
         ElementVisionRenderer.TYPE -> mapOf("table".asName() to this)

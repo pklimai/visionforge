@@ -1,10 +1,10 @@
 package space.kscience.visionforge.gdml
 
 import org.junit.jupiter.api.Test
-import space.kscience.dataforge.names.Name
 import space.kscience.gdml.Gdml
 import space.kscience.gdml.decodeFromStream
 import space.kscience.visionforge.solid.Solids
+import space.kscience.visionforge.solid.getPrototype
 import kotlin.test.assertNotNull
 
 @Suppress("UNUSED_VARIABLE")
@@ -23,7 +23,7 @@ class TestConvertor {
         val stream = javaClass.getResourceAsStream("/gdml/cubes.gdml")!!
         val gdml = Gdml.decodeFromStream(stream)
         val vision = gdml.toVision()
-        assertNotNull(vision.getPrototype(Name.parse("solids.box")))
+        assertNotNull(vision.getPrototype("solids.box"))
         println(Solids.encodeToString(vision))
     }
 

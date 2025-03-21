@@ -70,7 +70,7 @@ public class JsVisionClient : AbstractPlugin(), VisionClient {
     private val mutex = Mutex()
 
 
-    private val rootChangeCollector = VisionChangeBuilder()
+    private val rootChangeCollector = VisionChangeCollector()
 
     /**
      * Communicate vision property changed from rendering engine to model
@@ -78,7 +78,7 @@ public class JsVisionClient : AbstractPlugin(), VisionClient {
     override fun notifyPropertyChanged(visionName: Name, propertyName: Name, item: Meta?) {
         context.launch {
             mutex.withLock {
-                rootChangeCollector.propertyChanged(visionName, propertyName, item)
+                rootChangeCollector.getOrCreateChange(visionName).propertyChanged(propertyName, item)
             }
         }
     }
@@ -150,10 +150,10 @@ public class JsVisionClient : AbstractPlugin(), VisionClient {
                         //aggregate atomic changes
                         while (isActive) {
                             delay(feedbackAggregationTime.milliseconds)
-                            val visionChangeCollector = rootChangeCollector[name]
+                            val visionChangeCollector = rootChangeCollector[visionName]
                             if (visionChangeCollector?.isEmpty() == false) {
                                 mutex.withLock {
-                                    eventCollector.emit(visionName to visionChangeCollector.deepCopy(visionManager))
+                                    eventCollector.emit(visionName to visionChangeCollector.collect(visionManager))
                                     rootChangeCollector.reset()
                                 }
                             }
@@ -166,6 +166,7 @@ public class JsVisionClient : AbstractPlugin(), VisionClient {
                     feedbackJob?.cancel()
                     logger.info { "WebSocket feedback channel closed for output '$visionName'" }
                 }
+
                 onerror = {
                     feedbackJob?.cancel()
                     logger.error { "WebSocket feedback channel error for output '$visionName'" }
@@ -177,16 +178,16 @@ public class JsVisionClient : AbstractPlugin(), VisionClient {
 
     private fun renderVision(element: Element, name: Name, vision: Vision, outputMeta: Meta) {
         vision.setAsRoot(visionManager)
-        val renderer: ElementVisionRenderer =
-            findRendererFor(vision) ?: error("Could not find renderer for ${vision::class}")
+        val renderer: ElementVisionRenderer = findRendererFor(vision)
+            ?: error("Could not find renderer for ${vision::class}")
         //render vision
         renderer.render(element, name, vision, outputMeta)
-        //start vision update from backend model
+        //start vision update from a backend model
         startVisionUpdate(element, name, vision, outputMeta)
-        //subscribe to a backwards events propagation for control visions
-        if(vision is ControlVision){
-            vision.controlEventFlow.onEach {
-                sendEvent(name,it)
+        //subscribe to backwards events propagation for control visions
+        if (vision is ControlVision) {
+            vision.eventFlow.onEach {
+                sendEvent(name, it)
             }.launchIn(context)
         }
 
@@ -248,7 +249,7 @@ public class JsVisionClient : AbstractPlugin(), VisionClient {
                 val embeddedVision = element.getEmbeddedData(VisionTagConsumer.OUTPUT_DATA_CLASS)!!.let {
                     visionManager.decodeFromString(it)
                 }
-                logger.info { "Found embedded vision for output with name $name" }
+                logger.info { "Found embedded vision data with name $name" }
                 renderVision(element, name, embeddedVision, outputMeta)
             }
 
@@ -322,24 +323,6 @@ public fun JsVisionClient.renderAllVisions(): Unit = whenDocumentLoaded {
     renderAllVisionsIn(element)
 }
 
-public class VisionClientApplication(public val context: Context) : Application {
-    private val client = context.request(JsVisionClient)
-
-    override fun start(document: Document, state: Map<String, Any>) {
-        context.logger.info {
-            "Starting VisionClient with renderers: ${
-                client.renderers.joinToString(
-                    prefix = "\n\t",
-                    separator = "\n\t"
-                ) { it.toString() }
-            }"
-        }
-        val element = document.body ?: error("Document does not have a body")
-        client.renderAllVisionsIn(element)
-    }
-}
-
-
 /**
  * Create a vision client context and render all visions on the page.
  */
@@ -351,7 +334,18 @@ public fun runVisionClient(contextBuilder: ContextBuilder.() -> Unit) {
         contextBuilder()
     }
 
+    val client = context.request(JsVisionClient)
+
     startApplication {
-        VisionClientApplication(context)
+        context.logger.info {
+            "Starting VisionClient with renderers: ${
+                client.renderers.joinToString(
+                    prefix = "\n\t",
+                    separator = "\n\t"
+                ) { it.toString() }
+            }"
+        }
+        val element = document.body ?: error("Document does not have a body")
+        client.renderAllVisionsIn(element)
     }
 }

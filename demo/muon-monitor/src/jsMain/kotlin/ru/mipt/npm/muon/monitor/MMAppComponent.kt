@@ -3,9 +3,9 @@ package ru.mipt.npm.muon.monitor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import bootstrap.Button
-import bootstrap.ButtonGroup
-import bootstrap.Layout.Width.Full
+import app.softwork.bootstrapcompose.Button
+import app.softwork.bootstrapcompose.ButtonGroup
+import app.softwork.bootstrapcompose.Layout.Width
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.coroutines.launch
@@ -66,7 +66,7 @@ fun MMApp(context: Context, model: Model, selected: Name? = null) {
             options = mmOptions,
             sidebarTabs = {
                 Tab("Events") {
-                    ButtonGroup({ Layout.width = Full }) {
+                    ButtonGroup({ Layout.width = Width.Full }) {
                         Button("Next") {
                             context.launch {
                                 val event = window.fetch(
@@ -85,7 +85,7 @@ fun MMApp(context: Context, model: Model, selected: Name? = null) {
                                 model.displayEvent(event)
                             }
                         }
-                        Button("Clear", color = bootstrap.Color.Secondary) {
+                        Button("Clear", color = app.softwork.bootstrapcompose.Color.Secondary) {
                             events.clear()
                             model.reset()
                         }

@@ -11,20 +11,19 @@ import kotlinx.html.a
 import kotlinx.html.h1
 import space.kscience.dataforge.context.Global
 import space.kscience.dataforge.context.request
+import space.kscience.plotly.PlotlyPlugin
 import space.kscience.plotly.layout
 import space.kscience.plotly.models.Trace
 import space.kscience.plotly.models.invoke
+import space.kscience.plotly.plotly
 import space.kscience.visionforge.html.VisionPage
-import space.kscience.visionforge.plotly.PlotlyPlugin
-import space.kscience.visionforge.plotly.plotly
-import space.kscience.visionforge.server.close
 import space.kscience.visionforge.server.openInBrowser
 import space.kscience.visionforge.server.visionPage
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-fun main() {
+suspend fun main() {
     val plotlyPlugin = Global.request(PlotlyPlugin)
     val visionManager = plotlyPlugin.visionManager
 
@@ -53,8 +52,6 @@ fun main() {
             h1 { +"This is the plot page" }
             a("/other") { +"The other page" }
             vision {
-
-
                 plotly {
                     traces(sinTrace, cosTrace)
                     layout {
@@ -108,5 +105,5 @@ fun main() {
 
     }
 
-    server.close()
+    server.stop()
 }

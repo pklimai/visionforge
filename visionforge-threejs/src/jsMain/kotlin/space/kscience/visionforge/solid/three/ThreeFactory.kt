@@ -64,8 +64,8 @@ public fun Object3D.updatePosition(vision: Vision) {
 /**
  * Update non-position non-geometry property
  */
-public fun Object3D.updateProperty(source: Vision, propertyName: Name) {
-    // console.log("$source updated $propertyName with ${source.computeProperty(propertyName)}")
+public fun Object3D.updateProperty(source: Solid, propertyName: Name) {
+//    console.log("${source::class} updated $propertyName with ${source.readProperty(propertyName, inherited = true)}")
     if (isMesh(this) && propertyName.startsWith(MATERIAL_KEY)) {
         updateMaterialProperty(source, propertyName)
     } else if (
@@ -76,7 +76,7 @@ public fun Object3D.updateProperty(source: Vision, propertyName: Name) {
         //update position of mesh using this object
         updatePosition(source)
     } else if (propertyName == Vision.VISIBLE_KEY) {
-        visible = source.visible ?: true
+        visible = source.visible != false
     }
 }
 

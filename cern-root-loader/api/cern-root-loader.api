@@ -5,7 +5,7 @@ public final class ru/mipt/npm/root/BMN {
 }
 
 public final class ru/mipt/npm/root/BMNKt {
-	public static final fun toVector (Lru/mipt/npm/root/FairTrackParam;)Lspace/kscience/visionforge/solid/Float32Vector3D;
+	public static final fun toVector (Lru/mipt/npm/root/FairTrackParam;)Lspace/kscience/kmath/geometry/Vector3D;
 }
 
 public final class ru/mipt/npm/root/BmnEventContainer {
@@ -36,7 +36,6 @@ public synthetic class ru/mipt/npm/root/BmnGlobalTrack$$serializer : kotlinx/ser
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/BmnGlobalTrack;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/BmnGlobalTrack$Companion {
@@ -65,7 +64,6 @@ public synthetic class ru/mipt/npm/root/CbmStsTrack$$serializer : kotlinx/serial
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/CbmStsTrack;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/CbmStsTrack$Companion {
@@ -234,7 +232,6 @@ public synthetic class ru/mipt/npm/root/FairTrackParam$$serializer : kotlinx/ser
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/FairTrackParam;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/FairTrackParam$Companion {
@@ -274,7 +271,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoBBox$$serializer : kot
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoBBox;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoBBox$Companion {
@@ -311,7 +307,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoCombiTrans$$serializer
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoCombiTrans;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoCombiTrans$Companion {
@@ -332,7 +327,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoCompositeShape$$serial
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoCompositeShape;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoCompositeShape$Companion {
@@ -355,7 +349,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoHMatrix$$serializer : 
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoHMatrix;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoHMatrix$Companion {
@@ -375,7 +368,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoIdentity$$serializer :
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoIdentity;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoIdentity$Companion {
@@ -397,7 +389,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoIntersection$$serializ
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoIntersection;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoIntersection$Companion {
@@ -421,7 +412,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoManager$$serializer : 
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoManager;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoManager$Companion {
@@ -443,7 +433,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoMaterial$$serializer :
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoMaterial;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoMaterial$Companion {
@@ -476,7 +465,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoMedium$$serializer : k
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoMedium;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoMedium$Companion {
@@ -496,7 +484,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoMixture$$serializer : 
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoMixture;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoMixture$Companion {
@@ -523,7 +510,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoNode$$serializer : kot
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoNode;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoNode$Companion {
@@ -544,7 +530,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoNodeMatrix$$serializer
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoNodeMatrix;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoNodeMatrix$Companion {
@@ -565,7 +550,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoNodeOffset$$serializer
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoNodeOffset;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoNodeOffset$Companion {
@@ -593,7 +577,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoPcon$$serializer : kot
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoPcon;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoPcon$Companion {
@@ -616,7 +599,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoPgon$$serializer : kot
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoPgon;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoPgon$Companion {
@@ -637,7 +619,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoRotation$$serializer :
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoRotation;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoRotation$Companion {
@@ -672,7 +653,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoShapeAssembly$$seriali
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoShapeAssembly;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoShapeAssembly$Companion {
@@ -699,7 +679,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoSubtraction$$serialize
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoSubtraction;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoSubtraction$Companion {
@@ -720,7 +699,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoTranslation$$serialize
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoTranslation;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoTranslation$Companion {
@@ -745,7 +723,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoTube$$serializer : kot
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoTube;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoTube$Companion {
@@ -774,7 +751,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoTubeSeg$$serializer : 
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoTubeSeg;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoTubeSeg$Companion {
@@ -796,7 +772,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoUnion$$serializer : ko
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoUnion;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoUnion$Companion {
@@ -830,7 +805,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoVolume$$serializer : k
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoVolume;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoVolume$Companion {
@@ -852,7 +826,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoVolumeAssembly$$serial
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoVolumeAssembly;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoVolumeAssembly$Companion {
@@ -891,7 +864,6 @@ public synthetic class ru/mipt/npm/root/serialization/TGeoXtru$$serializer : kot
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TGeoXtru;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TGeoXtru$Companion {
@@ -912,7 +884,6 @@ public synthetic class ru/mipt/npm/root/serialization/THashList$$serializer : ko
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/THashList;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/THashList$Companion {
@@ -933,7 +904,6 @@ public synthetic class ru/mipt/npm/root/serialization/TList$$serializer : kotlin
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TList;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TList$Companion {
@@ -957,7 +927,6 @@ public synthetic class ru/mipt/npm/root/serialization/TNamed$$serializer : kotli
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/mipt/npm/root/serialization/TNamed;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class ru/mipt/npm/root/serialization/TNamed$Companion {

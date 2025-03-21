@@ -1,8 +1,8 @@
 plugins {
     kotlin("multiplatform")
     kotlin("jupyter.api")
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-//    application
+    id("com.gradleup.shadow") version "8.3.6"
+
 }
 
 repositories {
@@ -12,17 +12,18 @@ repositories {
 }
 
 kotlin {
-    jvmToolchain(11)
-    js(IR) {
+    jvmToolchain(17)
+    js {
+        useEsModules()
         browser {
-            webpackTask {
-                cssSupport{
+            commonWebpackConfig {
+                outputFileName = "js/visionforge-playground.js"
+                cssSupport {
                     enabled = true
                 }
-                scssSupport{
+                scssSupport {
                     enabled = true
                 }
-                mainOutputFileName.set("js/visionforge-playground.js")
             }
         }
         binaries.executable()
@@ -31,7 +32,7 @@ kotlin {
     jvm {
 //        withJava()
         compilerOptions {
-            freeCompilerArgs.addAll("-Xjvm-default=all", "-Xopt-in=kotlin.RequiresOptIn", "-Xlambdas=indy", "-Xcontext-receivers")
+            freeCompilerArgs.addAll("-Xjvm-default=all", "-Xcontext-parameters")
 
         }
         testRuns["test"].executionTask.configure {
@@ -43,9 +44,9 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(projects.visionforgeSolid)
-//                implementation(projects.visionforgePlotly)
+                implementation(projects.plotlyKt.plotlyKtCore)
                 implementation(projects.visionforgeMarkdown)
-//                implementation(projects.visionforgeTables)
+                implementation(projects.visionforgeTables)
                 implementation(projects.cernRootLoader)
                 api(projects.visionforgeJupyter.visionforgeJupyterCommon)
             }
@@ -54,32 +55,36 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(projects.visionforgeThreejs)
-                compileOnly(npm("webpack-bundle-analyzer","4.5.0"))
+//                compileOnly(npm("webpack-bundle-analyzer","4.5.0"))
             }
         }
 
         val jvmMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-server-cio:${spclibs.versions.ktor.get()}")
+                implementation("io.ktor:ktor-server-cio")
                 implementation(projects.visionforgeGdml)
                 implementation(projects.visionforgeServer)
                 implementation(spclibs.logback.classic)
-                implementation("com.github.Ricky12Awesome:json-schema-serialization:0.6.6")
             }
         }
+
         all {
             languageSettings.optIn("space.kscience.dataforge.misc.DFExperimental")
         }
     }
 }
 
-val jsBrowserDistribution = tasks.getByName("jsBrowserDistribution")
+val debug = false
+
+val jsBrowserDistribution = if(debug) {
+    tasks.getByName("jsBrowserDevelopmentExecutableDistribution")
+} else {
+    tasks.getByName("jsBrowserDistribution")
+}
 
 tasks.getByName<ProcessResources>("jvmProcessResources") {
     dependsOn(jsBrowserDistribution)
-    from(jsBrowserDistribution) {
-        exclude("**/*.js.map")
-    }
+    from(jsBrowserDistribution)
 }
 
 val processJupyterApiResources by tasks.getting(org.jetbrains.kotlinx.jupyter.api.plugin.tasks.JupyterApiResourcesTask::class) {

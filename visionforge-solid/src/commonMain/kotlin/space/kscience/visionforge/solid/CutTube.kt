@@ -2,9 +2,9 @@ package space.kscience.visionforge.solid
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
-import space.kscience.visionforge.setChild
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
@@ -25,8 +25,8 @@ public class CutTube(
     public val height: Float,
     public val phiStart: Float = 0f,
     public val phi: Float = PI2,
-    public val nTop: Float32Vector3D,
-    public val nBottom: Float32Vector3D,
+    public val nTop: FloatVector3D,
+    public val nBottom: FloatVector3D,
 ) : SolidBase<CutTube>(), GeometrySolid {
 
     init {
@@ -45,7 +45,7 @@ public class CutTube(
         require(segments >= 4) { "The number of segments in the tube is too small" }
         val angleStep = phi / (segments - 1)
 
-        fun section(r: Float, z: Float, n: Float32Vector3D): List<Float32Vector3D> = (0 until segments).map { i ->
+        fun section(r: Float, z: Float, n: FloatVector3D): List<FloatVector3D> = (0 until segments).map { i ->
             val x = r * cos(phiStart + angleStep * i)
             val y = r * sin(phiStart + angleStep * i)
             Float32Vector3D(x, y, (n.z * z - n.x * x - n.y * y) / n.z)
@@ -153,8 +153,8 @@ public inline fun MutableVisionContainer<Solid>.cutTube(
     height: Number,
     startAngle: Number = 0f,
     angle: Number = PI2,
-    topNormal: Float32Vector3D,
-    bottomNormal: Float32Vector3D,
+    topNormal: FloatVector3D,
+    bottomNormal: FloatVector3D,
     name: String? = null,
     block: CutTube.() -> Unit = {},
 ): CutTube = CutTube(
@@ -165,4 +165,6 @@ public inline fun MutableVisionContainer<Solid>.cutTube(
     phi = angle.toFloat(),
     nTop = topNormal,
     nBottom = bottomNormal
-).apply(block).also { setChild(name, it) }
+).apply(block).also {
+    setVision(SolidGroup.inferNameFor(name, it), it)
+}

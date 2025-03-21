@@ -7,15 +7,16 @@ val dataforgeVersion: String by rootProject.extra
 kscience {
     jvm()
     js()
-    native()
-    wasm()
+    native {}
+//    wasm()
     useCoroutines()
     commonMain {
         api("space.kscience:dataforge-context:$dataforgeVersion")
+        api(project.dependencies.platform(spclibs.ktor.bom))
         api(spclibs.kotlinx.html)
     }
     jsMain {
-        api("org.jetbrains.kotlin-wrappers:kotlin-extensions")
+        api("org.jetbrains.kotlin-wrappers:kotlin-js")
     }
     useSerialization {
         json()

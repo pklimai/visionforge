@@ -23,7 +23,7 @@
  */
 
 @file:JsModule("three/examples/jsm/libs/stats.module.js")
-@file:JsNonModule
+
 
 package three.external.libs
 

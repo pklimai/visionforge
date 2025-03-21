@@ -4,11 +4,12 @@ import io.ktor.server.cio.CIO
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.http.content.staticResources
 import io.ktor.server.routing.routing
+import kotlinx.html.unsafe
 import space.kscience.dataforge.context.Context
-import space.kscience.dataforge.context.Global
+import space.kscience.plotly.PlotlyPlugin
 import space.kscience.visionforge.html.*
 import space.kscience.visionforge.markup.MarkupPlugin
-import space.kscience.visionforge.plotly.PlotlyPlugin
+import space.kscience.visionforge.server.VisionRoute
 import space.kscience.visionforge.server.close
 import space.kscience.visionforge.server.openInBrowser
 import space.kscience.visionforge.server.visionPage
@@ -18,6 +19,13 @@ import space.kscience.visionforge.visionManager
 import java.awt.Desktop
 import java.nio.file.Path
 
+val context = Context("playground") {
+    plugin(Solids)
+    plugin(PlotlyPlugin)
+    plugin(MarkupPlugin)
+    plugin(TableVisionPlugin)
+}
+
 
 public fun makeVisionFile(
     path: Path? = null,
@@ -26,7 +34,7 @@ public fun makeVisionFile(
     show: Boolean = true,
     content: HtmlVisionFragment,
 ): Unit {
-    val actualPath = VisionPage(Global.visionManager, content = content).makeFile(path) { actualPath ->
+    val actualPath = VisionPage(context.visionManager, content = content).makeFile(path) { actualPath ->
         mapOf(
             "title" to VisionPage.title(title),
             "playground" to VisionPage.importScriptHeader(
@@ -34,23 +42,22 @@ public fun makeVisionFile(
                 resourceLocation,
                 actualPath
             ),
+            "playground-style" to VisionPage.styleHeader {
+                unsafe {
+                    +".visionforge-output { height:100vh; }"
+                }
+            }
         )
     }
     if (show) Desktop.getDesktop().browse(actualPath.toFile().toURI())
 }
 
-public fun serve(
+public suspend fun serve(
     title: String = "VisionForge page",
     show: Boolean = true,
+    routeConfiguration: VisionRoute.() -> Unit = {},
     content: HtmlVisionFragment,
 ) {
-    val context = Context("playground") {
-        plugin(Solids)
-        plugin(PlotlyPlugin)
-        plugin(MarkupPlugin)
-        plugin(TableVisionPlugin)
-    }
-
     val server = embeddedServer(CIO, port = 7779) {
         routing {
             staticResources("", null, null)
@@ -62,6 +69,7 @@ public fun serve(
                 defer = true
             },
             VisionPage.title(title),
+            routeConfiguration = routeConfiguration,
             visionFragment = content
         )
     }.start(false)

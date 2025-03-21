@@ -6,10 +6,10 @@ import space.kscience.dataforge.meta.number
 import space.kscience.dataforge.names.asName
 import space.kscience.dataforge.names.startsWith
 import space.kscience.visionforge.onPropertyChange
-import space.kscience.visionforge.setChild
 import space.kscience.visionforge.solid.SolidGroup
 import space.kscience.visionforge.solid.SolidMaterial.Companion.EDGES_KEY
 import space.kscience.visionforge.solid.layer
+import space.kscience.visionforge.solid.set
 import space.kscience.visionforge.solid.three.*
 import three.core.Object3D
 import three.geometries.BoxGeometry
@@ -21,7 +21,7 @@ internal fun SolidGroup.varBox(
     ySize: Number,
     name: String = "",
     action: VariableBox.() -> Unit = {},
-): VariableBox = VariableBox(xSize, ySize).apply(action).also { setChild(name, it) }
+): VariableBox = VariableBox(xSize, ySize).apply(action).also { set(name, it) }
 
 internal class VariableBox(val xSize: Number, val ySize: Number) : ThreeJsVision() {
 
@@ -46,7 +46,7 @@ internal class VariableBox(val xSize: Number, val ySize: Number) : ThreeJsVision
         mesh.scale.z = properties.getValue(VALUE)?.number?.toDouble() ?: 1.0
 
         //add listener to object properties
-        onPropertyChange(three.context) { name ->
+        onPropertyChange(three.context) { name, _ ->
             when {
                 name == VALUE -> {
                     val value = properties.getValue(VALUE)?.int ?: 0

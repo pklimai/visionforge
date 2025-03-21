@@ -70,7 +70,7 @@ To learn more about DataForge, please consult the following URLs:
 >
 > **Maturity**: EXPERIMENTAL
 
-### [plotly](plotly)
+### [plotly-kt](plotly-kt)
 >
 > **Maturity**: EXPERIMENTAL
 
@@ -96,10 +96,6 @@ To learn more about DataForge, please consult the following URLs:
 > **Maturity**: EXPERIMENTAL
 
 ### [visionforge-markdown](visionforge-markdown)
->
-> **Maturity**: EXPERIMENTAL
-
-### [visionforge-plotly](visionforge-plotly)
 >
 > **Maturity**: EXPERIMENTAL
 
@@ -147,23 +143,15 @@ To learn more about DataForge, please consult the following URLs:
 >
 > **Maturity**: EXPERIMENTAL
 
-### [plotly/examples](plotly/examples)
+### [plotly-kt/examples](plotly-kt/examples)
 >
 > **Maturity**: EXPERIMENTAL
 
-### [plotly/plotlykt-core](plotly/plotlykt-core)
+### [plotly-kt/plotly-kt-core](plotly-kt/plotly-kt-core)
 >
 > **Maturity**: DEVELOPMENT
 
-### [plotly/plotlykt-jupyter](plotly/plotlykt-jupyter)
->
-> **Maturity**: EXPERIMENTAL
-
-### [plotly/plotlykt-script](plotly/plotlykt-script)
->
-> **Maturity**: EXPERIMENTAL
-
-### [plotly/plotlykt-server](plotly/plotlykt-server)
+### [plotly-kt/plotly-kt-server](plotly-kt/plotly-kt-server)
 >
 > **Maturity**: EXPERIMENTAL
 
@@ -176,19 +164,15 @@ To learn more about DataForge, please consult the following URLs:
 >
 > **Maturity**: EXPERIMENTAL
 
-### [plotly/examples/compose-demo](plotly/examples/compose-demo)
+### [plotly-kt/examples/compose-demo](plotly-kt/examples/compose-demo)
 >
 > **Maturity**: EXPERIMENTAL
 
-### [plotly/examples/fx-demo](plotly/examples/fx-demo)
+### [plotly-kt/examples/js-demo](plotly-kt/examples/js-demo)
 >
 > **Maturity**: EXPERIMENTAL
 
-### [plotly/examples/js-demo](plotly/examples/js-demo)
->
-> **Maturity**: EXPERIMENTAL
-
-### [plotly/examples/native-demo](plotly/examples/native-demo)
+### [plotly-kt/examples/native-demo](plotly-kt/examples/native-demo)
 >
 > **Maturity**: EXPERIMENTAL
 

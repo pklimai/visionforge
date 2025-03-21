@@ -4,7 +4,6 @@ plugins {
 
 kscience{
     jvm()
-    useKtor()
     jvmMain {
         api(projects.visionforgeCore)
         api("io.ktor:ktor-server-host-common")

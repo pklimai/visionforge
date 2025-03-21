@@ -4,7 +4,6 @@ import space.kscience.dataforge.context.Context
 import space.kscience.dataforge.names.Name
 import space.kscience.gdml.*
 import space.kscience.visionforge.Vision
-import space.kscience.visionforge.getChild
 import space.kscience.visionforge.solid.*
 import space.kscience.visionforge.visionManager
 import kotlin.test.Test
@@ -23,10 +22,10 @@ class TestCubes {
     fun testCubesDirect() {
         val vision: SolidGroup = cubes.toVision()
 //        println(Solids.encodeToString(vision))
-        val smallBoxPrototype = vision.getPrototype(Name.parse("solids.smallBox")) as? Box
+        val smallBoxPrototype = vision.getPrototype("solids.smallBox") as? Box
         assertNotNull(smallBoxPrototype)
         assertEquals(30.0, smallBoxPrototype.xSize.toDouble())
-        val smallBoxVision = vision.children.getChild("composite-111.smallBox")?.prototype as? Box
+        val smallBoxVision = vision["composite-111.smallBox"]?.prototype?.prototype as? Box
         assertNotNull(smallBoxVision)
         assertEquals(30.0, smallBoxVision.xSize.toDouble())
     }
@@ -55,7 +54,7 @@ class TestCubes {
                 assertNotNull(this.prototype)
             }
             if (this is SolidGroup) {
-                items.forEach {
+                visions.forEach {
                     it.value.checkPrototypes()
                 }
             }

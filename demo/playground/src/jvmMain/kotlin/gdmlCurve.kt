@@ -27,7 +27,7 @@ fun main() = makeVisionFile(Path.of("curves.html"), resourceLocation = ResourceL
                 val cathodeTeflonDiskThickness = 5
                 val cathodeCopperSupportOuterRadius = 45
                 val cathodeCopperSupportInnerRadius = 8.5
-                val cathodeCopperSupportThickness = 1
+                val cathodeCopperSupportThickness = 1.0
                 // mylar cathode
                 val mylarCathodeThickness = 0.004
                 // patern

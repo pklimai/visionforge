@@ -23,7 +23,7 @@
  */
 
 @file:JsModule("three/examples/jsm/exporters/STLExporter.js")
-@file:JsNonModule
+
 
 package three.external.exporters
 

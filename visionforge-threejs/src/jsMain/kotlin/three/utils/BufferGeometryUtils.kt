@@ -1,5 +1,5 @@
 @file:JsModule("three/examples/jsm/utils/BufferGeometryUtils")
-@file:JsNonModule
+
 package three.utils
 
 import three.core.BufferGeometry

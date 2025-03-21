@@ -4,7 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import space.kscience.visionforge.MutableVisionContainer
 import space.kscience.visionforge.VisionBuilder
-import space.kscience.visionforge.setChild
 
 /**
  * Utility solids
@@ -29,5 +28,5 @@ public fun MutableVisionContainer<Solid>.axes(
     name: String = "@axes",
     block: AxesSolid.() -> Unit = {},
 ): AxesSolid = AxesSolid(size.toDouble()).apply(block).also {
-    setChild(name, it)
+    setVision(SolidGroup.inferNameFor(name, it), it)
 }

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 @file:JsModule("three/examples/jsm/libs/dat.gui.module.js")
-@file:JsNonModule
+
 
 package three.external.libs
 

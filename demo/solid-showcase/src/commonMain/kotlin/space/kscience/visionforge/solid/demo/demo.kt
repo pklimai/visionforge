@@ -4,7 +4,8 @@ import kotlinx.coroutines.*
 import space.kscience.dataforge.meta.Meta
 import space.kscience.dataforge.meta.invoke
 import space.kscience.dataforge.names.Name
-import space.kscience.kmath.geometry.Euclidean3DSpace
+import space.kscience.kmath.geometry.euclidean3d.Float32Vector3D
+import space.kscience.kmath.geometry.euclidean3d.Float64Space3D
 import space.kscience.kmath.geometry.radians
 import space.kscience.visionforge.Colors
 import space.kscience.visionforge.solid.*
@@ -24,7 +25,6 @@ fun VisionLayout<Solid>.demo(name: String, title: String = name, block: SolidGro
         block()
         ambientLight {
             color(Colors.white)
-            intensity = 0.5
         }
         pointLight(0, 0, 1000) {
             color(Colors.white)
@@ -110,11 +110,11 @@ fun VisionLayout<Solid>.showcase() {
             rotationY = PI / 4
             axes(200)
             box(100, 100, 100) {
-                rotate((PI / 4).radians, Euclidean3DSpace.zAxis)
+                rotate((PI / 4).radians, Float64Space3D.zAxis)
                 GlobalScope.launch(Dispatchers.Main) {
                     while (isActive) {
                         delay(100)
-                        rotate((PI / 20).radians, Euclidean3DSpace.yAxis)
+                        rotate((PI / 20).radians, Float64Space3D.yAxis)
                     }
                 }
                 color(Colors.red)

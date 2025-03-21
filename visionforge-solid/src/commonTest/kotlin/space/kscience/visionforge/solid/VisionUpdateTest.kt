@@ -1,55 +1,106 @@
 package space.kscience.visionforge.solid
 
-import space.kscience.dataforge.context.Global
-import space.kscience.dataforge.context.request
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
 import space.kscience.dataforge.meta.Meta
-import space.kscience.dataforge.meta.asValue
+import space.kscience.dataforge.meta.string
 import space.kscience.dataforge.names.asName
 import space.kscience.visionforge.VisionChange
-import space.kscience.visionforge.getChild
+import space.kscience.visionforge.getOrCreateChange
+import space.kscience.visionforge.useProperty
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.seconds
 
 internal class VisionUpdateTest {
-    val solidManager = Global.request(Solids)
-    val visionManager = solidManager.visionManager
 
     @Test
-    fun testVisionUpdate() {
+    fun testVisionUpdate() = runTest {
         val targetVision = testSolids.solidGroup {
             box(200, 200, 200, name = "origin")
         }
-        val dif = visionManager.VisionChange {
+        val dif = testVisionManager.VisionChange {
             solidGroup("top") {
                 color(123)
                 box(100, 100, 100)
             }
-            propertyChanged("top".asName(), SolidMaterial.MATERIAL_COLOR_KEY, Meta("red".asValue()))
-            propertyChanged("origin".asName(), SolidMaterial.MATERIAL_COLOR_KEY, Meta("red".asValue()))
+
+            getOrCreateChange("top".asName()).propertyChanged(
+                SolidMaterial.MATERIAL_COLOR_KEY,
+                Meta("red")
+            )
+            getOrCreateChange("origin".asName()).propertyChanged(
+                SolidMaterial.MATERIAL_COLOR_KEY,
+                Meta("red")
+            )
         }
-        targetVision.update(dif)
-        assertTrue { targetVision.children.getChild("top") is SolidGroup }
-        assertEquals("red", (targetVision.children.getChild("origin") as Solid).color.string) // Should work
+        targetVision.receiveEvent(dif)
+        assertTrue { targetVision["top"] is SolidGroup }
+        assertEquals("red", (targetVision["origin"] as Solid).color.string) // Should work
         assertEquals(
             "#00007b",
-            (targetVision.children.getChild("top") as Solid).color.string
+            (targetVision["top"] as Solid).color.string
         ) // new item always takes precedence
     }
 
     @Test
     fun testVisionChangeSerialization() {
-        val change = visionManager.VisionChange {
+        val change = testVisionManager.VisionChange {
             solidGroup("top") {
                 color(123)
                 box(100, 100, 100)
             }
-            propertyChanged("top".asName(), SolidMaterial.MATERIAL_COLOR_KEY, Meta("red".asValue()))
-            propertyChanged("origin".asName(), SolidMaterial.MATERIAL_COLOR_KEY, Meta("red".asValue()))
+            getOrCreateChange("top".asName()).propertyChanged(
+                SolidMaterial.MATERIAL_COLOR_KEY,
+                Meta("red")
+            )
+            getOrCreateChange("origin".asName()).propertyChanged(
+                SolidMaterial.MATERIAL_COLOR_KEY,
+                Meta("red")
+            )
         }
-        val serialized = visionManager.jsonFormat.encodeToString(VisionChange.serializer(), change)
+        val serialized = testVisionManager.jsonFormat.encodeToString(VisionChange.serializer(), change)
         println(serialized)
-        val reconstructed = visionManager.jsonFormat.decodeFromString(VisionChange.serializer(), serialized)
+        val reconstructed = testVisionManager.jsonFormat.decodeFromString(VisionChange.serializer(), serialized)
         assertEquals(change.properties, reconstructed.properties)
+    }
+
+    @Test
+    fun useProperty() = runTest(timeout = 1.seconds) {
+        withContext(Dispatchers.Default) {
+            val group = testSolids.solidGroup {
+                box(100, 100, 100)
+            }
+
+            val box = group.visions.values.first()
+
+            val collected = Channel<String?>(5)
+
+            box.useProperty(SolidMaterial.MATERIAL_COLOR_KEY) {
+                println(it.string)
+                collected.send(it.string)
+            }
+
+            delay(1)
+
+            group.color("red")
+            group.color("green")
+            box.color("blue")
+
+            assertEquals("blue", box.readProperty(SolidMaterial.MATERIAL_COLOR_KEY).string)
+            assertEquals("blue", box.color.string)
+
+            val list = collected.consumeAsFlow().take(4).toList()
+
+            assertEquals(null, list.first())
+            assertEquals("blue", list.last())
+        }
     }
 }

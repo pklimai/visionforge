@@ -30,10 +30,10 @@ public object ThreeCanvasLabelFactory : ThreeFactory<SolidLabel> {
         canvas.getContext("2d").apply {
             this as CanvasRenderingContext2D
             font = "Bold ${vision.fontSize}pt ${vision.fontFamily}"
-            fillStyle = vision.properties.getValue(
+            fillStyle = vision.readProperty(
                 SolidMaterial.MATERIAL_COLOR_KEY,
-                inherit = false,
-                includeStyles = true
+                inherited = false,
+                useStyles = true
             )?.value ?: "black"
             textBaseline = CanvasTextBaseline.MIDDLE
             val metrics = measureText(vision.text)

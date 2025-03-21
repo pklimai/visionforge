@@ -23,7 +23,7 @@ private class VisionCounterTree(
     var selfCount = 1
 
     val children: Map<NameToken, VisionCounterTree> by lazy {
-        (vision as? SolidGroup)?.items?.mapValues { (key, vision) ->
+        (vision as? SolidGroup)?.visions?.mapValues { (key, vision) ->
             if (vision is SolidReference) {
                 prototypes.getOrPut(vision.prototypeName) {
                     VisionCounterTree(vision.prototypeName, vision.prototype, prototypes)

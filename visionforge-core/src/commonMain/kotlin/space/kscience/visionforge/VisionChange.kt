@@ -1,23 +1,16 @@
 package space.kscience.visionforge
 
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import space.kscience.dataforge.meta.*
 import space.kscience.dataforge.meta.descriptors.MetaDescriptor
-import space.kscience.dataforge.names.Name
-import space.kscience.dataforge.names.isEmpty
-import space.kscience.dataforge.names.plus
+import space.kscience.dataforge.names.*
 import kotlin.time.Duration
-
 
 
 /**
@@ -32,7 +25,9 @@ public object NullVision : Vision {
             error("Can't set parent for null vision")
         }
 
-    override val properties: MutableVisionProperties get() = error("Can't get properties of `NullVision`")
+    override val properties: Nothing get() = error("Can't get properties of `NullVision`")
+
+    override val eventFlow: Flow<VisionEvent> = emptyFlow()
 
     override val descriptor: MetaDescriptor? = null
 }
@@ -62,134 +57,145 @@ private fun Vision.deepCopy(manager: VisionManager): Vision {
 public data class VisionChange(
     public val vision: Vision? = null,
     public val properties: Meta? = null,
-    public val children: Map<Name, VisionChange>? = null,
+    public val children: Map<NameToken, VisionChange>? = null,
 ) : VisionEvent
+
+public fun VisionChange.isEmpty(): Boolean = vision == null && properties == null && children == null
+
 
 /**
  * An update for a [Vision]
  */
-public class VisionChangeBuilder : MutableVisionContainer<Vision> {
+public class VisionChangeCollector : MutableVisionContainer<Vision> {
 
     private var vision: Vision? = null
-    private var propertyChange = MutableMeta()
-    private val children: HashMap<Name, VisionChangeBuilder> = HashMap()
+    private var properties = MutableMeta()
+    private val children: HashMap<NameToken, VisionChangeCollector> = HashMap()
 
-    public operator fun get(name: Name): VisionChangeBuilder? = children[name]
+    public operator fun get(name: NameToken): VisionChangeCollector? = children[name]
 
-    public fun isEmpty(): Boolean = propertyChange.isEmpty() && propertyChange.isEmpty() && children.isEmpty()
+    public fun isEmpty(): Boolean = properties.isEmpty() && properties.isEmpty() && children.isEmpty()
 
     @JvmSynchronized
-    private fun getOrPutChild(visionName: Name): VisionChangeBuilder =
-        children.getOrPut(visionName) { VisionChangeBuilder() }
+    public fun getOrCreateChange(token: NameToken): VisionChangeCollector =
+        children.getOrPut(token) { VisionChangeCollector() }
 
     @JvmSynchronized
     internal fun reset() {
         vision = null
-        propertyChange = MutableMeta()
+        properties = MutableMeta()
         children.clear()
     }
 
-    public fun propertyChanged(visionName: Name, propertyName: Name, item: Meta?) {
-        if (visionName == Name.EMPTY) {
-            //Write property removal as [Null]
-            if (propertyName.isEmpty()) {
-                propertyChange = item?.toMutableMeta() ?: MutableMeta()
-            } else {
-                propertyChange[propertyName] = (item ?: Meta(Null))
-            }
+    @JvmSynchronized
+    public fun propertyChanged(propertyName: Name, item: Meta?) {
+        //Write property removal as [Null]
+        if (propertyName.isEmpty()) {
+            properties = item?.toMutableMeta() ?: MutableMeta()
         } else {
-            getOrPutChild(visionName).propertyChanged(Name.EMPTY, propertyName, item)
+            properties[propertyName] = (item ?: Meta(Null))
         }
     }
 
-    override fun setChild(name: Name?, child: Vision?) {
-        if (name == null) error("Static children are not allowed in VisionChange")
-        getOrPutChild(name).apply {
-            vision = child ?: NullVision
+    @JvmSynchronized
+    public fun updateProperties(newProperties: Meta) {
+        properties.update(newProperties)
+    }
+
+    override fun setVision(token: NameToken, vision: Vision?) {
+        getOrCreateChange(token).apply {
+            this.vision = vision ?: NullVision
         }
     }
 
-    private fun build(visionManager: VisionManager): VisionChange = VisionChange(
-        vision,
-        if (propertyChange.isEmpty()) null else propertyChange,
-        if (children.isEmpty()) null else children.mapValues { it.value.build(visionManager) }
-    )
+    public fun consumeEvent(event: VisionEvent): Unit = when (event) {
+        //is VisionChange -> updateFrom(event)
+        is VisionEventPack -> event.events.forEach { consumeEvent(it) }
 
-    /**
-     * Isolate collected changes by creating detached copies of given visions
-     */
-    public fun deepCopy(visionManager: VisionManager): VisionChange = VisionChange(
-        vision?.deepCopy(visionManager),
-        if (propertyChange.isEmpty()) null else propertyChange.seal(),
-        if (children.isEmpty()) null else children.mapValues { it.value.deepCopy(visionManager) }
-    )
+        is VisionEventForChild -> getOrCreateChange(event.childName).consumeEvent(event.event)
 
-    /**
-     * Transform current change directly to Json string without protective copy
-     */
-    public fun toJsonString(visionManager: VisionManager): String = visionManager.encodeToString(
-        build(visionManager)
+        is VisionChange -> {
+            event.properties?.let { properties.update(it) }
+            event.children?.forEach { (token, child) ->
+                getOrCreateChange(token).consumeEvent(child)
+            }
+            vision = event.vision
+        }
+
+//        is SetVisionChildEvent -> setVision(event.nameToken, event.vision)
+//
+//        is SetVisionPropertiesEvent -> updateProperties(event.properties)
+//
+//        is SetRootVisionEvent -> vision = event.vision
+
+        //listen to changed event
+        is VisionPropertyChangedEvent -> propertyChanged(
+            propertyName = event.propertyName,
+            item = event.propertyValue
+        )
+
+        is VisionGroupCompositionChangedEvent -> setVision(event.childName, event.childVision)
+
+        is VisionControlEvent, is VisionMetaEvent -> {
+            //do nothing
+            //TODO add logging
+        }
+    }
+
+    public fun collect(visionManager: VisionManager): VisionChange = VisionChange(
+        vision = vision?.deepCopy(visionManager),
+        properties = properties.takeIf { !it.isEmpty() },
+        children = children.takeIf { !it.isEmpty() }?.mapValues { it.value.collect(visionManager) }
     )
 }
 
-public inline fun VisionManager.VisionChange(block: VisionChangeBuilder.() -> Unit): VisionChange =
-    VisionChangeBuilder().apply(block).deepCopy(this)
-
-
-/**
- * Collect changes that are made to [source] to [collector] using [mutex] as a synchronization lock.
- */
-private fun CoroutineScope.collectChange(
-    name: Name,
-    source: Vision,
-    mutex: Mutex,
-    collector: VisionChangeBuilder,
-) {
-
-    //Collect properties change
-    source.properties.changes.onEach { propertyName ->
-        val newItem = source.properties.own[propertyName]
-        collector.propertyChanged(name, propertyName, newItem)
-    }.launchIn(this)
-
-    val children = source.children
-    //Subscribe for children changes
-    children?.forEach { token, child ->
-        collectChange(name + token, child, mutex, collector)
-    }
-
-    //Subscribe for structure change
-    children?.changes?.onEach { changedName ->
-        val after = children[changedName]
-        val fullName = name + changedName
-        if (after != null) {
-            collectChange(fullName, after, mutex, collector)
-        }
-        mutex.withLock {
-            collector.setChild(fullName, after)
-        }
-    }?.launchIn(this)
+public operator fun VisionChangeCollector.get(name: Name): VisionChangeCollector? = when (name.length) {
+    0 -> this
+    1 -> get(name.first())
+    else -> get(name.first())?.get(name.cutFirst())
 }
 
+public fun VisionChangeCollector.getOrCreateChange(name: Name): VisionChangeCollector = when (name.length) {
+    0 -> this
+    1 -> getOrCreateChange(name.first())
+    else -> getOrCreateChange(name.first()).getOrCreateChange(name.cutFirst())
+}
+
+public inline fun VisionManager.VisionChange(block: VisionChangeCollector.() -> Unit): VisionChange =
+    VisionChangeCollector().apply(block).collect(this)
+
 /**
- * Generate a flow of changes of this vision and its children
+ * Generate a flow of changes for this vision and its children
  *
  * @param sendInitial if true, send the initial vision state as first change
  */
 public fun Vision.flowChanges(
     collectionDuration: Duration,
     sendInitial: Boolean = false,
-): Flow<VisionChange> = flow {
+): Flow<VisionEvent> = flow {
     val manager = manager ?: error("Orphan vision could not collect changes")
     coroutineScope {
-        val collector = VisionChangeBuilder()
+        val collector = VisionChangeCollector()
         val mutex = Mutex()
-        collectChange(Name.EMPTY, this@flowChanges, mutex, collector)
+
+        fun collectVisionEvents(vision: Vision, prefix: Name) {
+            vision.eventFlow.onEach {
+                val event = if (prefix.isEmpty()) it else VisionEventForChild(prefix, it)
+                collector.consumeEvent(event)
+            }.launchIn(this)
+            if (vision is VisionGroup<*>) {
+                vision.visions.forEach { (token, child) ->
+                    collectVisionEvents(child, prefix + token)
+                }
+            }
+        }
+
+        collectVisionEvents(this@flowChanges, Name.EMPTY)
 
         if (sendInitial) {
             //Send initial vision state
-            val initialChange = VisionChange(vision = deepCopy(manager))
-            emit(initialChange)
+            val initialEvent = VisionChange(vision = deepCopy(manager))
+            emit(initialEvent)
         }
 
         while (true) {
@@ -199,7 +205,7 @@ public fun Vision.flowChanges(
             if (!collector.isEmpty()) {
                 mutex.withLock {
                     //emit changes
-                    emit(collector.deepCopy(manager))
+                    emit(collector.collect(manager))
                     //Reset the collector
                     collector.reset()
                 }

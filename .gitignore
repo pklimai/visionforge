@@ -3,10 +3,9 @@
 *.iws
 out/
 .gradle
-.kotlin
+.kotlin/
 build/
 data/
-.kotlin/
 
 jcef-bundle/
 

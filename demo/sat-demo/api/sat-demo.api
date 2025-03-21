@@ -1,9 +1,10 @@
 public final class ru/mipt/npm/sat/SatServerKt {
-	public static final fun main ()V
+	public static final fun main (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun main ([Ljava/lang/String;)V
 }
 
 public final class ru/mipt/npm/sat/StaticKt {
+	public static final fun getContext ()Lspace/kscience/dataforge/context/Context;
 	public static final fun main ()V
 	public static synthetic fun main ([Ljava/lang/String;)V
 }

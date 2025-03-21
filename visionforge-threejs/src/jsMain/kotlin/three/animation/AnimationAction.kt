@@ -1,6 +1,6 @@
 @file:Suppress("NO_EXPLICIT_VISIBILITY_IN_API_MODE_WARNING", "unused")
 @file:JsModule("three")
-@file:JsNonModule
+
 
 package three.animation
 
