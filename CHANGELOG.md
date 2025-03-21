@@ -3,23 +3,37 @@
 ## Unreleased
 
 ### Added
-- Plotly refactored on top of visionforge/server. Now it is called `plotly-kt`. Version follows general VisionForge version.
 
 ### Changed
-- Simplified Vision and VisionGroup logic. Observation logic moved out.
-- Use `Name` for child designation and `Path` for tree access
-- The default intensity for AmbientLight is 1.0. The intensity scale for Three-js is 3.0. 
 
 ### Deprecated
 
 ### Removed
+
+### Fixed
+
+### Security
+
+## 0.5.0 - 2025-03-21
+
+### Added
+
+- Plotly refactored on top of visionforge/server. Now it is called `plotly-kt`. Version follows general VisionForge version.
+
+### Changed
+
+- Simplified Vision and VisionGroup logic. Observation logic moved out.
+- Use `Name` for child designation and `Path` for tree access
+- The default intensity for AmbientLight is 1.0. The intensity scale for Three-js is 3.0. 
+
+### Removed
+
 - VisionChildren and VisionProperties
 
 ### Fixed
+
 - Vision server now automatically switches to WSS protocol for updates if incoming protocol is HTTPS
 - Issue with track removal in muon monitor demo.
-
-### Security
 
 ## 0.4.2 - 2024-06-06
 

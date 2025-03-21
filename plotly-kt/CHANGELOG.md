@@ -9,15 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
-- Name change from `plotlykt` to `plotly-kt`. Version now follows VisionForge version.
-- Moved plotly implementation on top of VisionForge framework.
-- `Plot` and `Trace` now inherit `Vision`.
-- `Trace` no longer inherit `Scheme`. It requires `Trace.Factory` and import of `space.kscience.plotly.models.invoke` to be automatically created.
-- `makeFile` -> `show`
-- `PlotlyFragment` -> `HtmlVisionFragment`, `PlotlyPage` -> `HtmlVisionPage`
-- Explicitly passing renderer in fragments is no longer necessary
-- `Plotly.serve` is replaced by `embeddedServer(...){ plotlyPage(...) }`
-- KTor 3.x
 
 ### Deprecated
 
@@ -26,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Security
+
+## 0.5.0 (package and versioning change!)
+
+### Changed
+
+- Package changed to plotly-kt. Now use VisionForge versions.
+- Plotly-kt now fully relies on VisionForge classes.
 
 ## 0.7.2 - 2024-06-06
 
@@ -100,13 +98,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a protective copy on reading doubleArray from TraceValues
 - #85
 - Rendering in JS that used backend HTML generation
-
-## 0.5.0
-
-### Changed
-
-- Switch to DataForge 0.5
--
 
 ## 0.4.4
 
