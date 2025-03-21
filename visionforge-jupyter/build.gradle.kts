@@ -12,10 +12,11 @@ kscience {
         api(projects.visionforgeCore)
     }
     dependencies(jvmMain){
+        api(projects.visionforgeServer)
+        api(project.dependencies.platform(spclibs.ktor.bom))
         api("io.ktor:ktor-server-cio-jvm")
         api("io.ktor:ktor-server-websockets-jvm")
         api("io.ktor:ktor-server-cors-jvm")
-        api(projects.visionforgeServer)
     }
 }
 
