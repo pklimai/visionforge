@@ -1,5 +1,5 @@
 public final class ComplexDynamicServerKt {
-	public static final fun main ()V
+	public static final fun main (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun main ([Ljava/lang/String;)V
 	public static final fun updateFrom (Lspace/kscience/plotly/models/Trace;Ljava/lang/String;Lkotlinx/coroutines/flow/Flow;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun updateXYFrom (Lspace/kscience/plotly/models/Trace;Lkotlinx/coroutines/flow/Flow;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -17,12 +17,12 @@ public final class DownloadChartAsSVGKt {
 }
 
 public final class DynamicBarsKt {
-	public static final fun main ()V
+	public static final fun main (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun main ([Ljava/lang/String;)V
 }
 
 public final class DynamicServerKt {
-	public static final fun main ()V
+	public static final fun main (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun main ([Ljava/lang/String;)V
 }
 
@@ -54,27 +54,27 @@ public final class LocalFileExportKt {
 public final class PlotTabs {
 	public fun <init> ()V
 	public final fun getTabs ()Ljava/util/List;
-	public final fun tab (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)V
-	public static synthetic fun tab$default (LPlotTabs;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
+	public final fun tab (Ljava/lang/String;Ljava/lang/String;Lspace/kscience/visionforge/html/HtmlFragment;)V
+	public static synthetic fun tab$default (LPlotTabs;Ljava/lang/String;Ljava/lang/String;Lspace/kscience/visionforge/html/HtmlFragment;ILjava/lang/Object;)V
 }
 
 public final class PlotTabs$Tab {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lspace/kscience/plotly/PlotlyFragment;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lspace/kscience/visionforge/html/HtmlFragment;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Lspace/kscience/plotly/PlotlyFragment;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lspace/kscience/plotly/PlotlyFragment;)LPlotTabs$Tab;
-	public static synthetic fun copy$default (LPlotTabs$Tab;Ljava/lang/String;Ljava/lang/String;Lspace/kscience/plotly/PlotlyFragment;ILjava/lang/Object;)LPlotTabs$Tab;
+	public final fun component3 ()Lspace/kscience/visionforge/html/HtmlFragment;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lspace/kscience/visionforge/html/HtmlFragment;)LPlotTabs$Tab;
+	public static synthetic fun copy$default (LPlotTabs$Tab;Ljava/lang/String;Ljava/lang/String;Lspace/kscience/visionforge/html/HtmlFragment;ILjava/lang/Object;)LPlotTabs$Tab;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getContent ()Lspace/kscience/plotly/PlotlyFragment;
+	public final fun getContent ()Lspace/kscience/visionforge/html/HtmlFragment;
 	public final fun getId ()Ljava/lang/String;
 	public final fun getTitle ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class SimpleServerKt {
-	public static final fun main ()V
+public final class ServeStaticPlotsKt {
+	public static final fun main (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun main ([Ljava/lang/String;)V
 }
 
@@ -89,10 +89,11 @@ public final class SvgSaveViaOrcaKt {
 }
 
 public final class TabPageLayoutKt {
+	public static final fun getCdnBootstrap ()Lspace/kscience/visionforge/html/HtmlFragment;
 	public static final fun main ()V
 	public static synthetic fun main ([Ljava/lang/String;)V
-	public static final fun tabs (Lspace/kscience/plotly/Plotly;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lspace/kscience/plotly/PlotlyPage;
-	public static synthetic fun tabs$default (Lspace/kscience/plotly/Plotly;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/plotly/PlotlyPage;
+	public static final fun tabs (Lspace/kscience/plotly/Plotly;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lspace/kscience/visionforge/html/VisionPage;
+	public static synthetic fun tabs$default (Lspace/kscience/plotly/Plotly;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/visionforge/html/VisionPage;
 }
 
 public final class UnsupportedFeatureKt {
@@ -177,7 +178,7 @@ public final class candlestick/BasicCandleStickKt {
 }
 
 public final class candlestick/DynamicCandleStickKt {
-	public static final fun main ()V
+	public static final fun main (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun main ([Ljava/lang/String;)V
 }
 
@@ -252,7 +253,7 @@ public final class geo/ChoroplethKt {
 }
 
 public final class geo/DynamicMapKt {
-	public static final fun main ()V
+	public static final fun main (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun main ([Ljava/lang/String;)V
 }
 
@@ -355,7 +356,7 @@ public final class io/LoadFromResourceKt {
 }
 
 public final class misc/DynamicHistogramKt {
-	public static final fun main ()V
+	public static final fun main (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun main ([Ljava/lang/String;)V
 }
 

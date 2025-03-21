@@ -63,7 +63,7 @@ include(
     ":plotly-kt",
     ":plotly-kt:plotly-kt-core",
     ":plotly-kt:plotly-kt-server",
-    ":plotly-kt:plotly-kt-script",
+//    ":plotly-kt:plotly-kt-script",
     ":plotly-kt:examples",
 //    ":plotly:examples:fx-demo",
     ":plotly-kt:examples:compose-demo",

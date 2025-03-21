@@ -1,8 +1,18 @@
 public final class space/kscience/visionforge/server/ApplicationExtensionsKt {
 	public static final fun EngineConnectorConfig (Ljava/lang/String;I)Lio/ktor/server/engine/EngineConnectorConfig;
-	public static final fun close (Lio/ktor/server/engine/ApplicationEngine;)V
-	public static final fun openInBrowser (Lio/ktor/server/engine/ApplicationEngine;)V
-	public static final fun require (Lio/ktor/util/pipeline/Pipeline;Lio/ktor/server/application/Plugin;)Ljava/lang/Object;
+	public static final fun close (Lio/ktor/server/engine/EmbeddedServer;)V
+	public static final fun openInBrowser (Lio/ktor/server/engine/EmbeddedServer;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class space/kscience/visionforge/server/VisionPageKt {
+	public static final fun serveVisionData (Lio/ktor/server/application/Application;Lspace/kscience/visionforge/server/VisionRoute;Ljava/util/Map;)V
+	public static final fun serveVisionData (Lio/ktor/server/application/Application;Lspace/kscience/visionforge/server/VisionRoute;Lkotlin/jvm/functions/Function1;)V
+	public static final fun visionPage (Lio/ktor/server/application/Application;Lspace/kscience/visionforge/VisionManager;[Lspace/kscience/visionforge/html/HtmlFragment;Ljava/lang/String;Lio/ktor/server/engine/EngineConnectorConfig;Lkotlin/jvm/functions/Function1;Lspace/kscience/visionforge/html/HtmlVisionFragment;)V
+	public static final fun visionPage (Lio/ktor/server/application/Application;Lspace/kscience/visionforge/html/VisionPage;Ljava/lang/String;Lio/ktor/server/engine/EngineConnectorConfig;Lkotlin/jvm/functions/Function1;)V
+	public static final fun visionPage (Lio/ktor/server/application/Application;Lspace/kscience/visionforge/server/VisionRoute;Ljava/util/Collection;Lio/ktor/server/engine/EngineConnectorConfig;Lspace/kscience/visionforge/html/HtmlVisionFragment;)V
+	public static synthetic fun visionPage$default (Lio/ktor/server/application/Application;Lspace/kscience/visionforge/VisionManager;[Lspace/kscience/visionforge/html/HtmlFragment;Ljava/lang/String;Lio/ktor/server/engine/EngineConnectorConfig;Lkotlin/jvm/functions/Function1;Lspace/kscience/visionforge/html/HtmlVisionFragment;ILjava/lang/Object;)V
+	public static synthetic fun visionPage$default (Lio/ktor/server/application/Application;Lspace/kscience/visionforge/html/VisionPage;Ljava/lang/String;Lio/ktor/server/engine/EngineConnectorConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static synthetic fun visionPage$default (Lio/ktor/server/application/Application;Lspace/kscience/visionforge/server/VisionRoute;Ljava/util/Collection;Lio/ktor/server/engine/EngineConnectorConfig;Lspace/kscience/visionforge/html/HtmlVisionFragment;ILjava/lang/Object;)V
 }
 
 public final class space/kscience/visionforge/server/VisionRoute : space/kscience/dataforge/context/ContextAware, space/kscience/dataforge/meta/Configurable {
@@ -33,16 +43,5 @@ public final class space/kscience/visionforge/server/VisionRoute$Mode : java/lan
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lspace/kscience/visionforge/server/VisionRoute$Mode;
 	public static fun values ()[Lspace/kscience/visionforge/server/VisionRoute$Mode;
-}
-
-public final class space/kscience/visionforge/server/VisionServerKt {
-	public static final fun serveVisionData (Lio/ktor/server/application/Application;Lspace/kscience/visionforge/server/VisionRoute;Ljava/util/Map;)V
-	public static final fun serveVisionData (Lio/ktor/server/application/Application;Lspace/kscience/visionforge/server/VisionRoute;Lkotlin/jvm/functions/Function1;)V
-	public static final fun visionPage (Lio/ktor/server/application/Application;Ljava/lang/String;Lspace/kscience/visionforge/server/VisionRoute;Ljava/util/Collection;Lio/ktor/server/engine/EngineConnectorConfig;Lspace/kscience/visionforge/html/HtmlVisionFragment;)V
-	public static final fun visionPage (Lio/ktor/server/application/Application;Lspace/kscience/visionforge/VisionManager;[Lspace/kscience/visionforge/html/HtmlFragment;Ljava/lang/String;Lio/ktor/server/engine/EngineConnectorConfig;Lkotlin/jvm/functions/Function1;Lspace/kscience/visionforge/html/HtmlVisionFragment;)V
-	public static final fun visionPage (Lio/ktor/server/application/Application;Lspace/kscience/visionforge/html/VisionPage;Ljava/lang/String;Lio/ktor/server/engine/EngineConnectorConfig;Lkotlin/jvm/functions/Function1;)V
-	public static synthetic fun visionPage$default (Lio/ktor/server/application/Application;Ljava/lang/String;Lspace/kscience/visionforge/server/VisionRoute;Ljava/util/Collection;Lio/ktor/server/engine/EngineConnectorConfig;Lspace/kscience/visionforge/html/HtmlVisionFragment;ILjava/lang/Object;)V
-	public static synthetic fun visionPage$default (Lio/ktor/server/application/Application;Lspace/kscience/visionforge/VisionManager;[Lspace/kscience/visionforge/html/HtmlFragment;Ljava/lang/String;Lio/ktor/server/engine/EngineConnectorConfig;Lkotlin/jvm/functions/Function1;Lspace/kscience/visionforge/html/HtmlVisionFragment;ILjava/lang/Object;)V
-	public static synthetic fun visionPage$default (Lio/ktor/server/application/Application;Lspace/kscience/visionforge/html/VisionPage;Ljava/lang/String;Lio/ktor/server/engine/EngineConnectorConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 }
 

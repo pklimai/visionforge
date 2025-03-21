@@ -1,9 +1,8 @@
 public abstract class space/kscience/visionforge/AbstractControlVision : space/kscience/visionforge/AbstractVision, space/kscience/visionforge/ControlVision {
 	public static final field Companion Lspace/kscience/visionforge/AbstractControlVision$Companion;
 	public fun <init> ()V
-	public synthetic fun <init> (ILspace/kscience/dataforge/meta/MutableMeta;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public synthetic fun <init> (ILspace/kscience/dataforge/meta/ObservableMutableMeta;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public fun dispatchControlEvent (Lspace/kscience/visionforge/VisionControlEvent;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun getControlEventFlow ()Lkotlinx/coroutines/flow/SharedFlow;
 	public static final synthetic fun write$Self (Lspace/kscience/visionforge/AbstractControlVision;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
@@ -11,54 +10,26 @@ public final class space/kscience/visionforge/AbstractControlVision$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract class space/kscience/visionforge/AbstractVision : space/kscience/visionforge/Vision {
+public abstract class space/kscience/visionforge/AbstractVision : space/kscience/visionforge/MutableVision {
 	public static final field Companion Lspace/kscience/visionforge/AbstractVision$Companion;
 	public fun <init> ()V
-	public synthetic fun <init> (ILspace/kscience/dataforge/meta/MutableMeta;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public synthetic fun <init> (ILspace/kscience/dataforge/meta/ObservableMutableMeta;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lspace/kscience/dataforge/meta/ObservableMutableMeta;)V
+	public synthetic fun <init> (Lspace/kscience/dataforge/meta/ObservableMutableMeta;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	protected final fun emitEvent (Lspace/kscience/visionforge/VisionEvent;)V
 	public fun getDescriptor ()Lspace/kscience/dataforge/meta/descriptors/MetaDescriptor;
+	public synthetic fun getEventFlow ()Lkotlinx/coroutines/flow/Flow;
+	public fun getEventFlow ()Lkotlinx/coroutines/flow/SharedFlow;
 	public fun getParent ()Lspace/kscience/visionforge/Vision;
-	public final fun getProperties ()Lspace/kscience/visionforge/MutableVisionProperties;
-	protected final fun getPropertiesInternal ()Lspace/kscience/dataforge/meta/MutableMeta;
+	public synthetic fun getProperties ()Lspace/kscience/dataforge/meta/Meta;
+	public synthetic fun getProperties ()Lspace/kscience/dataforge/meta/MutableMeta;
+	public final fun getProperties ()Lspace/kscience/dataforge/meta/ObservableMutableMeta;
 	public fun setParent (Lspace/kscience/visionforge/Vision;)V
-	protected final fun setPropertiesInternal (Lspace/kscience/dataforge/meta/MutableMeta;)V
 	public static final synthetic fun write$Self (Lspace/kscience/visionforge/AbstractVision;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class space/kscience/visionforge/AbstractVision$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
-}
-
-public abstract class space/kscience/visionforge/AbstractVisionGroup : space/kscience/visionforge/AbstractVision, space/kscience/visionforge/MutableVisionGroup {
-	public static final field Companion Lspace/kscience/visionforge/AbstractVisionGroup$Companion;
-	public fun <init> ()V
-	public synthetic fun <init> (ILspace/kscience/dataforge/meta/MutableMeta;Ljava/util/Map;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public abstract fun createGroup ()Lspace/kscience/visionforge/AbstractVisionGroup;
-	public fun getChildren ()Lspace/kscience/visionforge/MutableVisionChildren;
-	public synthetic fun getChildren ()Lspace/kscience/visionforge/VisionChildren;
-	protected final fun getChildrenInternal ()Ljava/util/Map;
-	protected final fun setChildrenInternal (Ljava/util/Map;)V
-	public static final synthetic fun write$Self (Lspace/kscience/visionforge/AbstractVisionGroup;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
-}
-
-public final class space/kscience/visionforge/AbstractVisionGroup$Companion {
-	public final fun getDescriptor ()Lspace/kscience/dataforge/meta/descriptors/MetaDescriptor;
-	public final fun serializer ()Lkotlinx/serialization/KSerializer;
-	public final fun updateProperties (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/meta/Meta;Lspace/kscience/dataforge/names/Name;)V
-	public static synthetic fun updateProperties$default (Lspace/kscience/visionforge/AbstractVisionGroup$Companion;Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/meta/Meta;Lspace/kscience/dataforge/names/Name;ILjava/lang/Object;)V
-}
-
-public class space/kscience/visionforge/AbstractVisionProperties : space/kscience/visionforge/MutableVisionProperties {
-	public fun <init> (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/meta/MutableMeta;)V
-	public fun getChanges ()Lkotlinx/coroutines/flow/Flow;
-	protected final fun getChangesInternal ()Lkotlinx/coroutines/flow/MutableSharedFlow;
-	public fun getDescriptor ()Lspace/kscience/dataforge/meta/descriptors/MetaDescriptor;
-	public synthetic fun getOwn ()Lspace/kscience/dataforge/meta/Meta;
-	public final fun getOwn ()Lspace/kscience/dataforge/meta/MutableMeta;
-	public fun getValue (Lspace/kscience/dataforge/names/Name;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lspace/kscience/dataforge/meta/Value;
-	public final fun getVision ()Lspace/kscience/visionforge/Vision;
-	public fun invalidate (Lspace/kscience/dataforge/names/Name;)V
-	public fun set (Lspace/kscience/dataforge/names/Name;Lspace/kscience/dataforge/meta/Meta;Z)V
-	public fun setValue (Lspace/kscience/dataforge/names/Name;Lspace/kscience/dataforge/meta/Value;Z)V
 }
 
 public final class space/kscience/visionforge/Colors {
@@ -219,20 +190,87 @@ public final class space/kscience/visionforge/Colors {
 	public final fun rgbToString-8NGXxBw (BBB)Ljava/lang/String;
 }
 
-public abstract interface class space/kscience/visionforge/ControlVision : space/kscience/visionforge/Vision {
+public final class space/kscience/visionforge/ControlInputEvent : space/kscience/visionforge/VisionControlEvent {
+	public static final field Companion Lspace/kscience/visionforge/ControlInputEvent$Companion;
+	public fun <init> (Lspace/kscience/dataforge/meta/Meta;)V
+	public fun getMeta ()Lspace/kscience/dataforge/meta/Meta;
+	public final fun getName ()Lspace/kscience/dataforge/names/Name;
+	public final fun getValue ()Lspace/kscience/dataforge/meta/Value;
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class space/kscience/visionforge/ControlInputEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lspace/kscience/visionforge/ControlInputEvent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/ControlInputEvent;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/ControlInputEvent;)V
+}
+
+public final class space/kscience/visionforge/ControlInputEvent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class space/kscience/visionforge/ControlSubmitEvent : space/kscience/visionforge/VisionControlEvent {
+	public static final field Companion Lspace/kscience/visionforge/ControlSubmitEvent$Companion;
+	public fun <init> (Lspace/kscience/dataforge/meta/Meta;)V
+	public fun getMeta ()Lspace/kscience/dataforge/meta/Meta;
+	public final fun getName ()Lspace/kscience/dataforge/names/Name;
+	public final fun getPayload ()Lspace/kscience/dataforge/meta/Meta;
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class space/kscience/visionforge/ControlSubmitEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lspace/kscience/visionforge/ControlSubmitEvent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/ControlSubmitEvent;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/ControlSubmitEvent;)V
+}
+
+public final class space/kscience/visionforge/ControlSubmitEvent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class space/kscience/visionforge/ControlValueChangeEvent : space/kscience/visionforge/VisionControlEvent {
+	public static final field Companion Lspace/kscience/visionforge/ControlValueChangeEvent$Companion;
+	public fun <init> (Lspace/kscience/dataforge/meta/Meta;)V
+	public fun getMeta ()Lspace/kscience/dataforge/meta/Meta;
+	public final fun getName ()Lspace/kscience/dataforge/names/Name;
+	public final fun getValue ()Lspace/kscience/dataforge/meta/Value;
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class space/kscience/visionforge/ControlValueChangeEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lspace/kscience/visionforge/ControlValueChangeEvent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/ControlValueChangeEvent;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/ControlValueChangeEvent;)V
+}
+
+public final class space/kscience/visionforge/ControlValueChangeEvent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class space/kscience/visionforge/ControlVision : space/kscience/visionforge/MutableVision {
 	public abstract fun dispatchControlEvent (Lspace/kscience/visionforge/VisionControlEvent;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun getControlEventFlow ()Lkotlinx/coroutines/flow/SharedFlow;
 	public fun receiveEvent (Lspace/kscience/visionforge/VisionEvent;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun receiveEvent$suspendImpl (Lspace/kscience/visionforge/ControlVision;Lspace/kscience/visionforge/VisionEvent;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class space/kscience/visionforge/ControlVisionKt {
-	public static final fun VisionInputEvent (Lspace/kscience/dataforge/meta/Value;Lspace/kscience/dataforge/names/Name;)Lspace/kscience/visionforge/VisionInputEvent;
-	public static synthetic fun VisionInputEvent$default (Lspace/kscience/dataforge/meta/Value;Lspace/kscience/dataforge/names/Name;ILjava/lang/Object;)Lspace/kscience/visionforge/VisionInputEvent;
-	public static final fun VisionSubmitEvent (Lspace/kscience/dataforge/meta/Meta;Lspace/kscience/dataforge/names/Name;)Lspace/kscience/visionforge/VisionSubmitEvent;
-	public static synthetic fun VisionSubmitEvent$default (Lspace/kscience/dataforge/meta/Meta;Lspace/kscience/dataforge/names/Name;ILjava/lang/Object;)Lspace/kscience/visionforge/VisionSubmitEvent;
-	public static final fun VisionValueChangeEvent (Lspace/kscience/dataforge/meta/Value;Lspace/kscience/dataforge/names/Name;)Lspace/kscience/visionforge/VisionValueChangeEvent;
-	public static synthetic fun VisionValueChangeEvent$default (Lspace/kscience/dataforge/meta/Value;Lspace/kscience/dataforge/names/Name;ILjava/lang/Object;)Lspace/kscience/visionforge/VisionValueChangeEvent;
+	public static final fun ControlInputEvent (Lspace/kscience/dataforge/meta/Value;Lspace/kscience/dataforge/names/Name;)Lspace/kscience/visionforge/ControlInputEvent;
+	public static synthetic fun ControlInputEvent$default (Lspace/kscience/dataforge/meta/Value;Lspace/kscience/dataforge/names/Name;ILjava/lang/Object;)Lspace/kscience/visionforge/ControlInputEvent;
+	public static final fun ControlSubmitEvent (Lspace/kscience/dataforge/meta/Meta;Lspace/kscience/dataforge/names/Name;)Lspace/kscience/visionforge/ControlSubmitEvent;
+	public static synthetic fun ControlSubmitEvent$default (Lspace/kscience/dataforge/meta/Meta;Lspace/kscience/dataforge/names/Name;ILjava/lang/Object;)Lspace/kscience/visionforge/ControlSubmitEvent;
+	public static final fun ControlValueChangeEvent (Lspace/kscience/dataforge/meta/Value;Lspace/kscience/dataforge/names/Name;)Lspace/kscience/visionforge/ControlValueChangeEvent;
+	public static synthetic fun ControlValueChangeEvent$default (Lspace/kscience/dataforge/meta/Value;Lspace/kscience/dataforge/names/Name;ILjava/lang/Object;)Lspace/kscience/visionforge/ControlValueChangeEvent;
 	public static final fun asyncControlEvent (Lspace/kscience/visionforge/ControlVision;Lspace/kscience/visionforge/VisionControlEvent;Lkotlinx/coroutines/CoroutineScope;)V
 	public static synthetic fun asyncControlEvent$default (Lspace/kscience/visionforge/ControlVision;Lspace/kscience/visionforge/VisionControlEvent;Lkotlinx/coroutines/CoroutineScope;ILjava/lang/Object;)V
 	public static final fun onSubmit (Lspace/kscience/visionforge/DataControl;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/Job;
@@ -241,72 +279,55 @@ public final class space/kscience/visionforge/ControlVisionKt {
 public abstract interface class space/kscience/visionforge/DataControl : space/kscience/visionforge/ControlVision {
 	public fun submit (Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun submit$default (Lspace/kscience/visionforge/DataControl;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static synthetic fun submit$suspendImpl (Lspace/kscience/visionforge/DataControl;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public final class space/kscience/visionforge/FlowPropertyKt {
-	public static final fun flowProperty (Lspace/kscience/visionforge/Vision;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lkotlinx/coroutines/flow/Flow;
-	public static final fun flowProperty (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lkotlinx/coroutines/flow/Flow;
-	public static synthetic fun flowProperty$default (Lspace/kscience/visionforge/Vision;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
-	public static synthetic fun flowProperty$default (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
-	public static final fun flowPropertyValue (Lspace/kscience/visionforge/Vision;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lkotlinx/coroutines/flow/Flow;
-	public static final fun flowPropertyValue (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lkotlinx/coroutines/flow/Flow;
-	public static synthetic fun flowPropertyValue$default (Lspace/kscience/visionforge/Vision;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
-	public static synthetic fun flowPropertyValue$default (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
-}
-
-public abstract interface class space/kscience/visionforge/MutableVisionChildren : space/kscience/visionforge/MutableVisionContainer, space/kscience/visionforge/VisionChildren {
-	public abstract fun clear ()V
-	public abstract fun getParent ()Lspace/kscience/visionforge/MutableVisionGroup;
-	public abstract fun set (Lspace/kscience/dataforge/names/NameToken;Lspace/kscience/visionforge/Vision;)V
-	public fun setChild (Lspace/kscience/dataforge/names/Name;Lspace/kscience/visionforge/Vision;)V
+public abstract interface class space/kscience/visionforge/MutableVision : space/kscience/visionforge/Vision {
+	public abstract fun getProperties ()Lspace/kscience/dataforge/meta/MutableMeta;
+	public fun mutableProperty (Lspace/kscience/dataforge/names/Name;ZZ)Lspace/kscience/dataforge/meta/MutableMeta;
+	public static synthetic fun mutableProperty$default (Lspace/kscience/visionforge/MutableVision;Lspace/kscience/dataforge/names/Name;ZZILjava/lang/Object;)Lspace/kscience/dataforge/meta/MutableMeta;
+	public fun receiveEvent (Lspace/kscience/visionforge/VisionEvent;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public abstract interface class space/kscience/visionforge/MutableVisionContainer {
-	public abstract fun setChild (Lspace/kscience/dataforge/names/Name;Lspace/kscience/visionforge/Vision;)V
+	public static final field Companion Lspace/kscience/visionforge/MutableVisionContainer$Companion;
+	public abstract fun setVision (Lspace/kscience/dataforge/names/NameToken;Lspace/kscience/visionforge/Vision;)V
 }
 
-public abstract interface class space/kscience/visionforge/MutableVisionGroup : space/kscience/visionforge/VisionGroup {
-	public abstract fun createGroup ()Lspace/kscience/visionforge/MutableVisionGroup;
-	public abstract fun getChildren ()Lspace/kscience/visionforge/MutableVisionChildren;
-	public fun update (Lspace/kscience/visionforge/VisionChange;)V
+public final class space/kscience/visionforge/MutableVisionContainer$Companion {
+	public final fun generateID ()Lspace/kscience/dataforge/names/NameToken;
 }
 
-public abstract interface class space/kscience/visionforge/MutableVisionProperties : space/kscience/dataforge/meta/MutableMetaProvider, space/kscience/visionforge/VisionProperties {
-	public synthetic fun get (Lspace/kscience/dataforge/names/Name;)Lspace/kscience/dataforge/meta/Meta;
-	public fun get (Lspace/kscience/dataforge/names/Name;)Lspace/kscience/dataforge/meta/MutableMeta;
-	public synthetic fun get (Lspace/kscience/dataforge/names/Name;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lspace/kscience/dataforge/meta/Meta;
-	public fun get (Lspace/kscience/dataforge/names/Name;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lspace/kscience/dataforge/meta/MutableMeta;
-	public fun set (Lspace/kscience/dataforge/names/Name;Lspace/kscience/dataforge/meta/Meta;)V
-	public abstract fun set (Lspace/kscience/dataforge/names/Name;Lspace/kscience/dataforge/meta/Meta;Z)V
-	public fun setValue (Lspace/kscience/dataforge/names/Name;Lspace/kscience/dataforge/meta/Value;)V
-	public abstract fun setValue (Lspace/kscience/dataforge/names/Name;Lspace/kscience/dataforge/meta/Value;Z)V
+public abstract interface class space/kscience/visionforge/MutableVisionGroup : space/kscience/visionforge/MutableVision, space/kscience/visionforge/MutableVisionContainer, space/kscience/visionforge/VisionGroup {
+	public abstract fun convertVisionOrNull (Lspace/kscience/visionforge/Vision;)Lspace/kscience/visionforge/Vision;
+	public fun receiveEvent (Lspace/kscience/visionforge/VisionEvent;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class space/kscience/visionforge/NullVision : space/kscience/visionforge/Vision {
 	public static final field INSTANCE Lspace/kscience/visionforge/NullVision;
 	public fun getDescriptor ()Lspace/kscience/dataforge/meta/descriptors/MetaDescriptor;
+	public fun getEventFlow ()Lkotlinx/coroutines/flow/Flow;
 	public fun getParent ()Lspace/kscience/visionforge/Vision;
-	public fun getProperties ()Lspace/kscience/visionforge/MutableVisionProperties;
+	public fun getProperties ()Ljava/lang/Void;
+	public synthetic fun getProperties ()Lspace/kscience/dataforge/meta/Meta;
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 	public fun setParent (Lspace/kscience/visionforge/Vision;)V
 }
 
-public final class space/kscience/visionforge/RootVision : space/kscience/visionforge/AbstractVisionGroup {
-	public fun <init> (Lspace/kscience/visionforge/VisionManager;)V
-	public synthetic fun createGroup ()Lspace/kscience/visionforge/AbstractVisionGroup;
-	public synthetic fun createGroup ()Lspace/kscience/visionforge/MutableVisionGroup;
-	public fun createGroup ()Lspace/kscience/visionforge/SimpleVisionGroup;
-	public fun getManager ()Lspace/kscience/visionforge/VisionManager;
+public final class space/kscience/visionforge/ObservableMutableMetaSerializer : kotlinx/serialization/KSerializer {
+	public static final field INSTANCE Lspace/kscience/visionforge/ObservableMutableMetaSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/dataforge/meta/ObservableMutableMeta;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/dataforge/meta/ObservableMutableMeta;)V
 }
 
-public final class space/kscience/visionforge/SimpleVisionGroup : space/kscience/visionforge/AbstractVisionGroup, space/kscience/visionforge/MutableVisionContainer {
+public final class space/kscience/visionforge/SimpleVisionGroup : space/kscience/visionforge/AbstractVision, space/kscience/visionforge/MutableVisionGroup {
 	public static final field Companion Lspace/kscience/visionforge/SimpleVisionGroup$Companion;
 	public fun <init> ()V
-	public synthetic fun createGroup ()Lspace/kscience/visionforge/AbstractVisionGroup;
-	public synthetic fun createGroup ()Lspace/kscience/visionforge/MutableVisionGroup;
-	public fun createGroup ()Lspace/kscience/visionforge/SimpleVisionGroup;
-	public fun setChild (Lspace/kscience/dataforge/names/Name;Lspace/kscience/visionforge/Vision;)V
+	public fun convertVisionOrNull (Lspace/kscience/visionforge/Vision;)Lspace/kscience/visionforge/Vision;
+	public fun getVisions ()Ljava/util/Map;
+	public fun setVision (Lspace/kscience/dataforge/names/NameToken;Lspace/kscience/visionforge/Vision;)V
 }
 
 public synthetic class space/kscience/visionforge/SimpleVisionGroup$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -317,11 +338,13 @@ public synthetic class space/kscience/visionforge/SimpleVisionGroup$$serializer 
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/SimpleVisionGroup;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class space/kscience/visionforge/SimpleVisionGroup$Companion {
+	public final fun getDescriptor ()Lspace/kscience/dataforge/meta/descriptors/MetaDescriptor;
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public final fun updateProperties (Lspace/kscience/visionforge/MutableVision;Lspace/kscience/dataforge/meta/Meta;Lspace/kscience/dataforge/names/Name;)V
+	public static synthetic fun updateProperties$default (Lspace/kscience/visionforge/SimpleVisionGroup$Companion;Lspace/kscience/visionforge/MutableVision;Lspace/kscience/dataforge/meta/Meta;Lspace/kscience/dataforge/names/Name;ILjava/lang/Object;)V
 }
 
 public final class space/kscience/visionforge/StyleReference {
@@ -331,81 +354,61 @@ public final class space/kscience/visionforge/StyleReference {
 }
 
 public final class space/kscience/visionforge/StyleReferenceKt {
-	public static final fun style (Lspace/kscience/visionforge/Vision;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
-	public static final fun style (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/meta/SchemeSpec;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
-	public static synthetic fun style$default (Lspace/kscience/visionforge/Vision;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
-	public static synthetic fun style$default (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/meta/SchemeSpec;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
-	public static final fun useStyle (Lspace/kscience/visionforge/Vision;Lspace/kscience/visionforge/StyleReference;Z)V
-	public static synthetic fun useStyle$default (Lspace/kscience/visionforge/Vision;Lspace/kscience/visionforge/StyleReference;ZILjava/lang/Object;)V
-}
-
-public final class space/kscience/visionforge/StyleSheet {
-	public static final field Companion Lspace/kscience/visionforge/StyleSheet$Companion;
-	public static final synthetic fun box-impl (Lspace/kscience/visionforge/Vision;)Lspace/kscience/visionforge/StyleSheet;
-	public static fun constructor-impl (Lspace/kscience/visionforge/Vision;)Lspace/kscience/visionforge/Vision;
-	public static final fun define-impl (Lspace/kscience/visionforge/Vision;Ljava/lang/String;Lspace/kscience/dataforge/meta/Meta;)V
-	public fun equals (Ljava/lang/Object;)Z
-	public static fun equals-impl (Lspace/kscience/visionforge/Vision;Ljava/lang/Object;)Z
-	public static final fun equals-impl0 (Lspace/kscience/visionforge/Vision;Lspace/kscience/visionforge/Vision;)Z
-	public static final fun get-impl (Lspace/kscience/visionforge/Vision;Ljava/lang/String;)Lspace/kscience/dataforge/meta/Meta;
-	public static final fun getItems-impl (Lspace/kscience/visionforge/Vision;)Ljava/util/Map;
-	public fun hashCode ()I
-	public static fun hashCode-impl (Lspace/kscience/visionforge/Vision;)I
-	public static final fun invoke-impl (Lspace/kscience/visionforge/Vision;Lkotlin/jvm/functions/Function1;)V
-	public static final fun set-impl (Lspace/kscience/visionforge/Vision;Ljava/lang/String;Lspace/kscience/dataforge/meta/Meta;)V
-	public fun toString ()Ljava/lang/String;
-	public static fun toString-impl (Lspace/kscience/visionforge/Vision;)Ljava/lang/String;
-	public final synthetic fun unbox-impl ()Lspace/kscience/visionforge/Vision;
-	public static final fun update-impl (Lspace/kscience/visionforge/Vision;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
-}
-
-public final class space/kscience/visionforge/StyleSheet$Companion {
-	public final fun getSTYLESHEET_KEY ()Lspace/kscience/dataforge/names/Name;
-}
-
-public final class space/kscience/visionforge/StyleSheetKt {
-	public static final fun getStyle (Lspace/kscience/visionforge/Vision;Ljava/lang/String;)Lspace/kscience/dataforge/meta/Meta;
-	public static final fun getStyleNodes (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;)Ljava/util/List;
-	public static final fun getStyleProperty (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;)Lspace/kscience/dataforge/meta/Meta;
-	public static final fun getStyleSheet (Lspace/kscience/visionforge/Vision;)Lspace/kscience/visionforge/Vision;
-	public static final fun getStyles (Lspace/kscience/visionforge/Vision;)Ljava/util/List;
-	public static final fun setStyles (Lspace/kscience/visionforge/Vision;Ljava/util/List;)V
-	public static final fun useStyle (Lspace/kscience/visionforge/Vision;Ljava/lang/String;Z)V
-	public static synthetic fun useStyle$default (Lspace/kscience/visionforge/Vision;Ljava/lang/String;ZILjava/lang/Object;)V
+	public static final fun style (Lspace/kscience/visionforge/MutableVision;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
+	public static final fun style (Lspace/kscience/visionforge/MutableVision;Lspace/kscience/dataforge/meta/SchemeSpec;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
+	public static synthetic fun style$default (Lspace/kscience/visionforge/MutableVision;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
+	public static synthetic fun style$default (Lspace/kscience/visionforge/MutableVision;Lspace/kscience/dataforge/meta/SchemeSpec;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
+	public static final fun useStyle (Lspace/kscience/visionforge/MutableVision;Lspace/kscience/visionforge/StyleReference;)V
 }
 
 public final class space/kscience/visionforge/UsePropertyKt {
+	public static final fun flowProperty (Lspace/kscience/visionforge/Vision;Ljava/lang/String;ZZ)Lkotlinx/coroutines/flow/Flow;
+	public static final fun flowProperty (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;ZZ)Lkotlinx/coroutines/flow/Flow;
+	public static synthetic fun flowProperty$default (Lspace/kscience/visionforge/Vision;Ljava/lang/String;ZZILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
+	public static synthetic fun flowProperty$default (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;ZZILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
+	public static final fun flowPropertyValue (Lspace/kscience/visionforge/Vision;Ljava/lang/String;ZZ)Lkotlinx/coroutines/flow/Flow;
+	public static final fun flowPropertyValue (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;ZZ)Lkotlinx/coroutines/flow/Flow;
+	public static synthetic fun flowPropertyValue$default (Lspace/kscience/visionforge/Vision;Ljava/lang/String;ZZILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
+	public static synthetic fun flowPropertyValue$default (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;ZZILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
+	public static final fun inheritedEventFlow (Lspace/kscience/visionforge/Vision;)Lkotlinx/coroutines/flow/Flow;
 	public static final fun onPropertyChange (Lspace/kscience/visionforge/Vision;Lkotlin/reflect/KProperty1;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function3;)Lkotlinx/coroutines/Job;
-	public static final fun onPropertyChange (Lspace/kscience/visionforge/Vision;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/Job;
+	public static final fun onPropertyChange (Lspace/kscience/visionforge/Vision;Lkotlinx/coroutines/CoroutineScope;ZLkotlin/jvm/functions/Function3;)Lkotlinx/coroutines/Job;
 	public static synthetic fun onPropertyChange$default (Lspace/kscience/visionforge/Vision;Lkotlin/reflect/KProperty1;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function3;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
-	public static synthetic fun onPropertyChange$default (Lspace/kscience/visionforge/Vision;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
-	public static final fun useProperty (Lspace/kscience/visionforge/Vision;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function1;)Lkotlinx/coroutines/Job;
-	public static final fun useProperty (Lspace/kscience/visionforge/Vision;Lkotlin/reflect/KProperty1;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/Job;
-	public static final fun useProperty (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function1;)Lkotlinx/coroutines/Job;
-	public static synthetic fun useProperty$default (Lspace/kscience/visionforge/Vision;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
-	public static synthetic fun useProperty$default (Lspace/kscience/visionforge/Vision;Lkotlin/reflect/KProperty1;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
-	public static synthetic fun useProperty$default (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;Ljava/lang/Boolean;Ljava/lang/Boolean;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
+	public static synthetic fun onPropertyChange$default (Lspace/kscience/visionforge/Vision;Lkotlinx/coroutines/CoroutineScope;ZLkotlin/jvm/functions/Function3;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
+	public static final fun useProperty (Lspace/kscience/visionforge/Vision;Ljava/lang/String;ZZLkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/Job;
+	public static final fun useProperty (Lspace/kscience/visionforge/Vision;Lkotlin/reflect/KProperty1;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function3;)Lkotlinx/coroutines/Job;
+	public static final fun useProperty (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;ZZLkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/Job;
+	public static synthetic fun useProperty$default (Lspace/kscience/visionforge/Vision;Ljava/lang/String;ZZLkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
+	public static synthetic fun useProperty$default (Lspace/kscience/visionforge/Vision;Lkotlin/reflect/KProperty1;Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function3;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
+	public static synthetic fun useProperty$default (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;ZZLkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
 }
 
-public abstract interface class space/kscience/visionforge/Vision : space/kscience/dataforge/meta/descriptors/Described {
+public abstract interface class space/kscience/visionforge/Vision : space/kscience/dataforge/meta/descriptors/Described, space/kscience/dataforge/provider/Provider {
 	public static final field Companion Lspace/kscience/visionforge/Vision$Companion;
 	public static final field STYLE_TARGET Ljava/lang/String;
 	public static final field TYPE Ljava/lang/String;
+	public static final field VISION_PROPERTY_TARGET Ljava/lang/String;
+	public fun content (Ljava/lang/String;)Ljava/util/Map;
+	public fun getDefaultTarget ()Ljava/lang/String;
 	public abstract fun getDescriptor ()Lspace/kscience/dataforge/meta/descriptors/MetaDescriptor;
+	public abstract fun getEventFlow ()Lkotlinx/coroutines/flow/Flow;
 	public fun getManager ()Lspace/kscience/visionforge/VisionManager;
 	public abstract fun getParent ()Lspace/kscience/visionforge/Vision;
-	public abstract fun getProperties ()Lspace/kscience/visionforge/MutableVisionProperties;
+	public abstract fun getProperties ()Lspace/kscience/dataforge/meta/Meta;
+	public fun readProperty (Lspace/kscience/dataforge/names/Name;ZZ)Lspace/kscience/dataforge/meta/Meta;
+	public static synthetic fun readProperty$default (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;ZZILjava/lang/Object;)Lspace/kscience/dataforge/meta/Meta;
 	public fun receiveEvent (Lspace/kscience/visionforge/VisionEvent;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun receiveEvent$suspendImpl (Lspace/kscience/visionforge/Vision;Lspace/kscience/visionforge/VisionEvent;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun setParent (Lspace/kscience/visionforge/Vision;)V
-	public fun update (Lspace/kscience/visionforge/VisionChange;)V
 }
 
 public final class space/kscience/visionforge/Vision$Companion {
 	public static final field STYLE_TARGET Ljava/lang/String;
 	public static final field TYPE Ljava/lang/String;
+	public static final field VISION_PROPERTY_TARGET Ljava/lang/String;
+	public final fun getSTYLESHEET_KEY ()Lspace/kscience/dataforge/names/Name;
 	public final fun getSTYLE_KEY ()Lspace/kscience/dataforge/names/Name;
 	public final fun getVISIBLE_KEY ()Lspace/kscience/dataforge/names/Name;
+	public final fun randomId ()Ljava/lang/String;
 }
 
 public abstract interface annotation class space/kscience/visionforge/VisionBuilder : java/lang/annotation/Annotation {
@@ -437,43 +440,34 @@ public synthetic class space/kscience/visionforge/VisionChange$$serializer : kot
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionChange;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class space/kscience/visionforge/VisionChange$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class space/kscience/visionforge/VisionChangeBuilder : space/kscience/visionforge/MutableVisionContainer {
+public final class space/kscience/visionforge/VisionChangeCollector : space/kscience/visionforge/MutableVisionContainer {
 	public fun <init> ()V
-	public final fun deepCopy (Lspace/kscience/visionforge/VisionManager;)Lspace/kscience/visionforge/VisionChange;
-	public final fun get (Lspace/kscience/dataforge/names/Name;)Lspace/kscience/visionforge/VisionChangeBuilder;
+	public final fun collect (Lspace/kscience/visionforge/VisionManager;)Lspace/kscience/visionforge/VisionChange;
+	public final fun consumeEvent (Lspace/kscience/visionforge/VisionEvent;)V
+	public final fun get (Lspace/kscience/dataforge/names/NameToken;)Lspace/kscience/visionforge/VisionChangeCollector;
+	public final fun getOrCreateChange (Lspace/kscience/dataforge/names/NameToken;)Lspace/kscience/visionforge/VisionChangeCollector;
 	public final fun isEmpty ()Z
-	public final fun propertyChanged (Lspace/kscience/dataforge/names/Name;Lspace/kscience/dataforge/names/Name;Lspace/kscience/dataforge/meta/Meta;)V
-	public fun setChild (Lspace/kscience/dataforge/names/Name;Lspace/kscience/visionforge/Vision;)V
-	public final fun toJsonString (Lspace/kscience/visionforge/VisionManager;)Ljava/lang/String;
+	public final fun propertyChanged (Lspace/kscience/dataforge/names/Name;Lspace/kscience/dataforge/meta/Meta;)V
+	public fun setVision (Lspace/kscience/dataforge/names/NameToken;Lspace/kscience/visionforge/Vision;)V
+	public final fun updateProperties (Lspace/kscience/dataforge/meta/Meta;)V
 }
 
 public final class space/kscience/visionforge/VisionChangeKt {
 	public static final fun VisionChange (Lspace/kscience/visionforge/VisionManager;Lkotlin/jvm/functions/Function1;)Lspace/kscience/visionforge/VisionChange;
 	public static final fun flowChanges-8Mi8wO0 (Lspace/kscience/visionforge/Vision;JZ)Lkotlinx/coroutines/flow/Flow;
 	public static synthetic fun flowChanges-8Mi8wO0$default (Lspace/kscience/visionforge/Vision;JZILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
+	public static final fun get (Lspace/kscience/visionforge/VisionChangeCollector;Lspace/kscience/dataforge/names/Name;)Lspace/kscience/visionforge/VisionChangeCollector;
+	public static final fun getOrCreateChange (Lspace/kscience/visionforge/VisionChangeCollector;Lspace/kscience/dataforge/names/Name;)Lspace/kscience/visionforge/VisionChangeCollector;
+	public static final fun isEmpty (Lspace/kscience/visionforge/VisionChange;)Z
 }
 
-public abstract interface class space/kscience/visionforge/VisionChildren : space/kscience/visionforge/VisionContainer {
-	public static final field Companion Lspace/kscience/visionforge/VisionChildren$Companion;
-	public static final field STATIC_TOKEN_BODY Ljava/lang/String;
-	public abstract fun get (Lspace/kscience/dataforge/names/NameToken;)Lspace/kscience/visionforge/Vision;
-	public abstract fun getChanges ()Lkotlinx/coroutines/flow/Flow;
-	public fun getChild (Lspace/kscience/dataforge/names/Name;)Lspace/kscience/visionforge/Vision;
-	public abstract fun getKeys ()Ljava/util/Set;
-	public abstract fun getParent ()Lspace/kscience/visionforge/Vision;
-	public fun getValues ()Ljava/lang/Iterable;
-}
-
-public final class space/kscience/visionforge/VisionChildren$Companion {
-	public static final field STATIC_TOKEN_BODY Ljava/lang/String;
-	public final fun empty (Lspace/kscience/visionforge/Vision;)Lspace/kscience/visionforge/VisionChildren;
+public abstract interface class space/kscience/visionforge/VisionChangedEvent : space/kscience/visionforge/VisionEvent {
 }
 
 public abstract interface class space/kscience/visionforge/VisionClient : space/kscience/dataforge/context/Plugin {
@@ -491,21 +485,11 @@ public final class space/kscience/visionforge/VisionClientKt {
 }
 
 public abstract interface class space/kscience/visionforge/VisionContainer {
-	public abstract fun getChild (Lspace/kscience/dataforge/names/Name;)Lspace/kscience/visionforge/Vision;
+	public abstract fun getVision (Lspace/kscience/dataforge/names/NameToken;)Lspace/kscience/visionforge/Vision;
 }
 
 public final class space/kscience/visionforge/VisionContainerKt {
-	public static final fun asSequence (Lspace/kscience/visionforge/VisionChildren;)Lkotlin/sequences/Sequence;
-	public static final fun forEach (Lspace/kscience/visionforge/VisionChildren;Lkotlin/jvm/functions/Function2;)V
-	public static final fun get (Lspace/kscience/visionforge/VisionChildren;Ljava/lang/String;)Lspace/kscience/visionforge/Vision;
-	public static final fun get (Lspace/kscience/visionforge/VisionChildren;Lspace/kscience/dataforge/names/Name;)Lspace/kscience/visionforge/Vision;
-	public static final fun getChild (Lspace/kscience/visionforge/VisionContainer;Ljava/lang/String;)Lspace/kscience/visionforge/Vision;
-	public static final fun isEmpty (Lspace/kscience/visionforge/VisionChildren;)Z
-	public static final fun iterator (Lspace/kscience/visionforge/VisionChildren;)Ljava/util/Iterator;
-	public static final fun set (Lspace/kscience/visionforge/MutableVisionChildren;Ljava/lang/String;Lspace/kscience/visionforge/Vision;)V
-	public static final fun set (Lspace/kscience/visionforge/MutableVisionChildren;Lspace/kscience/dataforge/names/Name;Lspace/kscience/visionforge/Vision;)V
-	public static final fun setChild (Lspace/kscience/visionforge/MutableVisionContainer;Ljava/lang/String;Lspace/kscience/visionforge/Vision;)V
-	public static final fun static (Lspace/kscience/visionforge/MutableVisionChildren;Lspace/kscience/visionforge/Vision;)V
+	public static final fun getVision (Lspace/kscience/visionforge/VisionContainer;Ljava/lang/String;)Lspace/kscience/visionforge/Vision;
 }
 
 public abstract class space/kscience/visionforge/VisionControlEvent : space/kscience/dataforge/meta/MetaRepr, space/kscience/visionforge/VisionEvent {
@@ -537,52 +521,126 @@ public abstract interface class space/kscience/visionforge/VisionEvent {
 }
 
 public final class space/kscience/visionforge/VisionEvent$Companion {
-	public final fun getCLICK_EVENT_KEY ()Lspace/kscience/dataforge/names/Name;
-}
-
-public abstract interface class space/kscience/visionforge/VisionGroup : space/kscience/visionforge/Vision {
-	public abstract fun getChildren ()Lspace/kscience/visionforge/VisionChildren;
-	public fun update (Lspace/kscience/visionforge/VisionChange;)V
-}
-
-public final class space/kscience/visionforge/VisionGroupKt {
-	public static final fun getChildren (Lspace/kscience/visionforge/Vision;)Lspace/kscience/visionforge/VisionChildren;
-	public static final fun group (Lspace/kscience/visionforge/MutableVisionContainer;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lspace/kscience/visionforge/SimpleVisionGroup;
-	public static final fun group (Lspace/kscience/visionforge/MutableVisionContainer;Lspace/kscience/dataforge/names/Name;Lkotlin/jvm/functions/Function1;)Lspace/kscience/visionforge/SimpleVisionGroup;
-	public static synthetic fun group$default (Lspace/kscience/visionforge/MutableVisionContainer;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/visionforge/SimpleVisionGroup;
-	public static synthetic fun group$default (Lspace/kscience/visionforge/MutableVisionContainer;Lspace/kscience/dataforge/names/Name;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/visionforge/SimpleVisionGroup;
-}
-
-public final class space/kscience/visionforge/VisionInputEvent : space/kscience/visionforge/VisionControlEvent {
-	public static final field Companion Lspace/kscience/visionforge/VisionInputEvent$Companion;
-	public fun <init> (Lspace/kscience/dataforge/meta/Meta;)V
-	public fun getMeta ()Lspace/kscience/dataforge/meta/Meta;
-	public final fun getName ()Lspace/kscience/dataforge/names/Name;
-	public final fun getValue ()Lspace/kscience/dataforge/meta/Value;
-	public fun toString ()Ljava/lang/String;
-}
-
-public synthetic class space/kscience/visionforge/VisionInputEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field INSTANCE Lspace/kscience/visionforge/VisionInputEvent$$serializer;
-	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
-	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionInputEvent;
-	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionInputEvent;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
-}
-
-public final class space/kscience/visionforge/VisionInputEvent$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class space/kscience/visionforge/VisionKt {
-	public static final fun getVisible (Lspace/kscience/visionforge/Vision;)Ljava/lang/Boolean;
-	public static final fun setVisible (Lspace/kscience/visionforge/Vision;Ljava/lang/Boolean;)V
+public final class space/kscience/visionforge/VisionEventForChild : space/kscience/visionforge/VisionEvent {
+	public static final field Companion Lspace/kscience/visionforge/VisionEventForChild$Companion;
+	public fun <init> (Lspace/kscience/dataforge/names/Name;Lspace/kscience/visionforge/VisionEvent;)V
+	public final fun getChildName ()Lspace/kscience/dataforge/names/Name;
+	public final fun getEvent ()Lspace/kscience/visionforge/VisionEvent;
 }
 
-public final class space/kscience/visionforge/VisionManager : space/kscience/dataforge/context/AbstractPlugin, space/kscience/visionforge/MutableVisionContainer {
+public synthetic class space/kscience/visionforge/VisionEventForChild$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lspace/kscience/visionforge/VisionEventForChild$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionEventForChild;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionEventForChild;)V
+}
+
+public final class space/kscience/visionforge/VisionEventForChild$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class space/kscience/visionforge/VisionEventPack : space/kscience/visionforge/VisionEvent {
+	public static final field Companion Lspace/kscience/visionforge/VisionEventPack$Companion;
+	public fun <init> (Ljava/util/List;)V
+	public final fun getEvents ()Ljava/util/List;
+}
+
+public synthetic class space/kscience/visionforge/VisionEventPack$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lspace/kscience/visionforge/VisionEventPack$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionEventPack;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionEventPack;)V
+}
+
+public final class space/kscience/visionforge/VisionEventPack$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class space/kscience/visionforge/VisionGroup : space/kscience/visionforge/Vision, space/kscience/visionforge/VisionContainer {
+	public static final field Companion Lspace/kscience/visionforge/VisionGroup$Companion;
+	public static final field VISION_CHILD_TARGET Ljava/lang/String;
+	public fun content (Ljava/lang/String;)Ljava/util/Map;
+	public fun getDefaultChainTarget ()Ljava/lang/String;
+	public fun getDefaultTarget ()Ljava/lang/String;
+	public fun getVision (Lspace/kscience/dataforge/names/NameToken;)Lspace/kscience/visionforge/Vision;
+	public abstract fun getVisions ()Ljava/util/Map;
+}
+
+public final class space/kscience/visionforge/VisionGroup$Companion {
+	public static final field VISION_CHILD_TARGET Ljava/lang/String;
+}
+
+public final class space/kscience/visionforge/VisionGroupCompositionChangedEvent : space/kscience/visionforge/VisionChangedEvent {
+	public static final field Companion Lspace/kscience/visionforge/VisionGroupCompositionChangedEvent$Companion;
+	public fun <init> (Lspace/kscience/dataforge/names/NameToken;Lspace/kscience/visionforge/Vision;)V
+	public final fun component1 ()Lspace/kscience/dataforge/names/NameToken;
+	public final fun component2 ()Lspace/kscience/visionforge/Vision;
+	public final fun copy (Lspace/kscience/dataforge/names/NameToken;Lspace/kscience/visionforge/Vision;)Lspace/kscience/visionforge/VisionGroupCompositionChangedEvent;
+	public static synthetic fun copy$default (Lspace/kscience/visionforge/VisionGroupCompositionChangedEvent;Lspace/kscience/dataforge/names/NameToken;Lspace/kscience/visionforge/Vision;ILjava/lang/Object;)Lspace/kscience/visionforge/VisionGroupCompositionChangedEvent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChildName ()Lspace/kscience/dataforge/names/NameToken;
+	public final fun getChildVision ()Lspace/kscience/visionforge/Vision;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class space/kscience/visionforge/VisionGroupCompositionChangedEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lspace/kscience/visionforge/VisionGroupCompositionChangedEvent$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionGroupCompositionChangedEvent;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionGroupCompositionChangedEvent;)V
+}
+
+public final class space/kscience/visionforge/VisionGroupCompositionChangedEvent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class space/kscience/visionforge/VisionGroupKt {
+	public static final fun MutableVisionGroup (Lspace/kscience/visionforge/Vision;Lkotlin/jvm/functions/Function1;)Lspace/kscience/visionforge/MutableVisionGroup;
+	public static synthetic fun MutableVisionGroup$default (Lspace/kscience/visionforge/Vision;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/visionforge/MutableVisionGroup;
+	public static final fun VisionGroup (Lspace/kscience/visionforge/Vision;Lkotlin/jvm/functions/Function1;)Lspace/kscience/visionforge/VisionGroup;
+	public static synthetic fun VisionGroup$default (Lspace/kscience/visionforge/Vision;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/visionforge/VisionGroup;
+	public static final fun group (Lspace/kscience/visionforge/MutableVisionContainer;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lspace/kscience/visionforge/SimpleVisionGroup;
+	public static final fun group (Lspace/kscience/visionforge/MutableVisionContainer;Lspace/kscience/dataforge/names/NameToken;Lkotlin/jvm/functions/Function1;)Lspace/kscience/visionforge/SimpleVisionGroup;
+	public static synthetic fun group$default (Lspace/kscience/visionforge/MutableVisionContainer;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/visionforge/SimpleVisionGroup;
+	public static synthetic fun group$default (Lspace/kscience/visionforge/MutableVisionContainer;Lspace/kscience/dataforge/names/NameToken;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/visionforge/SimpleVisionGroup;
+}
+
+public final class space/kscience/visionforge/VisionKt {
+	public static final fun getStyle (Lspace/kscience/visionforge/Vision;Ljava/lang/String;)Lspace/kscience/dataforge/meta/Meta;
+	public static final fun getStyleNodes (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;)Ljava/util/List;
+	public static final fun getStyleProperty (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/names/Name;)Lspace/kscience/dataforge/meta/Meta;
+	public static final fun getStyleSheet (Lspace/kscience/visionforge/Vision;)Lspace/kscience/dataforge/meta/Meta;
+	public static final fun getStyles (Lspace/kscience/visionforge/MutableVision;)Ljava/util/List;
+	public static final fun getStyles (Lspace/kscience/visionforge/Vision;)Ljava/util/List;
+	public static final fun getVisible (Lspace/kscience/visionforge/MutableVision;)Ljava/lang/Boolean;
+	public static final fun properties (Lspace/kscience/visionforge/MutableVision;Lkotlin/jvm/functions/Function1;)V
+	public static final fun readProperties (Lspace/kscience/visionforge/Vision;ZZ)Lspace/kscience/dataforge/meta/Meta;
+	public static synthetic fun readProperties$default (Lspace/kscience/visionforge/Vision;ZZILjava/lang/Object;)Lspace/kscience/dataforge/meta/Meta;
+	public static final fun readProperty (Lspace/kscience/visionforge/Vision;Ljava/lang/String;ZZ)Lspace/kscience/dataforge/meta/Meta;
+	public static synthetic fun readProperty$default (Lspace/kscience/visionforge/Vision;Ljava/lang/String;ZZILjava/lang/Object;)Lspace/kscience/dataforge/meta/Meta;
+	public static final fun setStyle (Lspace/kscience/visionforge/MutableVision;Ljava/lang/String;Lspace/kscience/dataforge/meta/Meta;)V
+	public static final fun setStyles (Lspace/kscience/visionforge/MutableVision;Ljava/util/List;)V
+	public static final fun setVisible (Lspace/kscience/visionforge/MutableVision;Ljava/lang/Boolean;)V
+	public static final fun updateStyle (Lspace/kscience/visionforge/MutableVision;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public static final fun useStyle (Lspace/kscience/visionforge/MutableVision;Ljava/lang/String;)V
+	public static final fun writeProperties (Lspace/kscience/visionforge/MutableVision;ZZ)Lspace/kscience/dataforge/meta/MutableMeta;
+	public static synthetic fun writeProperties$default (Lspace/kscience/visionforge/MutableVision;ZZILjava/lang/Object;)Lspace/kscience/dataforge/meta/MutableMeta;
+}
+
+public final class space/kscience/visionforge/VisionManager : space/kscience/dataforge/context/AbstractPlugin, space/kscience/visionforge/Vision {
 	public static final field Companion Lspace/kscience/visionforge/VisionManager$Companion;
 	public static final field VISION_SERIALIZER_MODULE_TARGET Ljava/lang/String;
 	public fun <init> (Lspace/kscience/dataforge/meta/Meta;)V
@@ -594,11 +652,15 @@ public final class space/kscience/visionforge/VisionManager : space/kscience/dat
 	public final fun encodeToMeta (Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/meta/descriptors/MetaDescriptor;)Lspace/kscience/dataforge/meta/Meta;
 	public static synthetic fun encodeToMeta$default (Lspace/kscience/visionforge/VisionManager;Lspace/kscience/visionforge/Vision;Lspace/kscience/dataforge/meta/descriptors/MetaDescriptor;ILjava/lang/Object;)Lspace/kscience/dataforge/meta/Meta;
 	public final fun encodeToString (Lspace/kscience/visionforge/Vision;)Ljava/lang/String;
-	public final fun encodeToString (Lspace/kscience/visionforge/VisionChange;)Ljava/lang/String;
+	public fun getDescriptor ()Lspace/kscience/dataforge/meta/descriptors/MetaDescriptor;
+	public fun getEventFlow ()Lkotlinx/coroutines/flow/Flow;
 	public final fun getJsonFormat ()Lkotlinx/serialization/json/Json;
+	public fun getManager ()Lspace/kscience/visionforge/VisionManager;
+	public fun getParent ()Lspace/kscience/visionforge/Vision;
+	public fun getProperties ()Lspace/kscience/dataforge/meta/Meta;
 	public final fun getSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
 	public fun getTag ()Lspace/kscience/dataforge/context/PluginTag;
-	public fun setChild (Lspace/kscience/dataforge/names/Name;Lspace/kscience/visionforge/Vision;)V
+	public fun setParent (Lspace/kscience/visionforge/Vision;)V
 }
 
 public final class space/kscience/visionforge/VisionManager$Companion : space/kscience/dataforge/context/PluginFactory {
@@ -630,7 +692,6 @@ public synthetic class space/kscience/visionforge/VisionMetaEvent$$serializer : 
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionMetaEvent;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class space/kscience/visionforge/VisionMetaEvent$Companion {
@@ -646,79 +707,31 @@ public abstract class space/kscience/visionforge/VisionPlugin : space/kscience/d
 	protected abstract fun getVisionSerializersModule ()Lkotlinx/serialization/modules/SerializersModule;
 }
 
-public abstract interface class space/kscience/visionforge/VisionProperties : space/kscience/dataforge/meta/MetaProvider {
-	public fun flowChanges ()Lkotlinx/coroutines/flow/Flow;
-	public fun get (Lspace/kscience/dataforge/names/Name;)Lspace/kscience/dataforge/meta/Meta;
-	public abstract fun get (Lspace/kscience/dataforge/names/Name;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lspace/kscience/dataforge/meta/Meta;
-	public static synthetic fun get$default (Lspace/kscience/visionforge/VisionProperties;Lspace/kscience/dataforge/names/Name;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lspace/kscience/dataforge/meta/Meta;
-	public abstract fun getChanges ()Lkotlinx/coroutines/flow/Flow;
-	public abstract fun getDescriptor ()Lspace/kscience/dataforge/meta/descriptors/MetaDescriptor;
-	public abstract fun getOwn ()Lspace/kscience/dataforge/meta/Meta;
-	public fun getValue (Lspace/kscience/dataforge/names/Name;)Lspace/kscience/dataforge/meta/Value;
-	public abstract fun getValue (Lspace/kscience/dataforge/names/Name;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lspace/kscience/dataforge/meta/Value;
-	public static synthetic fun getValue$default (Lspace/kscience/visionforge/VisionProperties;Lspace/kscience/dataforge/names/Name;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lspace/kscience/dataforge/meta/Value;
-	public abstract fun invalidate (Lspace/kscience/dataforge/names/Name;)V
-}
-
-public final class space/kscience/visionforge/VisionPropertiesKt {
-	public static final fun get (Lspace/kscience/visionforge/MutableVisionProperties;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lspace/kscience/dataforge/meta/MutableMeta;
-	public static final fun get (Lspace/kscience/visionforge/VisionProperties;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lspace/kscience/dataforge/meta/Meta;
-	public static synthetic fun get$default (Lspace/kscience/visionforge/MutableVisionProperties;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lspace/kscience/dataforge/meta/MutableMeta;
-	public static synthetic fun get$default (Lspace/kscience/visionforge/VisionProperties;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lspace/kscience/dataforge/meta/Meta;
-	public static final fun getValue (Lspace/kscience/visionforge/VisionProperties;Ljava/lang/String;ZLjava/lang/Boolean;)Lspace/kscience/dataforge/meta/Value;
-	public static synthetic fun getValue$default (Lspace/kscience/visionforge/VisionProperties;Ljava/lang/String;ZLjava/lang/Boolean;ILjava/lang/Object;)Lspace/kscience/dataforge/meta/Value;
-	public static final fun invoke (Lspace/kscience/visionforge/MutableVisionProperties;Lkotlin/jvm/functions/Function1;)V
-	public static final fun remove (Lspace/kscience/visionforge/MutableVisionProperties;Ljava/lang/String;)V
-	public static final fun remove (Lspace/kscience/visionforge/MutableVisionProperties;Lspace/kscience/dataforge/names/Name;)V
-	public static final fun root (Lspace/kscience/visionforge/MutableVisionProperties;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lspace/kscience/dataforge/meta/MutableMeta;
-	public static synthetic fun root$default (Lspace/kscience/visionforge/MutableVisionProperties;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lspace/kscience/dataforge/meta/MutableMeta;
-}
-
-public final class space/kscience/visionforge/VisionSubmitEvent : space/kscience/visionforge/VisionControlEvent {
-	public static final field Companion Lspace/kscience/visionforge/VisionSubmitEvent$Companion;
-	public fun <init> (Lspace/kscience/dataforge/meta/Meta;)V
-	public fun getMeta ()Lspace/kscience/dataforge/meta/Meta;
-	public final fun getName ()Lspace/kscience/dataforge/names/Name;
-	public final fun getPayload ()Lspace/kscience/dataforge/meta/Meta;
+public final class space/kscience/visionforge/VisionPropertyChangedEvent : space/kscience/visionforge/VisionChangedEvent {
+	public static final field Companion Lspace/kscience/visionforge/VisionPropertyChangedEvent$Companion;
+	public fun <init> (Lspace/kscience/dataforge/names/Name;Lspace/kscience/dataforge/meta/Meta;)V
+	public final fun component1 ()Lspace/kscience/dataforge/names/Name;
+	public final fun component2 ()Lspace/kscience/dataforge/meta/Meta;
+	public final fun copy (Lspace/kscience/dataforge/names/Name;Lspace/kscience/dataforge/meta/Meta;)Lspace/kscience/visionforge/VisionPropertyChangedEvent;
+	public static synthetic fun copy$default (Lspace/kscience/visionforge/VisionPropertyChangedEvent;Lspace/kscience/dataforge/names/Name;Lspace/kscience/dataforge/meta/Meta;ILjava/lang/Object;)Lspace/kscience/visionforge/VisionPropertyChangedEvent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPropertyName ()Lspace/kscience/dataforge/names/Name;
+	public final fun getPropertyValue ()Lspace/kscience/dataforge/meta/Meta;
+	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public synthetic class space/kscience/visionforge/VisionSubmitEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field INSTANCE Lspace/kscience/visionforge/VisionSubmitEvent$$serializer;
+public synthetic class space/kscience/visionforge/VisionPropertyChangedEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lspace/kscience/visionforge/VisionPropertyChangedEvent$$serializer;
 	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionSubmitEvent;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionPropertyChangedEvent;
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionSubmitEvent;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionPropertyChangedEvent;)V
 }
 
-public final class space/kscience/visionforge/VisionSubmitEvent$Companion {
-	public final fun serializer ()Lkotlinx/serialization/KSerializer;
-}
-
-public final class space/kscience/visionforge/VisionValueChangeEvent : space/kscience/visionforge/VisionControlEvent {
-	public static final field Companion Lspace/kscience/visionforge/VisionValueChangeEvent$Companion;
-	public fun <init> (Lspace/kscience/dataforge/meta/Meta;)V
-	public fun getMeta ()Lspace/kscience/dataforge/meta/Meta;
-	public final fun getName ()Lspace/kscience/dataforge/names/Name;
-	public final fun getValue ()Lspace/kscience/dataforge/meta/Value;
-	public fun toString ()Ljava/lang/String;
-}
-
-public synthetic class space/kscience/visionforge/VisionValueChangeEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field INSTANCE Lspace/kscience/visionforge/VisionValueChangeEvent$$serializer;
-	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
-	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lspace/kscience/visionforge/VisionValueChangeEvent;
-	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/VisionValueChangeEvent;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
-}
-
-public final class space/kscience/visionforge/VisionValueChangeEvent$Companion {
+public final class space/kscience/visionforge/VisionPropertyChangedEvent$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
@@ -730,8 +743,10 @@ public final class space/kscience/visionforge/html/HeadersKt {
 public final class space/kscience/visionforge/html/HtmlExportKt {
 	public static final fun makeFile (Lspace/kscience/visionforge/html/VisionPage;Ljava/nio/file/Path;Lkotlin/jvm/functions/Function1;)Ljava/nio/file/Path;
 	public static synthetic fun makeFile$default (Lspace/kscience/visionforge/html/VisionPage;Ljava/nio/file/Path;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ljava/nio/file/Path;
-	public static final fun show (Lspace/kscience/visionforge/html/VisionPage;Ljava/nio/file/Path;)V
-	public static synthetic fun show$default (Lspace/kscience/visionforge/html/VisionPage;Ljava/nio/file/Path;ILjava/lang/Object;)V
+	public static final fun makeString (Lspace/kscience/visionforge/html/VisionPage;Ljava/util/Map;)Ljava/lang/String;
+	public static synthetic fun makeString$default (Lspace/kscience/visionforge/html/VisionPage;Ljava/util/Map;ILjava/lang/Object;)Ljava/lang/String;
+	public static final fun openInBrowser (Lspace/kscience/visionforge/html/VisionPage;Ljava/nio/file/Path;)V
+	public static synthetic fun openInBrowser$default (Lspace/kscience/visionforge/html/VisionPage;Ljava/nio/file/Path;ILjava/lang/Object;)V
 }
 
 public abstract interface class space/kscience/visionforge/html/HtmlFragment {
@@ -825,14 +840,13 @@ public synthetic class space/kscience/visionforge/html/VisionOfCheckbox$$seriali
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfCheckbox;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class space/kscience/visionforge/html/VisionOfCheckbox$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract interface class space/kscience/visionforge/html/VisionOfHtml : space/kscience/visionforge/Vision {
+public abstract interface class space/kscience/visionforge/html/VisionOfHtml : space/kscience/visionforge/MutableVision {
 	public fun getClasses ()Ljava/util/Set;
 	public fun getStyleString ()Ljava/lang/String;
 	public fun setClasses (Ljava/util/Set;)V
@@ -854,7 +868,6 @@ public synthetic class space/kscience/visionforge/html/VisionOfHtmlButton$$seria
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfHtmlButton;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class space/kscience/visionforge/html/VisionOfHtmlButton$Companion {
@@ -877,7 +890,6 @@ public synthetic class space/kscience/visionforge/html/VisionOfHtmlForm$$seriali
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfHtmlForm;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class space/kscience/visionforge/html/VisionOfHtmlForm$Companion {
@@ -894,7 +906,7 @@ public final class space/kscience/visionforge/html/VisionOfHtmlFormKt {
 
 public class space/kscience/visionforge/html/VisionOfHtmlInput : space/kscience/visionforge/AbstractControlVision, space/kscience/visionforge/html/VisionOfHtml {
 	public static final field Companion Lspace/kscience/visionforge/html/VisionOfHtmlInput$Companion;
-	public synthetic fun <init> (ILspace/kscience/dataforge/meta/MutableMeta;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public synthetic fun <init> (ILspace/kscience/dataforge/meta/ObservableMutableMeta;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public fun <init> (Ljava/lang/String;)V
 	public final fun getDisabled ()Z
 	public final fun getFieldName ()Ljava/lang/String;
@@ -914,7 +926,6 @@ public synthetic class space/kscience/visionforge/html/VisionOfHtmlInput$$serial
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfHtmlInput;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class space/kscience/visionforge/html/VisionOfHtmlInput$Companion {
@@ -955,7 +966,6 @@ public synthetic class space/kscience/visionforge/html/VisionOfNumberField$$seri
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfNumberField;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class space/kscience/visionforge/html/VisionOfNumberField$Companion {
@@ -977,7 +987,6 @@ public synthetic class space/kscience/visionforge/html/VisionOfPlainHtml$$serial
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfPlainHtml;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class space/kscience/visionforge/html/VisionOfPlainHtml$Companion {
@@ -1003,7 +1012,6 @@ public synthetic class space/kscience/visionforge/html/VisionOfRangeField$$seria
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfRangeField;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class space/kscience/visionforge/html/VisionOfRangeField$Companion {
@@ -1025,7 +1033,6 @@ public synthetic class space/kscience/visionforge/html/VisionOfTextField$$serial
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lspace/kscience/visionforge/html/VisionOfTextField;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class space/kscience/visionforge/html/VisionOfTextField$Companion {
@@ -1062,9 +1069,14 @@ public final class space/kscience/visionforge/html/VisionPage {
 public final class space/kscience/visionforge/html/VisionPage$Companion {
 	public final fun scriptHeader (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lspace/kscience/visionforge/html/HtmlFragment;
 	public static synthetic fun scriptHeader$default (Lspace/kscience/visionforge/html/VisionPage$Companion;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/visionforge/html/HtmlFragment;
+	public final fun styleHeader (Lkotlin/jvm/functions/Function1;)Lspace/kscience/visionforge/html/HtmlFragment;
 	public final fun styleSheetHeader (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lspace/kscience/visionforge/html/HtmlFragment;
 	public static synthetic fun styleSheetHeader$default (Lspace/kscience/visionforge/html/VisionPage$Companion;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/visionforge/html/HtmlFragment;
 	public final fun title (Ljava/lang/String;)Lspace/kscience/visionforge/html/HtmlFragment;
+}
+
+public final class space/kscience/visionforge/html/VisionPageKt {
+	public static final fun VisionPage (Lspace/kscience/visionforge/VisionManager;[Lspace/kscience/visionforge/html/HtmlFragment;Lspace/kscience/visionforge/html/HtmlVisionFragment;)Lspace/kscience/visionforge/html/VisionPage;
 }
 
 public abstract class space/kscience/visionforge/html/VisionTagConsumer : kotlinx/html/TagConsumer, space/kscience/dataforge/context/ContextAware {
@@ -1142,7 +1154,6 @@ public abstract interface class space/kscience/visionforge/visitor/VisionVisitor
 	public fun skip (Lspace/kscience/dataforge/names/Name;Lspace/kscience/visionforge/Vision;)Z
 	public abstract fun visit (Lspace/kscience/dataforge/names/Name;Lspace/kscience/visionforge/Vision;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun visitChildren (Lspace/kscience/dataforge/names/Name;Lspace/kscience/visionforge/Vision;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun visitChildren$suspendImpl (Lspace/kscience/visionforge/visitor/VisionVisitor;Lspace/kscience/dataforge/names/Name;Lspace/kscience/visionforge/Vision;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class space/kscience/visionforge/visitor/VisionVisitor$Companion {

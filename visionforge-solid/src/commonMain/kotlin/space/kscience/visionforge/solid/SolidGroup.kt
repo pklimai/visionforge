@@ -81,7 +81,7 @@ public class SolidGroup : AbstractVision(), SolidContainer, PrototypeHolder, Mut
 
     override fun setVision(token: NameToken, vision: Solid?) {
         if (vision == null) {
-            solids.remove(token)?.let {
+            solids.remove(token)?.also {
                 it.parent = null
             }
         } else {

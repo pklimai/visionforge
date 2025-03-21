@@ -1,26 +1,24 @@
 public final class space/kscience/plotly/compose/AppKt {
 	public static final fun App (Landroidx/compose/runtime/Composer;I)V
+	public static final fun getPort ()I
 	public static final fun main ()V
 	public static synthetic fun main ([Ljava/lang/String;)V
 }
 
 public final class space/kscience/plotly/compose/ComposableSingletons$AppKt {
 	public static final field INSTANCE Lspace/kscience/plotly/compose/ComposableSingletons$AppKt;
-	public static field lambda-1 Lkotlin/jvm/functions/Function3;
-	public static field lambda-2 Lkotlin/jvm/functions/Function3;
-	public static field lambda-3 Lkotlin/jvm/functions/Function2;
-	public static field lambda-4 Lkotlin/jvm/functions/Function3;
-	public static field lambda-5 Lkotlin/jvm/functions/Function3;
 	public fun <init> ()V
-	public final fun getLambda-1$compose_demo ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda-2$compose_demo ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda-3$compose_demo ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda-4$compose_demo ()Lkotlin/jvm/functions/Function3;
-	public final fun getLambda-5$compose_demo ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-101810039$compose_demo ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-1219049393$compose_demo ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-430675520$compose_demo ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$-484018975$compose_demo ()Lkotlin/jvm/functions/Function3;
+	public final fun getLambda$1513332475$compose_demo ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class space/kscience/plotly/compose/ServerKt {
-	public static final fun servePlots (Lkotlinx/coroutines/CoroutineScope;Lkotlinx/coroutines/flow/StateFlow;)Lio/ktor/server/engine/ApplicationEngine;
-	public static final fun staticPlot ()Ljava/lang/String;
+	public static final fun Scatter (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lspace/kscience/plotly/models/Scatter;
+	public static synthetic fun Scatter$default (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lspace/kscience/plotly/models/Scatter;
+	public static final fun servePlots (Lkotlinx/coroutines/CoroutineScope;Lkotlinx/coroutines/flow/StateFlow;I)Lio/ktor/server/engine/EmbeddedServer;
+	public static synthetic fun servePlots$default (Lkotlinx/coroutines/CoroutineScope;Lkotlinx/coroutines/flow/StateFlow;IILjava/lang/Object;)Lio/ktor/server/engine/EmbeddedServer;
 }
 
