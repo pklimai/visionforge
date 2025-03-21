@@ -413,6 +413,7 @@ public final class space/kscience/visionforge/solid/HexagonKt {
 
 public abstract class space/kscience/visionforge/solid/LightSource : space/kscience/visionforge/solid/MiscSolid {
 	public static final field Companion Lspace/kscience/visionforge/solid/LightSource$Companion;
+	public static final field DEFAULT_INTENSITY D
 	public fun <init> ()V
 	public synthetic fun <init> (ILspace/kscience/dataforge/meta/ObservableMutableMeta;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public final fun getColor ()Lspace/kscience/visionforge/solid/ColorAccessor;
