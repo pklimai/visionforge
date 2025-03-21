@@ -17,10 +17,12 @@ public abstract class LightSource : MiscSolid() {
     override val descriptor: MetaDescriptor get() = LightSource.descriptor
 
     public val color: ColorAccessor by colorProperty(SolidMaterial.COLOR_KEY)
-    public var intensity: Number by properties.number(INTENSITY_KEY) { 2.0 }
+    public var intensity: Number by properties.number(INTENSITY_KEY) { DEFAULT_INTENSITY }
 
     public companion object {
         public val INTENSITY_KEY: Name = "intensity".asName()
+
+        public const val DEFAULT_INTENSITY: Double = 1.0
 
         public val descriptor: MetaDescriptor by lazy {
             MetaDescriptor {

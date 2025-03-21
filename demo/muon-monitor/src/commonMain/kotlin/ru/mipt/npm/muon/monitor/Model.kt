@@ -72,7 +72,8 @@ class Model(val manager: VisionManager) {
         map.values.forEach {
             it.properties[SolidMaterial.MATERIAL_COLOR_KEY] = null
         }
-        tracks.visions.keys.forEach {
+        val tracksToRemove = tracks.visions.keys.toList()
+        tracksToRemove.forEach {
             tracks.setVision(it, null)
         }
     }

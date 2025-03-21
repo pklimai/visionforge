@@ -1,4 +1,4 @@
-# Module plotlykt-core
+# Module plotly-kt-core
 
 
 
@@ -6,7 +6,7 @@
 
 ## Artifact:
 
-The Maven coordinates of this project are `space.kscience:plotlykt-core:0.7.2`.
+The Maven coordinates of this project are `space.kscience:plotly-kt-core:0.5.0`.
 
 **Gradle Kotlin DSL:**
 ```kotlin
@@ -16,6 +16,6 @@ repositories {
 }
 
 dependencies {
-    implementation("space.kscience:plotlykt-core:0.7.2")
+    implementation("space.kscience:plotly-kt-core:0.5.0")
 }
 ```

@@ -10,7 +10,7 @@ group = "ru.mipt.npm"
 kscience {
     fullStack(
         "muon-monitor.js",
-        development = false,
+        development = true,
         jvmConfig = {
             binaries {
                 executable {

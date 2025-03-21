@@ -14,10 +14,12 @@ import kotlin.reflect.KClass
 public object ThreeAmbientLightFactory : ThreeFactory<AmbientLightSource> {
     override val type: KClass<in AmbientLightSource> get() = AmbientLightSource::class
 
+    private const val INTENSITY_SCALE = 3.0
+
     override suspend fun build(three: ThreePlugin, vision: AmbientLightSource, observe: Boolean): AmbientLight {
         val res = AmbientLight().apply {
             color = vision.color.threeColor() ?: Color(0x404040)
-            intensity = vision.intensity.toDouble()
+            intensity = vision.intensity.toDouble()*INTENSITY_SCALE
         }
 
         if (observe) {
@@ -25,11 +27,12 @@ public object ThreeAmbientLightFactory : ThreeFactory<AmbientLightSource> {
                 when (propertyName) {
                     Vision.VISIBLE_KEY -> res.visible = vision.visible ?: true
                     SolidMaterial.COLOR_KEY -> res.color = vision.color.threeColor() ?: Color(0x404040)
-                    LightSource.INTENSITY_KEY -> res.intensity = vision.intensity.toDouble()
+                    LightSource.INTENSITY_KEY -> res.intensity = vision.intensity.toDouble()*INTENSITY_SCALE
                 }
             }
         }
 
         return res
     }
+
 }

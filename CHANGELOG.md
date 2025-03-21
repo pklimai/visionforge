@@ -8,7 +8,7 @@
 ### Changed
 - Simplified Vision and VisionGroup logic. Observation logic moved out.
 - Use `Name` for child designation and `Path` for tree access
-- Default intensity for AmbientLight is 2.0
+- The default intensity for AmbientLight is 1.0. The intensity scale for Three-js is 3.0. 
 
 ### Deprecated
 
@@ -17,6 +17,7 @@
 
 ### Fixed
 - Vision server now automatically switches to WSS protocol for updates if incoming protocol is HTTPS
+- Issue with track removal in muon monitor demo.
 
 ### Security
 
